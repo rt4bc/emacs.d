@@ -628,6 +628,45 @@ tables so that they display correctly.
 ** Org Basic Config
 This section contains the basic configuration for =org-mode= plus the
 configuration for Org agendas and capture templates.
+#+begin_src emacs-lisp
+(defun efs/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
+(use-package org
+  :pin org
+  :commands (org-capture org-agenda)
+  :hook (org-mode . efs/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾")
+
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+
+  (cond
+  ((string-equal system-name "BLIU3-T01")
+  (progn
+  (setq org-agenda-files
+      '("/mnt/c/Users/bliu3/Workspace/Org/Tasks.org"
+        "/mnt/c/Users/bliu3/Workspace/Org/Notes.org"))))
+  (t 
+  (progn
+  (setq org-agenda-files
+      '("~/Desktop/Org/Tasks.org"
+        "~/Desktop/Org/Notes.org")))))
+
+        (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
+  (setq org-habit-graph-column 60)
+
+  (setq org-todo-keywords
+  '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+  (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
+)
+#+end_src
 
 ** Nice Heading Bullets
 #+begin_src emacs-lisp
@@ -679,7 +718,6 @@ Code blocks syntax hightlight
 (use-package htmlize
 :ensure t)
 #+end_src
-
 
 ** Structure Templates
 Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with =org-tempo= by typing =<= followed by the template name like =el= or =py= and then press =TAB=.  For example, to insert an empty =emacs-lisp= block below, you can type =<el= and press =TAB= to expand into such a block.
