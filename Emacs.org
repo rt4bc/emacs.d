@@ -74,7 +74,7 @@ You can also use M-x auto-package-update-now to update right now!
 #+begin_src emacs-lisp
 (use-package auto-package-update
   :custom
-  (auto-package-update-interval 7)
+  (auto-package-update-interval 30)
   (auto-package-update-prompt-before-update t)
   (auto-package-update-hide-results t)
   :config
@@ -102,6 +102,7 @@ these variables yourself.
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
+
 
 * General Config
 Auto Wrap lines
@@ -201,7 +202,7 @@ Use Fira code and Cantarell
 #+begin_src emacs-lisp
 
 (use-package doom-themes
-  :init (load-theme 'doom-palenight t))
+  :init (load-theme 'doom-zenburn t))
 
 #+end_src
 
@@ -474,7 +475,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
     (add-hook 'lsp-after-open-hook 'lsp-ui-mode)
     (add-hook 'c-mode-hook #'lsp)
     (add-hook 'c++-mode-hook #'lsp)
-    (add-hook 'emacs-lisp-mode-hook #'lsp)
+    ;; (add-hook 'emacs-lisp-mode-hook #'lsp)
     )
 
 #+end_src
@@ -574,6 +575,7 @@ Try these commands with =M-x=:
 (setq elpy-rpc-virtualenv-path 'current)
    
    #+end_src
+
 
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
