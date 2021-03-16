@@ -51,9 +51,18 @@ installation and configuration of everything else we use.
 ;; Initialize package sources
 (require 'package)
 
-(setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+(cond
+( (or (string-equal system-name "BLIU3-T01") (string-equal system-name "bliu3-lx01.bdcdesign.analog.com"))
+(progn
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+                         ("elpa" . "https://elpa.gnu.org/packages/")))))
+(t
+(progn
+((setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))))))
+
 
 (package-initialize)
 (unless package-archive-contents
