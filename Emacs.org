@@ -51,18 +51,9 @@ installation and configuration of everything else we use.
 ;; Initialize package sources
 (require 'package)
 
-(cond
-( (or (string-equal system-name "BLIU3-T01") (string-equal system-name "bliu3-lx01.bdcdesign.analog.com"))
-(progn
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+(setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
                          ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))))
-(t
-(progn
-((setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))))))
-
+                         ("elpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
 (package-initialize)
 (unless package-archive-contents
@@ -94,6 +85,11 @@ You can also use M-x auto-package-update-now to update right now!
   (auto-package-update-at-time "09:00"))
 #+end_src
 
+Read PATH from shell
+#+begin_src emacs-lisp
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+#+end_src
 
 * Keep Folders Clean
 We use the no-littering package to keep folders where we edit files
@@ -119,15 +115,8 @@ these variables yourself.
 * General Config
 Auto Wrap lines
   #+begin_src emacs-lisp
-(global-visual-line-mode 1)
-  
+(global-visual-line-mode 1)  
   #+end_src
-Auto truncate line at Org Mode
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-	  (lambda()
-	    (setq truncate-lines nil))) 
-#+end_src
 
 Kill ring lines
 #+begin_src emacs-lisp
@@ -157,7 +146,6 @@ Define words jump mode when brows docs
   :bind ("C-." . ace-jump-mode))
 
 #+end_src
-
 
 
 * Basic UI Configuration
@@ -372,53 +360,41 @@ useful for figuring out how things work in Emacs.
 * Programming Config
 ** Company Mode
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
-We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
-
 #+begin_src emacs-lisp
-
   (use-package company
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-           ("<tab>" . company-complete-selection))
-          (:map lsp-mode-map
-           ("<tab>" . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0)
-:config
-(progn
-(add-hook 'after-init-hook 'global-company-mode)))
-
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
-
+  :ensure t
+  :bind (:map company-active-map
+  ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 2)
+  (company-idle-delay 0.0)
+  :config
+  (global-company-mode 1))
 #+end_src
 
-** Projectile
-
-[[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
-
+** File Explorer sidebar
 #+begin_src emacs-lisp
-
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    ;; (when (file-directory-p "~/Projects/Code")
-    ;;   (setq projectile-project-search-path '("~/Projects/Code")))
-    ;; (setq projectile-switch-project-action #'projectile-dired)
-  )
-
-  (use-package counsel-projectile
-    :after projectile
-    :config (counsel-projectile-mode))
-
+(use-package treemacs
+:ensure t
+:bind
+(("C-c t" . treemacs)))
 #+end_src
+
+** C/C++ Setting
+   #+begin_src emacs-lisp
+(use-package eglot :ensure t)
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
+(use-package cmake-mode
+  :ensure t
+  :config
+  (setq auto-mode-alist  
+        (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
+                  ("\\.cmake\\'" . cmake-mode))  
+                auto-mode-alist))
+  )
+   #+end_src
 
 ** Magit
 
@@ -460,106 +436,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
-
-** LSP Mode
-Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
-
-The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
-
-The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
-#+begin_src emacs-lisp
-
-  (defun efs/lsp-mode-setup ()
-    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-    (lsp-headerline-breadcrumb-mode))
-
-  (use-package lsp-mode
-    :commands (lsp lsp-deferred)
-    :hook (lsp-mode . efs/lsp-mode-setup)
-    :init
-    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-    :config
-    (lsp-enable-which-key-integration t)
-    (setq gc-cons-threshold (* 100 1024 1024))
-    (setq read-process-output-max (* 1024 1024))
-    (setq lsp-prefer-flymake nil)
-    (setq lsp-file-watch-threshold 500000)
-    (add-hook 'lsp-after-open-hook 'lsp-ui-mode)
-    (add-hook 'c-mode-hook #'lsp)
-    (add-hook 'c++-mode-hook #'lsp)
-    ;; (add-hook 'emacs-lisp-mode-hook #'lsp)
-    )
-
-#+end_src
-
-*** LSP UI
-[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
-
-#+begin_src emacs-lisp
-
-  (use-package lsp-ui
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    (lsp-ui-doc-position 'bottom))
-
-#+end_src
-
-*** LSP Tree
-[[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
-
-Try these commands with =M-x=:
-
-- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
-- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
-- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
-
-This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
-
-#+begin_src emacs-lisp
-
-  (use-package lsp-treemacs
-    :after lsp)
-
-#+end_src
-
-*** LSP IVY
-[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
-
-Try these commands with =M-x=:
-
-- =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
-- =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
-
-#+begin_src emacs-lisp
-
-  (use-package lsp-ivy
-    :after lsp)
-
-#+end_src
-
-** C/C++ Setting
-   #+begin_src emacs-lisp
-(use-package cmake-mode
-  :ensure t
-  :config
-  (setq auto-mode-alist  
-        (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                  ("\\.cmake\\'" . cmake-mode))  
-                auto-mode-alist))
-  )
-
-(use-package ccls
-  :hook
-  ((c-mode c++-mode) .
-   (lambda () (require 'ccls) (lsp))))
-;; For the requeste indexed error, mostly caused by cross compiled setting.
-;; Put a .ccls file at the root directory.
-;; %compile_commands.json
-;; --target=arm-buildroot-linux-musleabihf
-;; if ccls package can't find ccls executable then put a bash wrapper
-;; in the path direcoty.
-   
-   #+end_src
 
 ** Flycheck
    #+begin_src emacs-lisp
@@ -635,6 +511,13 @@ tables so that they display correctly.
 #+end_src
 
 ** Org Basic Config
+Auto truncate line at Org Mode
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+	  (lambda()
+	    (setq truncate-lines nil))) 
+#+end_src
+
 This section contains the basic configuration for =org-mode= plus the
 configuration for Org agendas and capture templates.
 #+begin_src emacs-lisp
