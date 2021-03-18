@@ -427,7 +427,11 @@ useful for figuring out how things work in Emacs.
   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
   (use-package forge
     :after magit)
-
+ ;; Note: How to add private to ~/.ssh/config files
+ ;; Host github.com-rt4bc
+ ;; HostName github.com
+ ;; User rt4bc
+ ;; IdentityFile ~/.ssh/id_rsa_github_rt
 #+end_src
 
 ** Commenting
