@@ -380,21 +380,36 @@ useful for figuring out how things work in Emacs.
 (("C-c t" . treemacs)))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package neotree
+  :custom
+  (neo-theme 'nerd2)
+  :config
+  (progn
+    (setq neo-smart-open t)
+    (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
+    (setq neo-window-fixed-size nil)
+    ;; (setq-default neo-show-hidden-files nil)
+    (global-set-key [f3] 'neotree-toggle)
+    (global-set-key [f8] 'neotree-dir)))
+
+#+end_src
+
+** Code template
+#+begin_src emacs-lisp
+(require 'yasnippet)
+(yas-global-mode 1)
+#+end_src
 ** C/C++ Setting
-   #+begin_src emacs-lisp
-(use-package eglot :ensure t)
+#+begin_src emacs-lisp
+(use-package eglot
+:ensure t)
+(require 'eglot)
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
-(use-package cmake-mode
-  :ensure t
-  :config
-  (setq auto-mode-alist  
-        (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                  ("\\.cmake\\'" . cmake-mode))  
-                auto-mode-alist))
-  )
-   #+end_src
+#+end_src
 
 ** Magit
 
