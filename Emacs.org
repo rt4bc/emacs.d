@@ -432,6 +432,10 @@ useful for figuring out how things work in Emacs.
  ;; HostName github.com
  ;; User rt4bc
  ;; IdentityFile ~/.ssh/id_rsa_github_rt
+
+ ;; Note update ssh keybindings
+ ;; ssh-add -D ; remove all cache
+ ;; ssh-add xxxx_private_key  ;;update host private key.
 #+end_src
 
 ** Commenting
