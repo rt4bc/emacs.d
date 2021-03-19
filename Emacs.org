@@ -51,9 +51,19 @@ installation and configuration of everything else we use.
 ;; Initialize package sources
 (require 'package)
 
-(setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+(cond
+ ((eq system-type 'darwin)
+  (progn
+    (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                             ("org" . "https://orgmode.org/elpa.")
+                             ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+    (message "darwin ok")))
+ (t
+  (progn
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+    (message "non darwin ok"))))
 
 (package-initialize)
 (unless package-archive-contents
@@ -90,6 +100,7 @@ Read PATH from shell
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 #+end_src
+
 
 * Keep Folders Clean
 We use the no-littering package to keep folders where we edit files
@@ -397,7 +408,8 @@ useful for figuring out how things work in Emacs.
 
 ** Code template
 #+begin_src emacs-lisp
-(require 'yasnippet)
+(use-package yasnippet
+:ensure t)
 (yas-global-mode 1)
 #+end_src
 ** C/C++ Setting
