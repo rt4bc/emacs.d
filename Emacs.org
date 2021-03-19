@@ -97,8 +97,16 @@ You can also use M-x auto-package-update-now to update right now!
 
 Read PATH from shell
 #+begin_src emacs-lisp
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+;; (when (memq window-system '(mac ns x))
+;;  (exec-path-from-shell-initialize))
+
+(cond
+  ((eq system-type 'darwin)
+   (progn
+    (exec-path-from-shell-initialize)))
+  (t
+    (progn
+    (message "nothing happened."))))
 #+end_src
 
 
