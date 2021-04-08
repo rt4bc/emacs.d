@@ -425,9 +425,23 @@ useful for figuring out how things work in Emacs.
 (use-package eglot
 :ensure t)
 (require 'eglot)
+(add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
+#+end_src
+
+** Rust
+#+begin_src emacs-lisp
+(use-package rust-mode
+:ensure t)
+(require 'rust-mode)
+(add-hook 'rust-mode-hook
+(lambda () (setq indent-tabs-mode nil)))
+(define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
+(setq rust-format-on-save t)
+(add-hook 'rust-mode-hook 'eglot-ensure)
+(setq eglot-rust-server 'rustic)
 
 #+end_src
 
@@ -486,6 +500,10 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   :ensure t
   :diminish t
   :init (global-flycheck-mode))
+(use-package flycheck-rust
+:ensure t)
+(with-eval-after-load 'rust-mode
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
    #+end_src
 
 ** Python Setting
