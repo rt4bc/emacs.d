@@ -504,57 +504,57 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 ** Flycheck
    #+begin_src emacs-lisp
-   (use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+     (use-package flycheck
+       :ensure t
+       :init (global-flycheck-mode))
 
-(defvar-local flycheck-eglot-current-errors nil)
+     (defvar-local flycheck-eglot-current-errors nil)
 
-    (defun flycheck-eglot-report-fn (diags &rest _)
-      (setq flycheck-eglot-current-errors
-            (mapcar (lambda (diag)
-                      (save-excursion
-                        (goto-char (flymake--diag-beg diag))
-                        (flycheck-error-new-at (line-number-at-pos)
-                                               (1+ (- (point) (line-beginning-position)))
-                                               (pcase (flymake--diag-type diag)
-                                                 ('eglot-error 'error)
-                                                 ('eglot-warning 'warning)
-                                                 ('eglot-note 'info)
-                                                 (_ (error "Unknown diag type, %S" diag)))
-                                               (flymake--diag-text diag)
-                                               :checker 'eglot)))
-                    diags))
-      (flycheck-buffer))
+     (defun flycheck-eglot-report-fn (diags &rest _)
+       (setq flycheck-eglot-current-errors
+             (mapcar (lambda (diag)
+                       (save-excursion
+                         (goto-char (flymake--diag-beg diag))
+                         (flycheck-error-new-at (line-number-at-pos)
+                                                (1+ (- (point) (line-beginning-position)))
+                                                (pcase (flymake--diag-type diag)
+                                                  ('eglot-error 'error)
+                                                  ('eglot-warning 'warning)
+                                                  ('eglot-note 'info)
+                                                  (_ (error "Unknown diag type, %S" diag)))
+                                                (flymake--diag-text diag)
+                                                :checker 'eglot)))
+                     diags))
+       (flycheck-buffer))
 
-    (defun flycheck-eglot--start (checker callback)
-      (funcall callback 'finished flycheck-eglot-current-errors))
+     (defun flycheck-eglot--start (checker callback)
+       (funcall callback 'finished flycheck-eglot-current-errors))
 
-    (defun flycheck-eglot--available-p ()
-      (bound-and-true-p eglot--managed-mode))
+     (defun flycheck-eglot--available-p ()
+       (bound-and-true-p eglot--managed-mode))
 
-    (flycheck-define-generic-checker 'eglot
-      "Report `eglot' diagnostics using `flycheck'."
-      :start #'flycheck-eglot--start
-      :predicate #'flycheck-eglot--available-p
-      :modes '(prog-mode text-mode))
+     (flycheck-define-generic-checker 'eglot
+       "Report `eglot' diagnostics using `flycheck'."
+       :start #'flycheck-eglot--start
+       :predicate #'flycheck-eglot--available-p
+       :modes '(prog-mode text-mode))
 
-    (push 'eglot flycheck-checkers)
+     (push 'eglot flycheck-checkers)
 
-    (defun sanityinc/eglot-prefer-flycheck ()
-      (when eglot--managed-mode
-        (flycheck-add-mode 'eglot major-mode)
-        (flycheck-select-checker 'eglot)
-        (flycheck-mode)
-        (flymake-mode -1)
-        (setq eglot--current-flymake-report-fn 'flycheck-eglot-report-fn)))
+     (defun sanityinc/eglot-prefer-flycheck ()
+       (when eglot--managed-mode
+         (flycheck-add-mode 'eglot major-mode)
+         (flycheck-select-checker 'eglot)
+         (flycheck-mode)
+         (flymake-mode -1)
+         (setq eglot--current-flymake-report-fn 'flycheck-eglot-report-fn)))
 
-    (add-hook 'eglot--managed-mode-hook 'sanityinc/eglot-prefer-flycheck)
+     (add-hook 'eglot--managed-mode-hook 'sanityinc/eglot-prefer-flycheck)
 
-(use-package flycheck-rust
-:ensure t)
-(with-eval-after-load 'rust-mode
-(add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+     (use-package flycheck-rust
+       :ensure t)
+     (with-eval-after-load 'rust-mode
+       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
    #+end_src
 
@@ -756,6 +756,17 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 
+#+end_src
+
+** Format Code Block
+#+begin_src emacs-lisp
+(defun indent-org-block-automatically ()
+(when (org-in-src-block-p)
+(org-edit-special)
+(indent-region (point-min) (point-max))
+(org-edit-src-exit)))
+
+(run-at-time 1 10 'indent-org-block-automatically)
 #+end_src
 
 
