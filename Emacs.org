@@ -420,12 +420,17 @@ useful for figuring out how things work in Emacs.
     :ensure t)
   (yas-global-mode 1)
 #+end_src
-** C/C++ Setting
+
+** LSP-Client
 #+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t)
+  (use-package eglot :ensure t)
   (require 'eglot)
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+#+end_src
+
+** C/C++ Setting
+#+begin_src emacs-lisp
+  ;; TODO special for C/C++
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
@@ -433,23 +438,23 @@ useful for figuring out how things work in Emacs.
 
 ** Rust
 #+begin_src emacs-lisp
-;;  (use-package rust-mode
-;;    :ensure t)
-;;  (require 'rust-mode)
-;;  (add-hook 'rust-mode-hook
-;;            (lambda () (setq indent-tabs-mode nil)))
-;;  (define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
-;;  (setq rust-format-on-save t)
-;;  (add-hook 'rust-mode-hook 'eglot-ensure)
-;;  (setq eglot-rust-server 'rustic)
-
+;; (use-package rust-mode
+  ;; :ensure t
+  ;; :config
+  ;; (setq rust-format-on-save t)
+  ;; (setq eglot-rust-server 'rls)
+  ;; (add-hook 'rust-mode-hook
+            ;; (lambda () (setq indent-tabs-mode nil)))
+  ;; (add-hook 'rust-mode-hook 'eglot-ensure)
+  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+;; )
 (use-package rustic
 :ensure t
 :config
 (setq rustic-lsp-client 'eglot)
 (setq rustic-lsp-server 'rls)
-(add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-)
+(setq rustic-format-triggger 'on-save)
+(setq rustic-format-on-save t))
 
 #+end_src
 ** CMake
@@ -512,6 +517,25 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
+** Python Setting
+   #+begin_src emacs-lisp
+;;; Python-config:
+(setq python-indent-guess-indent-offset-verbose nil)
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable)
+  :config
+  (setq elpy-rpc-backend "jedi"))
+
+;; M-x elpy-config can get the elpy environment config.
+;; jedi or flake8 not installed, because elpy-rpc not installed
+;; we can source elpy-virtual-env active to enter the path
+;; an install the needed pacakge.
+(setq elpy-rpc-virtualenv-path 'current)
+   
+   #+end_src
+
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
@@ -564,28 +588,10 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
      (use-package flycheck-rust
        :ensure t)
      (push 'rustic-clippy flycheck-checkers)
+     (setq rustic-flycheck-clippy-params "--message-format=json")
      (with-eval-after-load 'rust-mode
        (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
-   #+end_src
-
-** Python Setting
-   #+begin_src emacs-lisp
-;;; Python-config:
-(setq python-indent-guess-indent-offset-verbose nil)
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable)
-  :config
-  (setq elpy-rpc-backend "jedi"))
-
-;; M-x elpy-config can get the elpy environment config.
-;; jedi or flake8 not installed, because elpy-rpc not installed
-;; we can source elpy-virtual-env active to enter the path
-;; an install the needed pacakge.
-(setq elpy-rpc-virtualenv-path 'current)
-   
    #+end_src
 
 
