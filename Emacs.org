@@ -447,6 +447,7 @@ useful for figuring out how things work in Emacs.
 :ensure t
 :config
 (setq rustic-lsp-client 'eglot)
+(setq rustic-lsp-server 'rls)
 (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 )
 
