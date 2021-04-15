@@ -438,23 +438,23 @@ useful for figuring out how things work in Emacs.
 
 ** Rust
 #+begin_src emacs-lisp
-;; (use-package rust-mode
+  ;; (use-package rust-mode
   ;; :ensure t
   ;; :config
   ;; (setq rust-format-on-save t)
   ;; (setq eglot-rust-server 'rls)
   ;; (add-hook 'rust-mode-hook
-            ;; (lambda () (setq indent-tabs-mode nil)))
+  ;; (lambda () (setq indent-tabs-mode nil)))
   ;; (add-hook 'rust-mode-hook 'eglot-ensure)
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-;; )
-(use-package rustic
-:ensure t
-:config
-(setq rustic-lsp-client 'eglot)
-(setq rustic-lsp-server 'rls)
-(setq rustic-format-triggger 'on-save)
-(setq rustic-format-on-save t))
+  ;; )
+  (use-package rustic
+    :ensure t
+    :config
+    (setq rustic-lsp-client 'eglot)
+    (setq rustic-lsp-server 'rls)
+    (setq rustic-format-triggger 'on-save)
+    (setq rustic-format-on-save t))
 
 #+end_src
 ** CMake
@@ -503,7 +503,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
   (use-package evil-nerd-commenter
     :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-
 #+end_src
 
 ** Rainbow Delimiters
@@ -519,21 +518,21 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 ** Python Setting
    #+begin_src emacs-lisp
-;;; Python-config:
-(setq python-indent-guess-indent-offset-verbose nil)
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable)
-  :config
-  (setq elpy-rpc-backend "jedi"))
+     ;;; Python-config:
+     (setq python-indent-guess-indent-offset-verbose nil)
+     (use-package elpy
+       :ensure t
+       :init
+       (elpy-enable)
+       :config
+       (setq elpy-rpc-backend "jedi"))
 
-;; M-x elpy-config can get the elpy environment config.
-;; jedi or flake8 not installed, because elpy-rpc not installed
-;; we can source elpy-virtual-env active to enter the path
-;; an install the needed pacakge.
-(setq elpy-rpc-virtualenv-path 'current)
-   
+     ;; M-x elpy-config can get the elpy environment config.
+     ;; jedi or flake8 not installed, because elpy-rpc not installed
+     ;; we can source elpy-virtual-env active to enter the path
+     ;; an install the needed pacakge.
+     (setq elpy-rpc-virtualenv-path 'current)
+
    #+end_src
 
 ** Flycheck
@@ -782,7 +781,8 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
       (org-edit-special)
       (indent-region (point-min) (point-max))
       (org-edit-src-exit)))
-(setq org-src-tab-acts-natively t)
+  (setq org-src-tab-acts-natively t)
+  (add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
   ;; (run-at-time 1 10 'indent-org-block-automatically)
 #+end_src
 
