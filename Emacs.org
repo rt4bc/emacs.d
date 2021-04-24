@@ -438,23 +438,23 @@ useful for figuring out how things work in Emacs.
 
 ** Rust
 #+begin_src emacs-lisp
-  ;; (use-package rust-mode
-  ;; :ensure t
-  ;; :config
-  ;; (setq rust-format-on-save t)
-  ;; (setq eglot-rust-server 'rls)
-  ;; (add-hook 'rust-mode-hook
-  ;; (lambda () (setq indent-tabs-mode nil)))
-  ;; (add-hook 'rust-mode-hook 'eglot-ensure)
-  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-  ;; )
-  (use-package rustic
+  (use-package rust-mode
     :ensure t
     :config
-    (setq rustic-lsp-client 'eglot)
-    (setq rustic-lsp-server 'rls)
-    (setq rustic-format-triggger 'on-save)
-    (setq rustic-format-on-save t))
+    (setq rust-format-on-save t)
+    (setq eglot-rust-server 'rls)
+    (add-hook 'rust-mode-hook
+              (lambda () (setq indent-tabs-mode nil)))
+    (add-hook 'rust-mode-hook 'eglot-ensure)
+    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+    )
+  ;; (use-package rustic
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq rustic-lsp-client 'eglot)
+  ;;   (setq rustic-lsp-server 'rls)
+  ;;   (setq rustic-format-triggger 'on-save)
+  ;;   (setq rustic-format-on-save t))
 
 #+end_src
 ** CMake
@@ -629,7 +629,8 @@ tables so that they display correctly.
     (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
     (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
     (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+    ;; (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil :inheit '(fixed-pitch))
     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
@@ -642,9 +643,12 @@ tables so that they display correctly.
 ** Org Basic Config
 Auto truncate line at Org Mode
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-	  (lambda()
-	    (setq truncate-lines nil))) 
+  (use-package valign
+    :ensure t)
+  (add-hook 'org-mode-hook #'valign-mode)
+  (add-hook 'org-mode-hook
+            (lambda()
+              (setq truncate-lines nil))) 
 #+end_src
 
 This section contains the basic configuration for =org-mode= plus the
