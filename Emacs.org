@@ -438,24 +438,23 @@ useful for figuring out how things work in Emacs.
 
 ** Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode
-    :ensure t
-    :config
-    (setq rust-format-on-save t)
-    (setq eglot-rust-server 'rls)
-    (add-hook 'rust-mode-hook
-              (lambda () (setq indent-tabs-mode nil)))
-    (add-hook 'rust-mode-hook 'eglot-ensure)
-    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-    )
-  ;; (use-package rustic
+  ;; (use-package rust-mode
   ;;   :ensure t
   ;;   :config
-  ;;   (setq rustic-lsp-client 'eglot)
-  ;;   (setq rustic-lsp-server 'rls)
-  ;;   (setq rustic-format-triggger 'on-save)
-  ;;   (setq rustic-format-on-save t))
-
+  ;;   (setq rust-format-on-save t)
+  ;;   (setq eglot-rust-server 'rls)
+  ;;   (add-hook 'rust-mode-hook
+  ;;             (lambda () (setq indent-tabs-mode nil)))
+  ;;   (add-hook 'rust-mode-hook 'eglot-ensure)
+  ;;   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;;   )
+  (use-package rustic
+    :ensure t
+    :config
+    (setq rustic-lsp-client 'eglot)
+    (setq rustic-lsp-server 'rls)
+    (setq rustic-format-triggger 'on-save)
+    (setq rustic-format-on-save t))
 #+end_src
 ** CMake
 #+begin_src emacs-lisp
