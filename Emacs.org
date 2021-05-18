@@ -438,103 +438,45 @@ useful for figuring out how things work in Emacs.
 
 ** Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode
-    :ensure t
-    :config
-    (setq rust-format-on-save t)
-    (setq eglot-rust-server 'rls)
-    (add-hook 'rust-mode-hook
-              (lambda () (setq indent-tabs-mode nil)))
-    (add-hook 'rust-mode-hook 'eglot-ensure)
-    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-    )
-  ;; (use-package rustic
+  ;; (use-package rust-mode
   ;;   :ensure t
   ;;   :config
-  ;;   (setq rustic-lsp-client 'eglot)
-  ;;   (setq rustic-lsp-server 'rls)
-  ;;   (setq rustic-format-triggger 'on-save)
-  ;;   (setq rustic-format-on-save t))
-#+end_src
-
-#+RESULTS:
-: t
-
-** CMake
-#+begin_src emacs-lisp
-  (use-package cmake-mode
+  ;;   (setq rust-format-on-save t)
+  ;;   (setq eglot-rust-server 'rls)
+  ;;   (add-hook 'rust-mode-hook
+  ;;             (lambda () (setq indent-tabs-mode nil)))
+  ;;   (add-hook 'rust-mode-hook 'eglot-ensure)
+  ;;   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;;   )
+  (use-package rustic
     :ensure t
     :config
-    (setq auto-mode-alist  
-          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                    ("\\.cmake\\'" . cmake-mode))  
-                  auto-mode-alist)))
+    (setq rustic-lsp-client 'eglot)
+    (setq rustic-lsp-server 'rls)
+    (setq rustic-format-triggger 'on-save)
+    (setq rustic-format-on-save t))
 #+end_src
 
-** Magit
-
-[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-
-  (use-package magit
-    :commands magit-status
-    :custom
-    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-  ;; NOTE: Make sure to configure a GitHub token before using this package!
-  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-  (use-package forge
-    :after magit)
- ;; Note: How to add private to ~/.ssh/config files
- ;; Host github.com-rt4bc
- ;; HostName github.com
- ;; User rt4bc
- ;; IdentityFile ~/.ssh/id_rsa_github_rt
-
- ;; Note update ssh keybindings
- ;; ssh-add -D ; remove all cache
- ;; ssh-add xxxx_private_key  ;;update host private key.
-#+end_src
-
-** Commenting
-
-Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
-
-#+begin_src emacs-lisp
-
-  (use-package evil-nerd-commenter
-    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-#+end_src
-
-** Rainbow Delimiters
-
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-
-#+begin_src emacs-lisp
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-#+end_src
 
 ** Python Setting
    #+begin_src emacs-lisp
-     ;;; Python-config:
+     ;; ;;; Python-config:
+     (setq python-shell-interpreter "python3")
+     (setenv "WORKON_HOME" "~/.virtualenvs/py39/")
+     ;; (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
      (use-package elpy
        :ensure t
        :init
        (elpy-enable)
        :config
-       (setq elpy-rpc-backend "jedi"))
+       (setq elpy-rpc-backend "pyls"))
 
-     ;; M-x elpy-config can get the elpy environment config.
-     ;; jedi or flake8 not installed, because elpy-rpc not installed
-     ;; we can source elpy-virtual-env active to enter the path
-     ;; an install the needed pacakge.
-     (setq elpy-rpc-virtualenv-path 'current)
+     ;; ;; M-x elpy-config can get the elpy environment config.
+     ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
+     ;; ;; we can source elpy-virtual-env active to enter the path
+     ;; ;; an install the needed pacakge.
+     ;; (setq elpy-rpc-virtualenv-path 'current)
 
    #+end_src
 
@@ -596,6 +538,61 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
    #+end_src
 
+** CMake
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :ensure t
+    :config
+    (setq auto-mode-alist  
+          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
+                    ("\\.cmake\\'" . cmake-mode))  
+                  auto-mode-alist)))
+#+end_src
+
+** Magit
+[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
+
+#+begin_src emacs-lisp
+
+  (use-package magit
+    :commands magit-status
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+  ;; NOTE: Make sure to configure a GitHub token before using this package!
+  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+  (use-package forge
+    :after magit)
+ ;; Note: How to add private to ~/.ssh/config files
+ ;; Host github.com-rt4bc
+ ;; HostName github.com
+ ;; User rt4bc
+ ;; IdentityFile ~/.ssh/id_rsa_github_rt
+
+ ;; Note update ssh keybindings
+ ;; ssh-add -D ; remove all cache
+ ;; ssh-add xxxx_private_key  ;;update host private key.
+#+end_src
+
+** Commenting
+Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
+
+#+begin_src emacs-lisp
+
+  (use-package evil-nerd-commenter
+    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+#+end_src
+
+** Rainbow Delimiters
+[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
+
+#+begin_src emacs-lisp
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+#+end_src
 
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
