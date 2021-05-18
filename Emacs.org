@@ -459,6 +459,13 @@ useful for figuring out how things work in Emacs.
 
 
 ** Python Setting
+*** How to setting
++ install virtualenv by pip
+
++ virtualevn set, put setting in .zshrc file
+
++ install pyls or jedi
+
    #+begin_src emacs-lisp
      ;; ;;; Python-config:
      ;; (setq python-shell-interpreter "python3")
