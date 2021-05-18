@@ -461,8 +461,10 @@ useful for figuring out how things work in Emacs.
 ** Python Setting
    #+begin_src emacs-lisp
      ;; ;;; Python-config:
-     (setq python-shell-interpreter "python3")
-     (setenv "WORKON_HOME" "~/.virtualenvs/py39/")
+     ;; (setq python-shell-interpreter "python3")
+     (setq python-shell-interpreter "ipython"
+           python-shell-interpreter-args "--simple-prompt -i")
+     (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
      ;; (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
      (use-package elpy
