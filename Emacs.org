@@ -461,10 +461,40 @@ useful for figuring out how things work in Emacs.
 ** Python Setting
 *** How to setting
 + install virtualenv by pip
+  #+begin_src shell
+    pip3 install virtualenv
+
+    pip3 install virtualenvwrapper
+
+  #+end_src
 
 + virtualevn set, put setting in .zshrc file
+  #+begin_src shell
+    #Virtualenvwrapper settings:
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+    export WORKON_HOME=$HOME/.virtualenvs
+    export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
+    source ~/.local/bin/virtualenvwrapper.sh
+  #+end_src
 
+  #+begin_src shell
+    #Run:
+    $workon
+    #A list of environments, empty, is printed.
+
+    #Run:
+    mkvirtualenv temp
+    #A new environment, temp is created and activated.
+
+    #Run:
+    workon
+    #This time, the temp environment is included.
+  #+end_src
+  
 + install pyls or jedi
+  #+begin_src shell
+    pip3 install 'python-language-server[all]'
+  #+end_src
 
    #+begin_src emacs-lisp
      ;; ;;; Python-config:
