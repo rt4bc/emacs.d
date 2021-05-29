@@ -511,18 +511,19 @@ useful for figuring out how things work in Emacs.
 
    #+begin_src emacs-lisp
      ;; ;;; Python-config:
-     ;; (setq python-shell-interpreter "python3")
-     (setq python-shell-interpreter "ipython"
-           python-shell-interpreter-args "--simple-prompt -i")
-     (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
-     ;; (add-hook 'python-mode-hook 'eglot-ensure)
-     (setq python-indent-guess-indent-offset-verbose nil)
      (use-package elpy
        :ensure t
        :init
        (elpy-enable)
        :config
        (setq elpy-rpc-backend "pyls"))
+
+     ;; (setq python-shell-interpreter "python3")
+     (setq python-shell-interpreter "ipython"
+           python-shell-interpreter-args "--simple-prompt -i")
+     (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
+     ;; (add-hook 'python-mode-hook 'eglot-ensure)
+     (setq python-indent-guess-indent-offset-verbose nil)
 
      ;; ;; M-x elpy-config can get the elpy environment config.
      ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
