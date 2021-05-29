@@ -101,14 +101,17 @@ Read PATH from shell
 #+begin_src emacs-lisp
   ;; (when (memq window-system '(mac ns x))
   ;;  (exec-path-from-shell-initialize))
-
-  (cond
-   ((eq system-type 'darwin)
-    (progn
-      (exec-path-from-shell-initialize)))
-   (t
-    (progn
-      (message "nothing happened."))))
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (cond
+     ((eq system-type 'darwin)
+      (progn
+        (exec-path-from-shell-initialize)))
+     (t
+      (progn
+        (message "nothing happened."))))
+    )
 #+end_src
 
 
@@ -423,6 +426,13 @@ useful for figuring out how things work in Emacs.
   (yas-global-mode 1)
 #+end_src
 
+** Code Management
+#+begin_src emacs-lisp
+
+  (use-package magit
+    :ensure t)
+#+end_src
+
 ** LSP-Client
 #+begin_src emacs-lisp
   (use-package eglot :ensure t)
@@ -454,7 +464,8 @@ useful for figuring out how things work in Emacs.
     :ensure t
     :config
     (setq rustic-lsp-client 'eglot)
-    (setq rustic-lsp-server 'rls)
+
+    (setq rustic-lsp-server 'rustic-analyzer)
     (setq rustic-format-triggger 'on-save)
     (setq rustic-format-on-save t))
 #+end_src
@@ -574,7 +585,7 @@ useful for figuring out how things work in Emacs.
        :ensure t)
      (push 'rustic-clippy flycheck-checkers)
      (setq rustic-flycheck-clippy-params "--message-format=json")
-     (with-eval-after-load 'rust-mode
+     (with-eval-after-load 'rustic-mode
        (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
    #+end_src
