@@ -14,7 +14,7 @@ Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], 
   ;; You will most likely need to adjust this font size for your system!
 
   ;;; Code:
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
   (defvar efs/default-font-size 180)
   (defvar efs/default-variable-font-size 180)
