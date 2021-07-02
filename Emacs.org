@@ -57,6 +57,7 @@ Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], 
   ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+end_src
+
 * Package System Setup
 Emacs has a built in package manager but it doesn’t make it easy to
 automatically install packages on a new system the first time you pull
