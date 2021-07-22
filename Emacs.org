@@ -496,10 +496,12 @@ useful for figuring out how things work in Emacs.
 + virtualevn set, put setting in .zshrc file
   #+begin_src shell
     #Virtualenvwrapper settings:
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
     export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
-    source ~/.local/bin/virtualenvwrapper.sh
+    export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
+    export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
+    source $HOME/.virtualenvs/py39/bin/virtualenvwrapper.sh
+    # export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
+    # source ~/.local/bin/virtualenvwrapper.sh
   #+end_src
 
   #+begin_src shell
@@ -547,8 +549,11 @@ useful for figuring out how things work in Emacs.
      ;; (setq python-shell-interpreter "python3")
      (setq python-shell-interpreter "ipython"
            python-shell-interpreter-args "--simple-prompt -i")
-     ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39")) 
-     ;; (add-hook 'python-mode-hook 'eglot-ensure)
+     ;; This part is needed, for cross platforms, both virtualenv use the
+     ;; same name
+     (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
+     ;; enable
+     (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
 
      ;; ;; M-x elpy-config can get the elpy environment config.
