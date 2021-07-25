@@ -221,7 +221,9 @@ Define words jump mode when brows docs
 
 Use Fira code and Cantarell
 #+begin_src emacs-lisp
-
+  (use-package unicode-fonts)
+  (require 'unicode-fonts)
+  (unicode-fonts-setup)
   (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
 
   ;; Set the fixed pitch face
