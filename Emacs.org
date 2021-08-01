@@ -564,6 +564,11 @@ useful for figuring out how things work in Emacs.
      ;; ;; an install the needed pacakge.
      ;; (setq elpy-rpc-virtualenv-path 'current)
 
+     ;; format code on save
+     (use-package 'py-autopep8
+       :enable t)
+     (require 'py-autopep8)
+     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
    #+end_src
 
    #+RESULTS:
