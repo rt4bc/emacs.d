@@ -414,8 +414,100 @@ useful for figuring out how things work in Emacs.
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :config
+    (progn
+      (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+            treemacs-deferred-git-apply-delay      0.5
+            treemacs-directory-name-transformer    #'identity
+            treemacs-display-in-side-window        t
+            treemacs-eldoc-display                 t
+            treemacs-file-event-delay              5000
+            treemacs-file-extension-regex          treemacs-last-period-regex-value
+            treemacs-file-follow-delay             0.2
+            treemacs-file-name-transformer         #'identity
+            treemacs-follow-after-init             t
+            treemacs-expand-after-init             t
+            treemacs-git-command-pipe              ""
+            treemacs-goto-tag-strategy             'refetch-index
+            treemacs-indentation                   2
+            treemacs-indentation-string            " "
+            treemacs-is-never-other-window         nil
+            treemacs-max-git-entries               5000
+            treemacs-missing-project-action        'ask
+            treemacs-move-forward-on-expand        nil
+            treemacs-no-png-images                 nil
+            treemacs-no-delete-other-windows       t
+            treemacs-project-follow-cleanup        nil
+            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+            treemacs-position                      'left
+            treemacs-read-string-input             'from-child-frame
+            treemacs-recenter-distance             0.1
+            treemacs-recenter-after-file-follow    nil
+            treemacs-recenter-after-tag-follow     nil
+            treemacs-recenter-after-project-jump   'always
+            treemacs-recenter-after-project-expand 'on-distance
+            treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
+            treemacs-show-cursor                   nil
+            treemacs-show-hidden-files             t
+            treemacs-silent-filewatch              nil
+            treemacs-silent-refresh                nil
+            treemacs-sorting                       'alphabetic-asc
+            treemacs-space-between-root-nodes      t
+            treemacs-tag-follow-cleanup            t
+            treemacs-tag-follow-delay              1.5
+            treemacs-user-mode-line-format         nil
+            treemacs-user-header-line-format       nil
+            treemacs-width                         20
+            treemacs-width-is-initially-locked     t
+            treemacs-workspace-switch-cleanup      nil)
+
+      ;; The default width and height of the icons is 22 pixels. If you are
+      ;; using a Hi-DPI display, uncomment this to double the icon size.
+      ;;(treemacs-resize-icons 44)
+
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t)
+      (treemacs-fringe-indicator-mode 'always)
+      (pcase (cons (not (null (executable-find "git")))
+                   (not (null treemacs-python-executable)))
+        (`(t . t)
+         (treemacs-git-mode 'deferred))
+        (`(t . _)
+         (treemacs-git-mode 'simple))))
     :bind
-    (("C-c t" . treemacs)))
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag)))
+
+  ;; (use-package treemacs-evil
+  ;; :after (treemacs evil)
+  ;; :ensure t)
+
+  (use-package treemacs-projectile
+    :after (treemacs projectile)
+    :ensure t)
+
+  (use-package treemacs-icons-dired
+    :after (treemacs dired)
+    :ensure t
+    :config (treemacs-icons-dired-mode))
+
+  (use-package treemacs-magit
+    :after (treemacs magit)
+    :ensure t)
+
+  (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
+    :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+    :ensure t
+    :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -584,56 +676,57 @@ useful for figuring out how things work in Emacs.
        :ensure t
        :init (global-flycheck-mode))
 
-     (defvar-local flycheck-eglot-current-errors nil)
+     ;; (defvar-local flycheck-eglot-current-errors nil)
 
-     (defun flycheck-eglot-report-fn (diags &rest _)
-       (setq flycheck-eglot-current-errors
-             (mapcar (lambda (diag)
-                       (save-excursion
-                         (goto-char (flymake--diag-beg diag))
-                         (flycheck-error-new-at (line-number-at-pos)
-                                                (1+ (- (point) (line-beginning-position)))
-                                                (pcase (flymake--diag-type diag)
-                                                  ('eglot-error 'error)
-                                                  ('eglot-warning 'warning)
-                                                  ('eglot-note 'info)
-                                                  (_ (error "Unknown diag type, %S" diag)))
-                                                (flymake--diag-text diag)
-                                                :checker 'eglot)))
-                     diags))
-       (flycheck-buffer))
+     ;; (defun flycheck-eglot-report-fn (diags &rest _)
+     ;;   (setq flycheck-eglot-current-errors
+     ;;         (mapcar (lambda (diag)
+     ;;                   (save-excursion
+     ;;                     (goto-char (flymake--diag-beg diag))
+     ;;                     (flycheck-error-new-at (line-number-at-pos)
+     ;;                                            (1+ (- (point) (line-beginning-position)))
+     ;;                                            (pcase (flymake--diag-type diag)
+     ;;                                              ('eglot-error 'error)
+     ;;                                              ('eglot-warning 'warning)
+     ;;                                              ('eglot-note 'info)
+     ;;                                              (_ (error "Unknown diag type, %S" diag)))
+     ;;                                            (flymake--diag-text diag)
+     ;;                                            :checker 'eglot)))
+     ;;                 diags))
+     ;;   (flycheck-buffer))
 
-     (defun flycheck-eglot--start (checker callback)
-       (funcall callback 'finished flycheck-eglot-current-errors))
+     ;; (defun flycheck-eglot--start (checker callback)
+     ;;   (funcall callback 'finished flycheck-eglot-current-errors))
 
-     (defun flycheck-eglot--available-p ()
-       (bound-and-true-p eglot--managed-mode))
+     ;; (defun flycheck-eglot--available-p ()
+     ;;   (bound-and-true-p eglot--managed-mode))
 
-     (flycheck-define-generic-checker 'eglot
-       "Report `eglot' diagnostics using `flycheck'."
-       :start #'flycheck-eglot--start
-       :predicate #'flycheck-eglot--available-p
-       :modes '(prog-mode text-mode))
+     ;; (flycheck-define-generic-checker 'eglot
+     ;;   "Report `eglot' diagnostics using `flycheck'."
+     ;;   :start #'flycheck-eglot--start
+     ;;   :predicate #'flycheck-eglot--available-p
+     ;;   :modes '(prog-mode text-mode))
 
-     (push 'eglot flycheck-checkers)
+     ;; (push 'eglot flycheck-checkers)
 
-     (defun sanityinc/eglot-prefer-flycheck ()
-       (when eglot--managed-mode
-         (flycheck-add-mode 'eglot major-mode)
-         (flycheck-select-checker 'eglot)
-         (flycheck-mode)
-         (flymake-mode -1)
-         (setq eglot--current-flymake-report-fn 'flycheck-eglot-report-fn)))
+     ;; (defun sanityinc/eglot-prefer-flycheck ()
+     ;;   (when eglot--managed-mode
+     ;;     (flycheck-add-mode 'eglot major-mode)
+     ;;     (flycheck-select-checker 'eglot)
+     ;;     (flycheck-mode)
+     ;;     (flymake-mode -1)
+     ;;     (setq eglot--current-flymake-report-fn 'flycheck-eglot-report-fn)))
 
-     (add-hook 'eglot--managed-mode-hook 'sanityinc/eglot-prefer-flycheck)
+     ;; (add-hook 'eglot--managed-mode-hook 'sanityinc/eglot-prefer-flycheck)
 
-     (use-package flycheck-rust
-       :ensure t)
-     (push 'rustic-clippy flycheck-checkers)
-     (setq rustic-flycheck-clippy-params "--message-format=json")
-     (with-eval-after-load 'rustic-mode
-       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-     ;; change to rustic-mode or rust-mode, based on previous selection
+     ;; (use-package flycheck-rust
+     ;;   :ensure t)
+     ;; (push 'rustic-clippy flycheck-checkers)
+     ;; (setq rustic-flycheck-clippy-params "--message-format=json")
+     ;; (with-eval-after-load 'rustic-mode
+     ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+     ;; ;; change to rustic-mode or rust-mode, based on previous selection
      ;; otherwise it will crash.
    #+end_src
 
