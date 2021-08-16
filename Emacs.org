@@ -13,7 +13,6 @@ Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], 
   ;;       in Emacs and init.el will be generated automatically!
   ;; You will most likely need to adjust this font size for your system!
 
-  ;;; Code:
   (defalias 'yes-or-no-p 'y-or-n-p)
 
   (defvar efs/default-font-size 180)
@@ -530,6 +529,17 @@ useful for figuring out how things work in Emacs.
   (use-package yasnippet
     :ensure t)
   (yas-global-mode 1)
+#+end_src
+
+** Code Folding
+Enable Hs-minor-mode globally
+#+begin_src emacs-lisp
+  (defun my-hs-mode-hook ()
+    (hs-minor-mode)
+    (local-set-key (kbd "C-=") 'hs-show-block)
+    (local-set-key (kbd "C-+") 'hs-hide-block))
+
+  (add-hook 'python-mode-hook 'my-hs-mode-hook)
 #+end_src
 
 ** Code Management
