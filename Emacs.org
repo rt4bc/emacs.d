@@ -42,6 +42,15 @@ Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], 
   (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_Src
 
+** Enable ssh connections ove HTTPS
+To set this in your ssh config, edit the file at ~/.ssh/config, and add this section:
+#+begin_src shell
+Host github.com
+Hostname ssh.github.com
+Port 443
+User git
+#+end_src
+
 * Working with Coding Systems and Unicode
 #+begin_src emacs-lisp
   (prefer-coding-system 'utf-8)
@@ -57,6 +66,7 @@ Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], 
   ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+end_src
+
 
 * Package System Setup
 Emacs has a built in package manager but it doesn’t make it easy to
@@ -805,6 +815,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
+
 
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
