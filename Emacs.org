@@ -877,43 +877,43 @@ Auto truncate line at Org Mode
 This section contains the basic configuration for =org-mode= plus the
 configuration for Org agendas and capture templates.
 #+begin_src emacs-lisp
-(defun efs/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1))
+  (defun efs/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1))
 
-(use-package org
-  :pin org
-  :commands (org-capture org-agenda)
-  :hook (org-mode . efs/org-mode-setup)
-  :config
-  (setq org-ellipsis " ▾")
+  (use-package org
+    :pin org
+    :commands (org-capture org-agenda)
+    :hook (org-mode . efs/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
 
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
 
-  (cond
-  ((string-equal system-name "BLIU3-T01")
-  (progn
-  (setq org-agenda-files
-      '("/mnt/c/Users/bliu3/Workspace/Org/Tasks.org"
-        "/mnt/c/Users/bliu3/Workspace/Org/Notes.org"))))
-  (t 
-  (progn
-  (setq org-agenda-files
-      '("~/Desktop/Org/Tasks.org"
-        "~/Desktop/Org/Notes.org")))))
+    (cond
+     ((string-equal system-name "BLIU3-T01")
+      (progn
+        (setq org-agenda-files
+              '("/mnt/c/Users/bliu3/Workspace/Org/Tasks.org"
+                "/mnt/c/Users/bliu3/Workspace/Org/Notes.org"))))
+     (t 
+      (progn
+        (setq org-agenda-files
+              '("~/Desktop/OrgNotes/Tasks.org"
+                "~/Desktop/OrgNotes/Notes.org")))))
 
-        (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
 
-  (setq org-todo-keywords
-  '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-  (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-)
+    (setq org-todo-keywords
+    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+    (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+  
+    )
 #+end_src
 
 ** Nice Heading Bullets
@@ -978,12 +978,18 @@ You can add more =src= block templates below by copying one of the lines and cha
 #+begin_src emacs-lisp
 
   (with-eval-after-load 'org
-    (require 'org-tempo)
+    (cond
+     ((string> org-version "9.")
+      (progn
+        (with-eval-after-load 'org
+          ;; This is needed as of Org 9.x
+          (require 'org-tempo)
 
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    )
+          (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+          (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+          (add-to-list 'org-structure-template-alist '("py" . "src python"))
+          )))))
+
 
 #+end_src
 
