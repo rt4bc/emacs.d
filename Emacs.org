@@ -51,6 +51,7 @@ Port 443
 User git
 #+end_src
 
+
 * Working with Coding Systems and Unicode
 #+begin_src emacs-lisp
   (prefer-coding-system 'utf-8)
@@ -193,6 +194,11 @@ Define words jump mode when brows docs
 
 #+end_src
 
+* ESL Spell check
+#+begin_src emacs-lisp
+  (dolist (hook '(text-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode 1))))
+#+end_src
 
 * Basic UI Configuration
 ** Bar Mode and Transparency
