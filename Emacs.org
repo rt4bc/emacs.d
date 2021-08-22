@@ -51,7 +51,6 @@ Port 443
 User git
 #+end_src
 
-
 * Working with Coding Systems and Unicode
 #+begin_src emacs-lisp
   (prefer-coding-system 'utf-8)
@@ -67,7 +66,6 @@ User git
   ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 #+end_src
-
 
 * Package System Setup
 Emacs has a built in package manager but it doesn’t make it easy to
@@ -155,7 +153,6 @@ these variables yourself.
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
-
 
 * General Config
 Auto Wrap lines
@@ -410,7 +407,6 @@ useful for figuring out how things work in Emacs.
     ([remap describe-key] . helpful-key))
 
 #+end_src
-
 
 * Programming Config
 ** Company Mode
@@ -742,7 +738,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
 document editor, project planner, task and time tracker, blogging
@@ -947,7 +942,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   (add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
   ;; (run-at-time 1 10 'indent-org-block-automatically)
 #+end_src
-
 
 * Ends
 #+begin_src emacs-lisp
