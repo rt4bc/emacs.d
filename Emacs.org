@@ -77,21 +77,9 @@ installation and configuration of everything else we use.
 #+begin_src emacs-lisp
   ;; Initialize package sources
   (require 'package)
-
-  (cond
-   ((eq system-type 'darwin)
-    (progn
-      (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                               ("org" . "https://orgmode.org/elpa.")
-                               ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-      (message "darwin ok")))
-   (t
-    (progn
-      (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                               ("org" . "https://orgmode.org/elpa/")
-                               ("elpa" . "https://elpa.gnu.org/packages/")))
-      (message "non darwin ok"))))
-
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
@@ -101,8 +89,6 @@ installation and configuration of everything else we use.
     (package-install 'use-package))
 
   (require 'use-package)
-  (setq use-package-always-ensure t)
-
 #+end_src
 
 The auto-package-update package helps us keep our Emacs packages up to
@@ -229,13 +215,15 @@ Use Fira code and Cantarell
   (use-package unicode-fonts)
   (require 'unicode-fonts)
   (unicode-fonts-setup)
-  (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
 
-  ;; Set the fixed pitch face
-  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
-
-  ;; Set the variable pitch face
-  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
+  (if (display-graphic-p)
+      (progn
+      
+        (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
+        ;; Set the fixed pitch face
+        (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
+        ;; Set the variable pitch face
+        (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
 
 #+end_src
 
@@ -243,10 +231,11 @@ Use Fira code and Cantarell
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
 
 #+begin_src emacs-lisp
-
   (use-package doom-themes
-    :init (load-theme 'doom-gruvbox t))
-
+    :ensure t)
+  (if (display-graphic-p)
+      (load-theme 'doom-dark+ t)
+    (load-theme 'doom-gruvbox t))
 #+end_src
 
 ** Better Modeline
@@ -568,16 +557,15 @@ Enable Hs-minor-mode globally
   ;;   (add-hook 'rust-mode-hook 'eglot-ensure)
   ;;   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   ;;   )
-  (use-package rustic
-    :ensure t
-    :config
-    (setq rustic-lsp-client 'eglot)
+  ;; (use-package rustic
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq rustic-lsp-client 'eglot)
 
-    (setq rustic-lsp-server 'rustic-analyzer)
-    (setq rustic-format-triggger 'on-save)
-    (setq rustic-format-on-save t))
+  ;;   (setq rustic-lsp-server 'rustic-analyzer)
+  ;;   (setq rustic-format-triggger 'on-save)
+  ;;   (setq rustic-format-on-save t))
 #+end_src
-
 
 ** Python Setting
 *** How to setting Env
@@ -635,18 +623,18 @@ Enable Hs-minor-mode globally
    #+begin_src emacs-lisp
      ;; ;;; Python-config:
      (use-package elpy
-       :ensure t
+       :defer t
        :init
        (elpy-enable)
        :config
        (setq elpy-rpc-backend "pyls"))
 
      ;; (setq python-shell-interpreter "python3")
-     (setq python-shell-interpreter "ipython"
+     (setq python-shell-interpreter "python"
            python-shell-interpreter-args "--simple-prompt -i")
      ;; This part is needed, for cross platforms, both virtualenv use the
      ;; same name
-     (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
+     ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
      ;; enable
      (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
@@ -690,11 +678,6 @@ Enable Hs-minor-mode globally
 
 ** Magit
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-  (use-package magit
-    :ensure t)
-#+end_src
 
 #+begin_src emacs-lisp
 
