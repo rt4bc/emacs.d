@@ -1,3 +1,4 @@
+
 #+title: Emacs From Scratch Configuration
 #+STARTUP: overview
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
@@ -422,7 +423,7 @@ useful for figuring out how things work in Emacs.
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
     :config
     (progn
-      (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+      (setq treemacs-collapse-dirs                 1
             treemacs-deferred-git-apply-delay      0.5
             treemacs-directory-name-transformer    #'identity
             treemacs-display-in-side-window        t
@@ -452,7 +453,7 @@ useful for figuring out how things work in Emacs.
             treemacs-recenter-after-tag-follow     nil
             treemacs-recenter-after-project-jump   'always
             treemacs-recenter-after-project-expand 'on-distance
-            treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
+            ;; treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
             treemacs-show-cursor                   nil
             treemacs-show-hidden-files             t
             treemacs-silent-filewatch              nil
@@ -583,7 +584,8 @@ Enable Hs-minor-mode globally
     export WORKON_HOME=$HOME/.virtualenvs
     export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
     export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
-    source $HOME/.virtualenvs/py39/bin/virtualenvwrapper.sh
+    source $HOME/.virtualenvs/py39/bin/activate 
+
     # export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
     # source ~/.local/bin/virtualenvwrapper.sh
   #+end_src
@@ -643,7 +645,7 @@ Enable Hs-minor-mode globally
      ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
      ;; ;; we can source elpy-virtual-env active to enter the path
      ;; ;; an install the needed pacakge.
-     ;; (setq elpy-rpc-virtualenv-path 'current)
+     (setq elpy-rpc-virtualenv-path 'current)
 
      ;; format code on save
      ;; (use-package 'py-autopep8
@@ -797,26 +799,14 @@ configuration for Org agendas and capture templates.
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
 
-    (cond
-     ((string-equal system-name "BLIU3-T01")
-      (progn
-        (setq org-agenda-files
-              '("/mnt/c/Users/bliu3/Workspace/Org/Tasks.org"
-                "/mnt/c/Users/bliu3/Workspace/Org/Notes.org"))))
-     (t 
-      (progn
-        (setq org-agenda-files
-              '("~/Desktop/OrgNotes/Tasks.org"
-                "~/Desktop/OrgNotes/Notes.org")))))
-
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
     (setq org-habit-graph-column 60)
 
     (setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-    (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-  
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
     )
 #+end_src
 
