@@ -155,6 +155,13 @@ Define words jump mode when brows docs
 
 #+end_src
 
+ace-window
+#+begin_src emacs-lisp
+  (require 'ace-window)
+  (global-set-key (kbd "M-o") 'ace-window)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+#+end_src
+
 * ESL Spell check
 #+begin_src emacs-lisp
   (dolist (hook '(text-mode-hook))
@@ -197,15 +204,6 @@ Define words jump mode when brows docs
   (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
   ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
 #+end_src
 
 ** Font Configuration
@@ -389,6 +387,7 @@ useful for figuring out how things work in Emacs.
 #+begin_src emacs-lisp
 
   (use-package helpful
+    :ensure t
     :commands (helpful-callable helpful-variable helpful-command helpful-key)
     :custom
     (counsel-describe-function-function #'helpful-callable)
@@ -422,8 +421,8 @@ useful for figuring out how things work in Emacs.
     :ensure t
     :defer t
     :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    (with-eval-after-load 'ace-window)
+    ;; (define-key ace-window-keymap (kbd "M-0") #'treemacs-select-window))
     :config
     (progn
       (setq treemacs-collapse-dirs                 1
@@ -458,7 +457,7 @@ useful for figuring out how things work in Emacs.
             treemacs-recenter-after-project-expand 'on-distance
             ;; treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
             treemacs-show-cursor                   nil
-            treemacs-show-hidden-files             t
+            treemacs-show-hidden-files             nil
             treemacs-silent-filewatch              nil
             treemacs-silent-refresh                nil
             treemacs-sorting                       'alphabetic-asc
@@ -493,10 +492,6 @@ useful for figuring out how things work in Emacs.
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag)))
 
-  ;; (use-package treemacs-evil
-  ;; :after (treemacs evil)
-  ;; :ensure t)
-
   (use-package treemacs-projectile
     :after (treemacs projectile)
     :ensure t)
@@ -509,11 +504,6 @@ useful for figuring out how things work in Emacs.
   (use-package treemacs-magit
     :after (treemacs magit)
     :ensure t)
-
-  (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-    :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-    :ensure t
-    :config (treemacs-set-scope-type 'Perspectives))
 #+end_src
 
 ** Code template
@@ -955,6 +945,14 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 * Ends
 #+begin_src emacs-lisp
-(provide 'init)
-;;; init.el ends here
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  (provide 'init)
+  ;;; init.el ends here
 #+end_src
