@@ -651,11 +651,9 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
        :config
        (setq elpy-rpc-backend "pyls"))
 
-     (setq python-shell-interpreter "python")
-     ;; (setq python-shell-interpreter "python"
-     ;; python-shell-interpreter-args "--simple-prompt -i")
-     ;; This part is needed, for cross platforms, both virtualenv use the
-     ;; same name
+     (setq python-shell-interpreter "ipython"
+           python-shell-interpreter-args "-i --simple-prompt")
+
      ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
      ;; enable
      (add-hook 'python-mode-hook 'eglot-ensure)
