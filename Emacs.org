@@ -513,8 +513,24 @@ useful for figuring out how things work in Emacs.
 ** Code template
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :ensure t)
-  (yas-global-mode 1)
+    :ensure t
+    :config
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+#+end_src
+And add yasnippet-snippet to local directory by:
+1. yasnippet-snippets - a snippet collection package maintained by AndreaCrotti. It can be installed with M-x package-install RET yasnippet-snippets if you have added MELPA to your package sources.
+2. yasmate a tool which is dedicated to converting textmate bundles into yasnippet snippets. To use these snippets you have to run the tool first, so see its doc), and then point the yas-snippet-dirs variable to the .../yasmate/snippets subdir. If you have a working ruby environment, you can probably get lucky directly with rake convert-bundles.
+3. textmate-to-yas.el This is another textmate bundle converting tool using Elisp instead of Ruby.
+#+begin_quote
+Once that is done, then just refresh the packages and install it with.
+
+M-x package-refresh-contents
+M-x package-install yasnippet-snippets
+Now all the snippets will load automatically, as soon as yasnippet loads.
+#+end_quote
+#+begin_src emacs-lisp
+  (use-pacakge yasnippet-snippets
+               :ensure t)
 #+end_src
 
 ** Code Folding
