@@ -292,7 +292,6 @@ The emacs org mode, S key is shift key!!!
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
 
 #+begin_src emacs-lisp
-
   (use-package ivy
     :ensure t
     :bind (
@@ -327,6 +326,7 @@ The emacs org mode, S key is shift key!!!
     (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
     (setf (alist-get 'swiper ivy-height-alist) 15)
     (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7)
+
     (ivy-mode 1))
 
   (use-package ivy-rich
@@ -343,11 +343,11 @@ The emacs org mode, S key is shift key!!!
     :ensure t
     :bind (("M-x" . counsel-M-x)
            ("C-x b" . counsel-switch-buffer)
+           ("C-M-j" . 'counsel-switch-buffer)
            ("C-x C-b" . counsel-ibuffer)
            ("M-y" . counsel-yank-pop)
            ("C-x C-r" . counsel-recentf)
            ("C-x C-f" . counsel-find-file)
-           ("C-M-j" . 'counsel-switch-buffer)
            :map minibuffer-local-map
            ("C-r" . 'counsel-minibuffer-history))
     :custom
