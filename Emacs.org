@@ -536,7 +536,7 @@ M-x package-install yasnippet-snippets
 Now all the snippets will load automatically, as soon as yasnippet loads.
 #+end_quote
 #+begin_src emacs-lisp
-  (use-pacakge yasnippet-snippets
+  (use-package yasnippet-snippets
                :ensure t)
 #+end_src
 
