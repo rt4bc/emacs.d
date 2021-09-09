@@ -5,6 +5,13 @@
 Learn emacs configuration and itself(emacs-lisp) from System
 Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], copy and remember, happy hacking.
 
+#+begin_quote
+In order to optimise command lookup, bash keeps a cache, per bash process, of where it found files. So if you typed python and it found it in /usr/bin/, then changing the PATH to provide another python earlier in the PATH will have no effect. You need to also give the bash command:
+
+hash -r
+to forget the optimised cached. See help hash. (Of course, I assume you reread the .bashrc or set the PATH explicitly in your shell as well).
+#+end_quote
+
 * Startup Performance
 ** Yes-or-No -> Y-or-N
 #+begin_src emacs-lisp
@@ -292,23 +299,22 @@ The emacs org mode, S key is shift key!!!
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
 
 #+begin_src emacs-lisp
-
   (use-package ivy
     :ensure t
     :bind (
-	   ("C-s" . swiper)
-	   :map ivy-minibuffer-map
-	   ("TAB" . ivy-alt-done)
-	   ("C-l" . ivy-alt-done)
-	   ("C-j" . ivy-next-line)
-	   ("C-k" . ivy-previous-line)
-	   :map ivy-switch-buffer-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-l" . ivy-done)
-	   ("C-d" . ivy-switch-buffer-kill)
-	   :map ivy-reverse-i-search-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-d" . ivy-reverse-i-search-kill))
+           ("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
     :config
     (setq ivy-use-virtual-buffers t)
     (setq ivy-wrap t)
@@ -327,6 +333,7 @@ The emacs org mode, S key is shift key!!!
     (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
     (setf (alist-get 'swiper ivy-height-alist) 15)
     (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7)
+
     (ivy-mode 1))
 
   (use-package ivy-rich
@@ -335,17 +342,21 @@ The emacs org mode, S key is shift key!!!
     :init
     (ivy-rich-mode 1))
 
+  (use-package ivy-hydra
+    :ensure t
+    :after ivy)
+
   (use-package counsel
     :ensure t
     :bind (("M-x" . counsel-M-x)
-	   ("C-x b" . counsel-switch-buffer)
-	   ("C-x C-b" . counsel-ibuffer)
-	   ("M-y" . counsel-yank-pop)
-	   ("C-x C-r" . counsel-recentf)
-	   ("C-x C-f" . counsel-find-file)
-	   ("C-M-j" . 'counsel-switch-buffer)
-	   :map minibuffer-local-map
-	   ("C-r" . 'counsel-minibuffer-history))
+           ("C-x b" . counsel-switch-buffer)
+           ("C-M-j" . 'counsel-switch-buffer)
+           ("C-x C-b" . counsel-ibuffer)
+           ("M-y" . counsel-yank-pop)
+           ("C-x C-r" . counsel-recentf)
+           ("C-x C-f" . counsel-find-file)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
     :custom
     (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
     :config
@@ -509,8 +520,24 @@ useful for figuring out how things work in Emacs.
 ** Code template
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :ensure t)
-  (yas-global-mode 1)
+    :ensure t
+    :config
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+#+end_src
+And add yasnippet-snippet to local directory by:
+1. yasnippet-snippets - a snippet collection package maintained by AndreaCrotti. It can be installed with M-x package-install RET yasnippet-snippets if you have added MELPA to your package sources.
+2. yasmate a tool which is dedicated to converting textmate bundles into yasnippet snippets. To use these snippets you have to run the tool first, so see its doc), and then point the yas-snippet-dirs variable to the .../yasmate/snippets subdir. If you have a working ruby environment, you can probably get lucky directly with rake convert-bundles.
+3. textmate-to-yas.el This is another textmate bundle converting tool using Elisp instead of Ruby.
+#+begin_quote
+Once that is done, then just refresh the packages and install it with.
+
+M-x package-refresh-contents
+M-x package-install yasnippet-snippets
+Now all the snippets will load automatically, as soon as yasnippet loads.
+#+end_quote
+#+begin_src emacs-lisp
+  (use-package yasnippet-snippets
+               :ensure t)
 #+end_src
 
 ** Code Folding
