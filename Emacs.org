@@ -416,6 +416,11 @@ useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Config
+** Emacs Tree Sitter
+#+begin_src emacs-lisp
+  ;; (use-package tree-sitter)
+  ;; (use-package tree-sitter-langs)
+#+end_src
 ** File Explorer sidebar
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -539,9 +544,9 @@ Enable Hs-minor-mode globally
 #+end_src
 ** LSP Mode Setting
 #+begin_src emacs-lisp
-  (use-package eglot)
-  (require 'eglot)
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;; (use-package eglot)
+  ;; (require 'eglot)
+  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 
   (use-package lsp-mode
     :init
@@ -549,6 +554,7 @@ Enable Hs-minor-mode globally
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            ;; (XXX-mode . lsp)
+           (python-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
@@ -557,6 +563,8 @@ Enable Hs-minor-mode globally
   ;; if you are ivy user
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   ;; optional if you want which-key integration
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
   (use-package which-key
     :config
     (which-key-mode))
@@ -564,9 +572,9 @@ Enable Hs-minor-mode globally
 
 ** C/C++ Setting
 #+begin_src emacs-lisp
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure)
+  ;; (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  ;; (add-hook 'c-mode-hook 'eglot-ensure)
+  ;; (add-hook 'c++-mode-hook 'eglot-ensure)
 #+end_src
 
 ** Python Setting
@@ -619,31 +627,39 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
   #+end_src
   
 *** How to set LSP
-+ install pyls or jedi
++ install Python language server, python-language-server is outdated...
   #+begin_src shell
-    pip3 install 'python-language-server[all]'
+    pip3 install 'python-lsp-server[all]'
   #+end_src
 
    #+begin_src emacs-lisp
-     (use-package elpy
-       :init
-       (elpy-enable)
-       :config
-       (setq elpy-rpc-backend "pyls"))
-
-     (setq python-shell-interpreter "ipython"
-           python-shell-interpreter-args "-i --simple-prompt")
+     ;; (use-package elpy
+     ;; :init
+     ;; (elpy-enable)
+     ;; :config
+     ;; (setq elpy-rpc-backend "pyls"))
 
      ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
      ;; enable
-     (add-hook 'python-mode-hook 'eglot-ensure)
-     (setq python-indent-guess-indent-offset-verbose nil)
+     ;; (add-hook 'python-mode-hook 'eglot-ensure)
 
      ;; ;; M-x elpy-config can get the elpy environment config.
      ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
      ;; ;; we can source elpy-virtual-env active to enter the path
      ;; ;; an install the needed pacakge.
-     (setq elpy-rpc-virtualenv-path 'current)
+     ;; (setq elpy-rpc-virtualenv-path 'current)
+
+     (setq python-indent-guess-indent-offset-verbose nil)
+     (setq python-shell-interpreter "python"
+           ;; python-shell-interpreter-args "-i --simple-prompt")
+           python-shell-interpreter-args "")
+
+     (use-package lsp-python-ms
+       :ensure t
+       :init (setq lsp-python-ms-auto-install-server t)
+       :hook (python-mode . (lambda ()
+                              (require 'lsp-python-ms)
+                              (lsp))))  ; or lsp-deferred
 
      ;; format code on save
      ;; (use-package 'py-autopep8
