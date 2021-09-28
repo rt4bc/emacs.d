@@ -576,9 +576,13 @@ Enable Hs-minor-mode globally
    
 2. Config
 #+begin_src emacs-lisp
-  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; (load (expand-file-name "~/quicklisp/slime-helper.el"))
   ;; Replace "sbcl" with the path to your implementation
-  (setq inferior-lisp-program "/usr/sbin/sbcl")
+  ;; (setq inferior-lisp-program "/usr/sbin/sbcl")
+  (use-package sly
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl"
+          sly-complete-symbol-function 'sly-simple-completions))
 #+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
