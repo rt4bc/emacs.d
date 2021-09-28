@@ -534,13 +534,9 @@ Enable Hs-minor-mode globally
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 #+begin_src emacs-lisp
   (use-package company
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    :custom
-    (company-minimum-prefix-length 2)
-    (company-idle-delay 0.1)
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
+    :ensure t)
+  (global-company-mode)
+  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
 ** LSP Mode Setting
 #+begin_src emacs-lisp
@@ -569,7 +565,21 @@ Enable Hs-minor-mode globally
     :config
     (which-key-mode))
 #+end_src
-
+** Common Lisp Setting
+1. Install SBCL
+   For Arch:
+   #+begin_src shell
+     $pacman -S sbcl
+     $curl -O http://beta.quicklisp.org/quicklisp.lisp
+     $sbcl --load quicklisp.lisp
+   #+end_src
+   
+2. Config
+#+begin_src emacs-lisp
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  (setq inferior-lisp-program "/usr/sbin/sbcl")
+#+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
   ;; (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
@@ -673,7 +683,6 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
    #+end_src
 
    #+RESULTS:
-
 ** HDL Setting
 #+begin_src emacs-lisp
   (use-package verilog-mode
