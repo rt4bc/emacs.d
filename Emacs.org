@@ -705,7 +705,7 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
           verilog-minimum-comment-distance 40
           verilog-indent-begin-after-if    t
           verilog-auto-lineup              'declarations
-          verilog-linter                   "my_lint_shell_command"
+          verilog-linter                   "verilator --lint-only"
           ))
 #+end_src
 ** TAGS
