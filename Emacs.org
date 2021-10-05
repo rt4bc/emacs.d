@@ -160,6 +160,15 @@ New line indent
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil)
   (global-set-key (kbd "RET") 'newline-and-indent)
+
+  ;; Hight lighting Indentation
+  (use-package highlight-indentation
+    :config
+    (set-face-background 'highlight-indentation-face "#e3e3d3")
+    (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+    (add-hook 'python-mode-hook 'highlight-indentation-mode)
+    )
+
 #+end_src
 
 Define words jump mode when brows docs
