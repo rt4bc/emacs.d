@@ -559,7 +559,7 @@ Enable Hs-minor-mode globally
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            ;; (XXX-mode . lsp)
-           (python-mode . lsp)
+           ;; (python-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
@@ -656,43 +656,43 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
   #+end_src
 
    #+begin_src emacs-lisp
-     ;; (use-package elpy
-     ;; :init
-     ;; (elpy-enable)
-     ;; :config
-     ;; (setq elpy-rpc-backend "pyls"))
+     (use-package elpy
+       :init
+       (elpy-enable)
+       :config
+       (setq elpy-rpc-virtualenv-path 'current)
+       (setq elpy-formatter 'black)
+       (setq elpy-syntax-check-command  "black")
+       (setq elpy-rpc-backend "pyls")
+       (add-hook 'elpy-mode-hook (lambda ()
+                                   (add-hook 'before-save-hook
+                                             'elpy-format-code nil t)))
+       )
 
-     ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
-     ;; enable
-     ;; (add-hook 'python-mode-hook 'eglot-ensure)
-
+     ;; Pyls-mypy Mypy type checking for Python 3
+     ;; pyls-isort Isort import sort code formatting
+     ;; pyls-black for code formatting using Black
      ;; ;; M-x elpy-config can get the elpy environment config.
-     ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
-     ;; ;; we can source elpy-virtual-env active to enter the path
      ;; ;; an install the needed pacakge.
-     ;; (setq elpy-rpc-virtualenv-path 'current)
+
+
+     ;; (use-package lsp-python-ms
+     ;; :ensure t
+     ;; :init (setq lsp-python-ms-auto-install-server t)
+     ;; :hook (python-mode . (lambda ()
+     ;; (require 'lsp-python-ms)
+     ;; (lsp))))  ; or lsp-deferred
 
      (setq python-indent-guess-indent-offset-verbose nil)
      (setq python-shell-interpreter "python"
            ;; python-shell-interpreter-args "-i --simple-prompt")
-           python-shell-interpreter-args "")
-
-     (use-package lsp-python-ms
-       :ensure t
-       :init (setq lsp-python-ms-auto-install-server t)
-       :hook (python-mode . (lambda ()
-                              (require 'lsp-python-ms)
-                              (lsp))))  ; or lsp-deferred
+           python-shell-interpreter-args "-i")
 
      ;; format code on save
-     ;; (use-package 'py-autopep8
-     ;; :enable t)
-     ;; (require 'py-autopep8)
-     ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-     (use-package python-black
-       :after python
-       :config
-       (add-hook 'python-mode-hook 'python-black-on-save-mode))
+     ;; (use-package python-black
+     ;; :after python
+     ;; :config
+     ;; (add-hook 'python-mode-hook 'python-black-on-save-mode))
    #+end_src
 
    #+RESULTS:
