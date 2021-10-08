@@ -662,7 +662,7 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
        :config
        (setq elpy-rpc-virtualenv-path 'current)
        (setq elpy-formatter 'black)
-       (setq elpy-syntax-check-command  "black")
+       ;; (setq elpy-syntax-check-command  "black")
        (setq elpy-rpc-backend "pyls")
        (add-hook 'elpy-mode-hook (lambda ()
                                    (add-hook 'before-save-hook
