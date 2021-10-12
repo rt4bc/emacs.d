@@ -140,7 +140,7 @@ these variables yourself.
   )
 #+end_src
 
-* General Config
+* General Configuration
 Auto Wrap lines
 #+begin_src emacs-lisp
   (global-visual-line-mode 1)  
@@ -252,8 +252,10 @@ Use Fira code and Cantarell
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t)
+  (use-package solarized-theme
+    :ensure t)
   (if (display-graphic-p)
-      (load-theme 'doom-dark+ t)
+      (load-theme 'solarized-zenburn t)
     (load-theme 'doom-gruvbox t))
 #+end_src
 
