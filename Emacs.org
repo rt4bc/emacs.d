@@ -188,6 +188,8 @@ ace-window
 ** TODO 
 
 * ESL Spell check
+Need to install spell checker and dictionary
+aspell & aspell-dict-en
 #+begin_src emacs-lisp
   (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
