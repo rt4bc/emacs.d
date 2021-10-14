@@ -146,6 +146,11 @@ Auto Wrap lines
   (global-visual-line-mode 1)  
 #+end_src
 
+Key binding
+#+begin_src emacs-lisp
+  (setq mac-option-modifier 'meta)
+#+end_src
+
 Kill ring lines
 #+begin_src emacs-lisp
   (setq  global-mark-ring-max 5000 ;;increase mark ring to contains 5000 entries
