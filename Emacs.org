@@ -643,6 +643,7 @@ Enable Hs-minor-mode globally
 + install Python language server, python-language-server is outdated...
   #+begin_src shell
     pip3 install 'python-lsp-server[all]'
+    pip3 install pyls-mypy pyls-isort pyls-black
   #+end_src
 
    #+begin_src emacs-lisp
