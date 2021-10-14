@@ -610,19 +610,9 @@ Enable Hs-minor-mode globally
     pip3 install virtualenvwrapper
   #+end_src
   after install python package, add virtualenvwrapper.sh path  to $PATH
+  or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
   #+begin_src shell
-
-❯ mkvirtualenv py39
-created virtual environment CPython3.9.7.final.0-64 in 253ms
-  creator CPython3Posix(dest=/Users/bochao/.virtualenvs/py39, clear=False, no_vcs_ignore=False, global=False)
-  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/Users/bochao/Library/Application Support/virtualenv)
-    added seed packages: pip==21.2.3, setuptools==57.4.0, wheel==0.37.0
-  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/predeactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/postdeactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/preactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/postactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_env_details
+    ❯ mkvirtualenv py39
   #+end_src
 
 + virtualevn set, put setting in .zshrc file
@@ -632,23 +622,12 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
     export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
     export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
     source $HOME/.virtualenvs/py39/bin/activate 
-
-    # export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
-    # source ~/.local/bin/virtualenvwrapper.sh
   #+end_src
 
   #+begin_src shell
     #Run:
     $workon
     #A list of environments, empty, is printed.
-
-    #Run:
-    mkvirtualenv temp
-    #A new environment, temp is created and activated.
-
-    #Run:
-    workon
-    #This time, the temp environment is included.
   #+end_src
   
 *** How to set LSP
