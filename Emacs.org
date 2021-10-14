@@ -147,9 +147,11 @@ Auto Wrap lines
 #+end_src
 
 Key binding
+This settin works for GUI Emacs
 #+begin_src emacs-lisp
   (setq mac-option-modifier 'meta)
 #+end_src
+For Emacs in terminal, like iterm2, need to change profile->keys bindings
 
 Kill ring lines
 #+begin_src emacs-lisp
