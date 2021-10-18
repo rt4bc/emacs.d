@@ -560,9 +560,9 @@ Enable Hs-minor-mode globally
 #+end_src
 ** LSP Mode Setting
 #+begin_src emacs-lisp
-  ;; (use-package eglot)
-  ;; (require 'eglot)
-  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  (use-package eglot)
+  (require 'eglot)
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 
   (use-package lsp-mode
     :init
@@ -606,9 +606,9 @@ Enable Hs-minor-mode globally
 #+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
-  ;; (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  ;; (add-hook 'c-mode-hook 'eglot-ensure)
-  ;; (add-hook 'c++-mode-hook 'eglot-ensure)
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (add-hook 'c++-mode-hook 'eglot-ensure)
 #+end_src
 
 ** Python Setting
