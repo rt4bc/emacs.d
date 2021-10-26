@@ -606,7 +606,7 @@ Enable Hs-minor-mode globally
 #+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "ccls"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
 #+end_src
