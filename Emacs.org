@@ -176,6 +176,10 @@ New line indent
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
     )
 
+  (use-package aggressive-indent
+    :config
+    (global-aggressive-indent-mode 1))
+
 #+end_src
 
 Define words jump mode when brows docs
