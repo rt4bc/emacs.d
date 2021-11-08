@@ -140,11 +140,18 @@ these variables yourself.
   )
 #+end_src
 
-* General Config
+* General Configuration
 Auto Wrap lines
 #+begin_src emacs-lisp
   (global-visual-line-mode 1)  
 #+end_src
+
+Key binding
+This settin works for GUI Emacs
+#+begin_src emacs-lisp
+  (setq mac-option-modifier 'meta)
+#+end_src
+For Emacs in terminal, like iterm2, need to change profile->keys bindings
 
 Kill ring lines
 #+begin_src emacs-lisp
@@ -160,6 +167,19 @@ New line indent
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil)
   (global-set-key (kbd "RET") 'newline-and-indent)
+
+  ;; Hight lighting Indentation
+  (use-package highlight-indentation
+    :config
+    (set-face-background 'highlight-indentation-face "#e3e3d3")
+    (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+    (add-hook 'python-mode-hook 'highlight-indentation-mode)
+    )
+
+  (use-package aggressive-indent
+    :config
+    (global-aggressive-indent-mode 1))
+
 #+end_src
 
 Define words jump mode when brows docs
@@ -179,6 +199,8 @@ ace-window
 ** TODO 
 
 * ESL Spell check
+Need to install spell checker and dictionary
+aspell & aspell-dict-en
 #+begin_src emacs-lisp
   (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
@@ -243,8 +265,10 @@ Use Fira code and Cantarell
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t)
+  (use-package solarized-theme
+    :ensure t)
   (if (display-graphic-p)
-      (load-theme 'doom-dark+ t)
+      (load-theme 'solarized-zenburn t)
     (load-theme 'doom-gruvbox t))
 #+end_src
 
@@ -416,6 +440,11 @@ useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Config
+** Emacs Tree Sitter
+#+begin_src emacs-lisp
+  ;; (use-package tree-sitter)
+  ;; (use-package tree-sitter-langs)
+#+end_src
 ** File Explorer sidebar
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -529,13 +558,9 @@ Enable Hs-minor-mode globally
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 #+begin_src emacs-lisp
   (use-package company
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    :custom
-    (company-minimum-prefix-length 2)
-    (company-idle-delay 0.1)
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
+    :ensure t)
+  (global-company-mode)
+  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
 ** LSP Mode Setting
 #+begin_src emacs-lisp
@@ -549,6 +574,7 @@ Enable Hs-minor-mode globally
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            ;; (XXX-mode . lsp)
+           ;; (python-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
@@ -557,11 +583,31 @@ Enable Hs-minor-mode globally
   ;; if you are ivy user
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   ;; optional if you want which-key integration
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
   (use-package which-key
     :config
     (which-key-mode))
 #+end_src
-
+** Common Lisp Setting
+1. Install SBCL
+   For Arch:
+   #+begin_src shell
+     $pacman -S sbcl
+     $curl -O http://beta.quicklisp.org/quicklisp.lisp
+     $sbcl --load quicklisp.lisp
+   #+end_src
+   
+2. Config
+#+begin_src emacs-lisp
+  ;; (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  ;; (setq inferior-lisp-program "/usr/sbin/sbcl")
+  (use-package sly
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl"
+          sly-complete-symbol-function 'sly-simple-completions))
+#+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
@@ -577,19 +623,9 @@ Enable Hs-minor-mode globally
     pip3 install virtualenvwrapper
   #+end_src
   after install python package, add virtualenvwrapper.sh path  to $PATH
+  or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
   #+begin_src shell
-
-❯ mkvirtualenv py39
-created virtual environment CPython3.9.7.final.0-64 in 253ms
-  creator CPython3Posix(dest=/Users/bochao/.virtualenvs/py39, clear=False, no_vcs_ignore=False, global=False)
-  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/Users/bochao/Library/Application Support/virtualenv)
-    added seed packages: pip==21.2.3, setuptools==57.4.0, wheel==0.37.0
-  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/predeactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/postdeactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/preactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/postactivate
-virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_env_details
+    ❯ mkvirtualenv py39
   #+end_src
 
 + virtualevn set, put setting in .zshrc file
@@ -599,29 +635,19 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
     export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
     export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
     source $HOME/.virtualenvs/py39/bin/activate 
-
-    # export VIRTUALENVWRAPPER_VIRTUALENV=~/.local/bin/virtualenv
-    # source ~/.local/bin/virtualenvwrapper.sh
   #+end_src
 
   #+begin_src shell
     #Run:
     $workon
     #A list of environments, empty, is printed.
-
-    #Run:
-    mkvirtualenv temp
-    #A new environment, temp is created and activated.
-
-    #Run:
-    workon
-    #This time, the temp environment is included.
   #+end_src
   
 *** How to set LSP
-+ install pyls or jedi
++ install Python language server, python-language-server is outdated...
   #+begin_src shell
-    pip3 install 'python-language-server[all]'
+    pip3 install 'python-lsp-server[all]'
+    pip3 install pyls-mypy pyls-isort pyls-black
   #+end_src
 
    #+begin_src emacs-lisp
@@ -629,35 +655,42 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
        :init
        (elpy-enable)
        :config
-       (setq elpy-rpc-backend "pyls"))
+       (setq elpy-rpc-virtualenv-path 'current)
+       (setq elpy-formatter 'black)
+       ;; (setq elpy-syntax-check-command  "black")
+       (setq elpy-rpc-backend "pyls")
+       (add-hook 'elpy-mode-hook (lambda ()
+                                   (add-hook 'before-save-hook
+                                             'elpy-format-code nil t)))
+       )
 
-     (setq python-shell-interpreter "ipython"
-           python-shell-interpreter-args "-i --simple-prompt")
-
-     ;; (pyvenv-activate (expand-file-name "~/.virtualenvs/py39"))
-     ;; enable
-     (add-hook 'python-mode-hook 'eglot-ensure)
-     (setq python-indent-guess-indent-offset-verbose nil)
-
+     ;; Pyls-mypy Mypy type checking for Python 3
+     ;; pyls-isort Isort import sort code formatting
+     ;; pyls-black for code formatting using Black
      ;; ;; M-x elpy-config can get the elpy environment config.
-     ;; ;; jedi or flake8 not installed, because elpy-rpc not installed
-     ;; ;; we can source elpy-virtual-env active to enter the path
      ;; ;; an install the needed pacakge.
-     (setq elpy-rpc-virtualenv-path 'current)
+
+
+     ;; (use-package lsp-python-ms
+     ;; :ensure t
+     ;; :init (setq lsp-python-ms-auto-install-server t)
+     ;; :hook (python-mode . (lambda ()
+     ;; (require 'lsp-python-ms)
+     ;; (lsp))))  ; or lsp-deferred
+
+     (setq python-indent-guess-indent-offset-verbose nil)
+     (setq python-shell-interpreter "python"
+           ;; python-shell-interpreter-args "-i --simple-prompt")
+           python-shell-interpreter-args "-i")
 
      ;; format code on save
-     ;; (use-package 'py-autopep8
-     ;; :enable t)
-     ;; (require 'py-autopep8)
-     ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-     (use-package python-black
-       :after python
-       :config
-       (add-hook 'python-mode-hook 'python-black-on-save-mode))
+     ;; (use-package python-black
+     ;; :after python
+     ;; :config
+     ;; (add-hook 'python-mode-hook 'python-black-on-save-mode))
    #+end_src
 
    #+RESULTS:
-
 ** HDL Setting
 #+begin_src emacs-lisp
   (use-package verilog-mode
@@ -676,7 +709,7 @@ virtualenvwrapper.user_scripts creating /Users/bochao/.virtualenvs/py39/bin/get_
           verilog-minimum-comment-distance 40
           verilog-indent-begin-after-if    t
           verilog-auto-lineup              'declarations
-          verilog-linter                   "my_lint_shell_command"
+          verilog-linter                   "verilator --lint-only"
           ))
 #+end_src
 ** TAGS
@@ -921,6 +954,34 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   ;; (run-at-time 1 10 'indent-org-block-automatically)
 #+end_src
 
+** Org Roam Mode
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory "~/kms-notes")
+    :bind
+    (("C-c n l" . org-roam-buffer-toggle)
+     ("C-c n f" . org-roam-node-find)
+     ("C-c n i" . org-roam-node-insert))
+    :config
+    (org-roam-setup))
+
+  ;;For org-roam v2, use org-roam-ui, org-roam-server only works with org-roam v1
+  (use-package websocket
+    :ensure t)
+  (use-package simple-httpd
+    :ensure t)
+  (add-to-list 'load-path "~/.emacs.d/stand-alone/org-roam-ui")
+  (load-library "org-roam-ui")
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+  (org-roam-ui-mode)
+#+end_src
 * Ends
 #+begin_src emacs-lisp
   ;; Disable line numbers for some modes
