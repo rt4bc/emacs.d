@@ -961,7 +961,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
     :init
     (setq org-roam-v2-ack t)
     :custom
-    (org-roam-directory "~/kms-notes")
+    (org-roam-directory "~/org-brain/")
     :bind
     (("C-c n l" . org-roam-buffer-toggle)
      ("C-c n f" . org-roam-node-find)
@@ -969,18 +969,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
     :config
     (org-roam-setup))
 
-  ;;For org-roam v2, use org-roam-ui, org-roam-server only works with org-roam v1
-  (use-package websocket
-    :ensure t)
-  (use-package simple-httpd
-    :ensure t)
-  (add-to-list 'load-path "~/.emacs.d/stand-alone/org-roam-ui")
-  (load-library "org-roam-ui")
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t)
-  (org-roam-ui-mode)
 #+end_src
 * Ends
 #+begin_src emacs-lisp
