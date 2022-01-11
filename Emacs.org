@@ -248,8 +248,8 @@ Use Fira code and Cantarell
   ;; :config
   ;; (unicode-fonts-setup))
 
-  (defvar efs/default-font-size 180)
-  (defvar efs/default-variable-font-size 180)
+  (defvar efs/default-font-size 150)
+  (defvar efs/default-variable-font-size 150)
   (if (display-graphic-p)
       (progn
         (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
@@ -280,12 +280,10 @@ Use Fira code and Cantarell
 
 #+begin_src emacs-lisp
   ;; doom-modeline depend the all-the-icons package 
-  (use-package all-the-icons)
-
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 15)))
-
+  ;; (use-package all-the-icons)
+  ;; (use-package doom-modeline
+  ;; :init (doom-modeline-mode 1)
+  ;; :custom ((doom-modeline-height 15)))
 #+end_src
 
 ** Key Remapping
@@ -538,9 +536,12 @@ useful for figuring out how things work in Emacs.
 
 ** Code template
 #+begin_src emacs-lisp
-   (use-package yasnippet                  
-     :config
-     (add-hook 'prog-mode-hook #'yas-minor-mode))
+  (use-package yasnippet                  
+    :config
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+
+  (use-package yasnippet-snippets
+    :ensure t)
 #+end_src
 
 ** Code Folding
