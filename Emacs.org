@@ -576,6 +576,7 @@ Enable Hs-minor-mode globally
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            ;; (XXX-mode . lsp)
            ;; (python-mode . lsp)
+           (lua-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
