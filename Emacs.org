@@ -577,6 +577,7 @@ Enable Hs-minor-mode globally
            ;; (XXX-mode . lsp)
            ;; (python-mode . lsp)
            (lua-mode . lsp)
+           ;; install lua-lanuage-server first
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
 
