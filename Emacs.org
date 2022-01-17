@@ -902,6 +902,7 @@ Eval code blocks.
      'org-babel-load-languages
      '((emacs-lisp . t)
        (C . t)
+       (lua . t)
        (python . t)))
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 #+end_src
