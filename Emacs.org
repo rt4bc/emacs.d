@@ -440,8 +440,18 @@ useful for figuring out how things work in Emacs.
 * Programming Config
 ** Emacs Tree Sitter
 #+begin_src emacs-lisp
-  ;; (use-package tree-sitter)
-  ;; (use-package tree-sitter-langs)
+
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+    )
+
+  (use-package tree-sitter-langs
+    :ensure t
+    )
+
 #+end_src
 ** File Explorer sidebar
 #+begin_src emacs-lisp
