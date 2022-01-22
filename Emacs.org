@@ -225,13 +225,6 @@ aspell & aspell-dict-en
 
 * Basic UI Configuration
 
-** Windows Size
-#+begin_src emacs-lisp
-  (if (display-graphic-p)
-      (progn
-        (add-to-list 'default-frame-alist '(height . 45))
-        (add-to-list 'default-frame-alist '(width . 80))))
-#+end_src
 ** Bar Mode and Transparency
 #+begin_src emacs-lisp
   (if (display-graphic-p)
@@ -521,7 +514,7 @@ useful for figuring out how things work in Emacs.
             treemacs-tag-follow-delay              1.5
             treemacs-user-mode-line-format         nil
             treemacs-user-header-line-format       nil
-            treemacs-width                         20
+            treemacs-width                         12
             treemacs-width-is-initially-locked     t
             treemacs-workspace-switch-cleanup      nil)
 
@@ -592,7 +585,15 @@ Enable Hs-minor-mode globally
 #+end_src
 ** LSP Mode Setting
 #+begin_src emacs-lisp
-  (use-package eglot)
+  (use-package eglot
+    :ensure t
+    :config
+    (defun eglot-format-buffer-on-save()
+      (if (and (project-current) (eglot-manager-p))
+          (add-hook 'before-save-hook  #'eglot-format-buffer nil 'local)
+        (remove-hook 'before-save-hook #'eglot-format-buffer 'local)))
+    (add-hook 'eglot-managed-mode-hook #'eglot-format-buffer-on-save))
+
   (require 'eglot)
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 
@@ -1009,25 +1010,25 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 ** Windows Startup Size
 Put this part at the end of init file, for font size config has impact on this.
 #+begin_src emacs-lisp
-(defun set-frame-size-according-to-resolution ()
-  (interactive)
-  (if window-system
-      (progn
-        ;; use 120 char wide window for largish displays
-        ;; and smaller 80 column windows for smaller displays
-        ;; pick whatever numbers make sense for you
-        (if (> (x-display-pixel-width) 1500)
+  (defun set-frame-size-according-to-resolution ()
+    (interactive)
+    (if window-system
+        (progn
+          ;; use 120 char wide window for largish displays
+          ;; and smaller 80 column windows for smaller displays
+          ;; pick whatever numbers make sense for you
+          (if (> (x-display-pixel-width) 1500)
+              (setq default-frame-alist
+                    '((top . 0)(left . 0)
+                      (width . 85)(height . 36)
+                      ))
             (setq default-frame-alist
                   '((top . 0)(left . 0)
-                    (width . 75)(height . 40)
-                    ))
-          (setq default-frame-alist
-                '((top . 0)(left . 0)
-                  (width . 75)(height . 35)
-                  )))
-        ))
-  )
-(set-frame-size-according-to-resolution)
+                    (width . 85)(height . 32)
+                    )))
+          ))
+    )
+  (set-frame-size-according-to-resolution)
 #+end_src
 ** Disable line number hook for special major mode
 #+begin_src emacs-lisp
