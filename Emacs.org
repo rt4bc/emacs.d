@@ -589,7 +589,7 @@ Enable Hs-minor-mode globally
     :ensure t
     :config
     (defun eglot-format-buffer-on-save()
-      (if (and (project-current) (eglot-manager-p))
+      (if (and (project-current) (eglot-managed-p))
           (add-hook 'before-save-hook  #'eglot-format-buffer nil 'local)
         (remove-hook 'before-save-hook #'eglot-format-buffer 'local)))
     (add-hook 'eglot-managed-mode-hook #'eglot-format-buffer-on-save))
