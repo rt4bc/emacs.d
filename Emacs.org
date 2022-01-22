@@ -269,9 +269,9 @@ Use Fira code and Cantarell
   (defvar efs/default-variable-font-size 150)
   (if (display-graphic-p)
       (progn
-        (set-face-attribute 'default nil :font "Fira Code" :height efs/default-font-size)
+        (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
         ;; Set the fixed pitch face
-        (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height efs/default-font-size)
+        (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
         ;; Set the variable pitch face
         (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
 #+end_src
