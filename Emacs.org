@@ -822,7 +822,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
 document editor, project planner, task and time tracker, blogging
 engine, and literate coding utility all wrapped up in one package.
-
 *** Beter Font
 The =efs/org-font-setup= function configures various text faces to
 tweak the sizes of headings and use variable width fonts in most cases
@@ -917,7 +916,7 @@ configuration for Org agendas and capture templates.
     :ensure t
     :hook (org-mode . org-bullets-mode)
     :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (org-bullets-bullet-list '("☯" "✿" "✚" "◉" "❀" )))
 
 #+end_src
 
