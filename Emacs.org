@@ -113,8 +113,7 @@ when emacs startup.
 (setenv "HOME" "E:/Dotfiles")
 (setq default-direcotry "E:/ESP32-Projects")
    #+end_quote
-  
-
+   
 * Working with Coding Systems and Unicode
 #+begin_src emacs-lisp
   (prefer-coding-system 'utf-8)
@@ -1008,6 +1007,30 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+end_src
 * Ends
+** Windows Startup Size
+Put this part at the end of init file, for font size config has impact on this.
+#+begin_src emacs-lisp
+(defun set-frame-size-according-to-resolution ()
+  (interactive)
+  (if window-system
+      (progn
+        ;; use 120 char wide window for largish displays
+        ;; and smaller 80 column windows for smaller displays
+        ;; pick whatever numbers make sense for you
+        (if (> (x-display-pixel-width) 1500)
+            (setq default-frame-alist
+                  '((top . 0)(left . 0)
+                    (width . 75)(height . 40)
+                    ))
+          (setq default-frame-alist
+                '((top . 0)(left . 0)
+                  (width . 75)(height . 35)
+                  )))
+        ))
+  )
+(set-frame-size-according-to-resolution)
+#+end_src
+** Disable line number hook for special major mode
 #+begin_src emacs-lisp
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
