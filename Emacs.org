@@ -111,7 +111,7 @@ when emacs startup.
 ;;(load user-init-file)
 
 (setenv "HOME" "E:/Dotfiles")
-(setq default-direcotry "E:/ESP32-Projects")
+(setq default-directory "E:/ESP32-Projects")
    #+end_quote
    
 * Working with Coding Systems and Unicode
