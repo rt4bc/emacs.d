@@ -193,9 +193,9 @@ New line indent
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
     )
 
-  (use-package aggressive-indent
-    :config
-    (global-aggressive-indent-mode 1))
+  ;; (use-package aggressive-indent
+  ;; :config
+  ;; (global-aggressive-indent-mode 1))
 
 #+end_src
 
@@ -514,7 +514,7 @@ useful for figuring out how things work in Emacs.
             treemacs-tag-follow-delay              1.5
             treemacs-user-mode-line-format         nil
             treemacs-user-header-line-format       nil
-            treemacs-width                         12
+            treemacs-width                         25
             treemacs-width-is-initially-locked     t
             treemacs-workspace-switch-cleanup      nil)
 
@@ -592,7 +592,8 @@ Enable Hs-minor-mode globally
       (if (and (project-current) (eglot-managed-p))
           (add-hook 'before-save-hook  #'eglot-format-buffer nil 'local)
         (remove-hook 'before-save-hook #'eglot-format-buffer 'local)))
-    (add-hook 'eglot-managed-mode-hook #'eglot-format-buffer-on-save))
+    ;; (add-hook 'eglot-managed-mode-hook #'eglot-format-buffer-on-save)
+    )
 
   (require 'eglot)
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
