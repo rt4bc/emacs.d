@@ -70,7 +70,7 @@ You can also use M-x auto-package-update-now to update right now!
 #+begin_src emacs-lisp
   (use-package auto-package-update
     :custom
-    (auto-package-update-interval 30) ;; interval days 
+    (auto-package-update-interval 100) ;; interval days 
     (auto-package-update-prompt-before-update t)
     (auto-package-update-hide-results t)
     :config
@@ -88,7 +88,7 @@ Read PATH from shell
         (exec-path-from-shell-initialize)))
 #+end_src
 
-** Enable SSH connections ove HTTPS
+** Enable SSH connections over HTTPS
 To set this in your ssh config, edit the file at ~/.ssh/config, add configuration as below, for company's firewall issue
 #+begin_src shell
 Host github.com
@@ -259,14 +259,15 @@ Use Fira code and Cantarell
   ;; (unicode-fonts-setup))
 
   (defvar efs/default-font-size 150)
-  (defvar efs/default-variable-font-size 150)
+  (defvar efs/default-variable-font-size 120)
   (if (display-graphic-p)
       (progn
         (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
         ;; Set the fixed pitch face
         (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
         ;; Set the variable pitch face
-        (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
+        ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
+        ))
 #+end_src
 
 ** Color theme
@@ -514,7 +515,7 @@ useful for figuring out how things work in Emacs.
             treemacs-tag-follow-delay              1.5
             treemacs-user-mode-line-format         nil
             treemacs-user-header-line-format       nil
-            treemacs-width                         25
+            ;; treemacs-width                         12
             treemacs-width-is-initially-locked     t
             treemacs-workspace-switch-cleanup      nil)
 
@@ -645,6 +646,29 @@ Enable Hs-minor-mode globally
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
+
+  ;; Clang stuff
+  (require 'clang-format)
+  (setq clang-format-style "file")
+
+  (use-package ggtags
+    :ensure t)
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1))))
+
+  ;;  (use-pacakge counsel-gtags-mode-map
+  ;;              :ensure t)
+  ;;  for kernel cross reference
+  ;;  (add-hook 'c-mode-hook 'counsel-gtags-mode)
+  ;;  (add-hook 'c++-mode-hook 'counsel-gtags-mode)
+
+  ;;  (with-eval-after-load 'counsel-gtags
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-t") 'counsel-gtags-find-definition)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
 #+end_src
 
 ** Python Setting
@@ -689,7 +713,7 @@ Enable Hs-minor-mode globally
        :config
        (setq elpy-rpc-virtualenv-path 'current)
        (setq elpy-formatter 'black)
-       ;; (setq elpy-syntax-check-command  "black")
+       (setq elpy-syntax-check-command  "black")
        (setq elpy-rpc-backend "pyls")
        (add-hook 'elpy-mode-hook (lambda ()
                                    (add-hook 'before-save-hook
@@ -716,10 +740,10 @@ Enable Hs-minor-mode globally
            python-shell-interpreter-args "-i")
 
      ;; format code on save
-     ;; (use-package python-black
-     ;; :after python
-     ;; :config
-     ;; (add-hook 'python-mode-hook 'python-black-on-save-mode))
+     (use-package python-black
+       :after python
+       :config
+       (add-hook 'python-mode-hook 'python-black-on-save-mode))
    #+end_src
 
    #+RESULTS:
@@ -918,7 +942,7 @@ configuration for Org agendas and capture templates.
     :ensure t
     :hook (org-mode . org-bullets-mode)
     :custom
-    (org-bullets-bullet-list '("☯" "✿" "✚" "◉" "❀" )))
+    (org-bullets-bullet-list '("◉" "☯" "○" "☯" "✸" "☯" "✿" "☯" "✜" "☯" "◆" "☯" "▶")))
 
 #+end_src
 
@@ -1020,11 +1044,11 @@ Put this part at the end of init file, for font size config has impact on this.
           ;; pick whatever numbers make sense for you
           (if (> (x-display-pixel-width) 1500)
               (setq default-frame-alist
-                    '((top . 0)(left . 0)
+                    '((top . 10)(left . 10)
                       (width . 85)(height . 36)
                       ))
             (setq default-frame-alist
-                  '((top . 0)(left . 0)
+                  '((top . 10)(left . 10)
                     (width . 85)(height . 32)
                     )))
           ))
