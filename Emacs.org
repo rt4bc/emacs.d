@@ -278,9 +278,30 @@ Use Fira code and Cantarell
     :ensure t)
   (use-package solarized-theme
     :ensure t)
-  (if (display-graphic-p)
-      (load-theme 'solarized-zenburn t)
-    (load-theme 'doom-gruvbox t))
+  (use-package moe-theme
+    :ensure t)
+
+  (require 'moe-theme)
+
+  ;; Show highlighted buffer-id as decoration. (Default: nil)
+  (setq moe-theme-highlight-buffer-id t)
+
+  ;; Resize titles (optional).
+  (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
+  (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+  (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+
+  ;; Choose a color for mode-line.(Default: blue)
+  ;; (moe-theme-set-color 'cyan)
+
+  ;; Finally, apply moe-theme now.
+  ;; Choose what you like, (moe-light) or (moe-dark)
+  (load-theme 'moe-dark t)
+
+  ;;  (if (display-graphic-p)
+  ;;      (load-theme 'solarized-zenburn t)
+  ;;  ())
+
 #+end_src
 
 ** Better Modeline
@@ -646,17 +667,35 @@ Enable Hs-minor-mode globally
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
-
   ;; Clang stuff
+
   ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
-  (require 'clang-format)
+  (use-package clang-format
+  :ensure t)
   (setq clang-format-style "file")
+
+#+end_src
+
+** TAGS
+#+begin_src emacs-lisp
+  (use-package counsel-etags
+    :bind (("C-]" . counsel-etags-find-tag-at-point))
+    :init
+    (add-hook 'prog-mode-hook
+              (lambda ()
+                (add-hook 'after-save-hook
+                          'counsel-etags-virtual-update-tags 'append 'local)))
+    :config
+    (setq counsel-etags-update-interval 60)
+    (push "build" counsel-etags-ignore-directories))
+
+  (require 'xcscope)
 
   (use-package ggtags
     :ensure t)
   (add-hook 'c-mode-common-hook
             (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (when (derived-mode-p 'c-mode 'c++-mode)
                 (ggtags-mode 1))))
 
   ;;  (use-pacakge counsel-gtags-mode-map
@@ -670,8 +709,8 @@ Enable Hs-minor-mode globally
   ;;  (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
   ;;  (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
   ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
-#+end_src
 
+#+end_src
 ** Python Setting
 *** How to setting Env
 + install virtualenv by pip
@@ -768,20 +807,6 @@ Enable Hs-minor-mode globally
           verilog-auto-lineup              'declarations
           verilog-linter                   "verilator --lint-only"
           ))
-#+end_src
-** TAGS
-#+begin_src emacs-lisp
-  (use-package counsel-etags
-    :bind (("C-]" . counsel-etags-find-tag-at-point))
-    :init
-    (add-hook 'prog-mode-hook
-              (lambda ()
-                (add-hook 'after-save-hook
-                          'counsel-etags-virtual-update-tags 'append 'local)))
-    :config
-    (setq counsel-etags-update-interval 60)
-    (push "build" counsel-etags-ignore-directories))
-
 #+end_src
 ** Flycheck
    #+begin_src emacs-lisp
