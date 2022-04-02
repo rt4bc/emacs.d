@@ -74,7 +74,7 @@ You can also use M-x auto-package-update-now to update right now!
     (auto-package-update-prompt-before-update t)
     (auto-package-update-hide-results t)
     :config
-    (auto-package-update-maybe) ;; update installed pacakge if at least xx days have pased since last update
+    (auto-package-update-maybe) ;; update installed package if at least xx days have pased since last update
     (auto-package-update-at-time "09:00"))
 #+end_src
 
@@ -676,41 +676,6 @@ Enable Hs-minor-mode globally
 
 #+end_src
 
-** TAGS
-#+begin_src emacs-lisp
-  (use-package counsel-etags
-    :bind (("C-]" . counsel-etags-find-tag-at-point))
-    :init
-    (add-hook 'prog-mode-hook
-              (lambda ()
-                (add-hook 'after-save-hook
-                          'counsel-etags-virtual-update-tags 'append 'local)))
-    :config
-    (setq counsel-etags-update-interval 60)
-    (push "build" counsel-etags-ignore-directories))
-
-  (require 'xcscope)
-
-  (use-package ggtags
-    :ensure t)
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode)
-                (ggtags-mode 1))))
-
-  ;;  (use-pacakge counsel-gtags-mode-map
-  ;;              :ensure t)
-  ;;  for kernel cross reference
-  ;;  (add-hook 'c-mode-hook 'counsel-gtags-mode)
-  ;;  (add-hook 'c++-mode-hook 'counsel-gtags-mode)
-
-  ;;  (with-eval-after-load 'counsel-gtags
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-t") 'counsel-gtags-find-definition)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
-
-#+end_src
 ** Python Setting
 *** How to setting Env
 + install virtualenv by pip
@@ -764,7 +729,7 @@ Enable Hs-minor-mode globally
      ;; pyls-isort Isort import sort code formatting
      ;; pyls-black for code formatting using Black
      ;; ;; M-x elpy-config can get the elpy environment config.
-     ;; ;; an install the needed pacakge.
+     ;; ;; an install the needed package.
 
 
      ;; (use-package lsp-python-ms
@@ -787,6 +752,57 @@ Enable Hs-minor-mode globally
    #+end_src
 
    #+RESULTS:
+** Scala Setting
+#+begin_src emacs-lisp
+  (use-package scala-mode
+    :interpreter
+    ("scala" . scala-mode))
+#+end_src
+** Pretty Mode
+#+begin_src emacs-lisp
+  (use-package pretty-mode
+               :ensure t)
+  (require 'pretty-mode)
+                                          ; if you want to set it globally
+  (global-pretty-mode t)
+                                          ; if you want to set it only for a specific mode
+  ;; (add-hook 'my-pretty-language-hook 'turn-on-pretty-mode)
+#+end_src
+** TAGS
+#+begin_src emacs-lisp
+  (use-package counsel-etags
+    :bind (("C-]" . counsel-etags-find-tag-at-point))
+    :init
+    (add-hook 'prog-mode-hook
+              (lambda ()
+                (add-hook 'after-save-hook
+                          'counsel-etags-virtual-update-tags 'append 'local)))
+    :config
+    (setq counsel-etags-update-interval 60)
+    (push "build" counsel-etags-ignore-directories))
+
+  (require 'xcscope)
+
+  (use-package ggtags
+    :ensure t)
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                (ggtags-mode 1))))
+
+  ;;  (use-package counsel-gtags-mode-map
+  ;;              :ensure t)
+  ;;  for kernel cross reference
+  ;;  (add-hook 'c-mode-hook 'counsel-gtags-mode)
+  ;;  (add-hook 'c++-mode-hook 'counsel-gtags-mode)
+
+  ;;  (with-eval-after-load 'counsel-gtags
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-t") 'counsel-gtags-find-definition)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
+  ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
+
+#+end_src   
 ** HDL Setting
 #+begin_src emacs-lisp
   (use-package verilog-mode
