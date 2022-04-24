@@ -822,7 +822,7 @@ Enable Hs-minor-mode globally
           verilog-minimum-comment-distance 40
           verilog-indent-begin-after-if    t
           verilog-auto-lineup              'declarations
-          verilog-linter                   "verilator --lint-only"
+          verilog-linter                   "iverilog -t null -Wall"
           ))
 #+end_src
 ** Flycheck
