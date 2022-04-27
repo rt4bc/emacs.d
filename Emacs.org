@@ -963,6 +963,10 @@ configuration for Org agendas and capture templates.
     :config
     (setq org-ellipsis " ▾")
 
+    ;; use this variable to disable acutal size
+    ;; otherwise the #+ATTR_ORG or #+ATTR_HTML :width 300px will not work
+    (setq org-image-actual-width nil)
+
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
