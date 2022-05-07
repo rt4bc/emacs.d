@@ -602,7 +602,11 @@ Enable Hs-minor-mode globally
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 #+begin_src emacs-lisp
   (use-package company
-    :ensure t)
+    :ensure t
+    :hook (scala-mode . company-mode)
+    :config
+    (setq lsp-completion-provider :capf)
+    )
   (global-company-mode)
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
@@ -615,7 +619,6 @@ Enable Hs-minor-mode globally
       (if (and (project-current) (eglot-managed-p))
           (add-hook 'before-save-hook  #'eglot-format-buffer nil 'local)
         (remove-hook 'before-save-hook #'eglot-format-buffer 'local)))
-    ;; (add-hook 'eglot-managed-mode-hook #'eglot-format-buffer-on-save)
     )
 
   (require 'eglot)
@@ -626,12 +629,14 @@ Enable Hs-minor-mode globally
     ;; set prefix for lsp-command-keymap
     (setq lsp-keymap-prefix "C-c l")
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           ;; (XXX-mode . lsp)
-           ;; (python-mode . lsp)
+           (scala-mode . lsp)
            (lua-mode . lsp)
            ;; install lua-lanuage-server first
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
+
+  ;; Add metals backend for lsp-mode
+  (use-package lsp-metals)
 
   ;; optionally
   (use-package lsp-ui :commands lsp-ui-mode)
@@ -758,7 +763,34 @@ Enable Hs-minor-mode globally
   (use-package scala-mode
     :interpreter
     ("scala" . scala-mode))
+  ;; Enable sbt mode for executing sbt commands
+  (use-package sbt-mode
+    :commands sbt-start sbt-command
+    :config
+    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+    ;; allows using SPACE when in the minibuffer
+    (substitute-key-definition
+     'minibuffer-complete-word
+     'self-insert-command
+     minibuffer-local-completion-map)
+    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+    (setq sbt:program-options '("-Dsbt.supershell=false"))
+    )
 #+end_src
+Install lsp server manually
+#+begin_quote
+# Make sure to use coursier v1.1.0-M9 or newer.
+curl -L -o coursier https://git.io/coursier-cli
+chmod +x coursier
+./coursier bootstrap \
+  --java-opt -Xss4m \
+  --java-opt -Xms100m \
+  --java-opt -Dmetals.client=emacs \
+  org.scalameta:metals_2.12:0.11.2 \
+  -r bintray:scalacenter/releases \
+  -r sonatype:snapshots \
+  -o /home/bochao/.local/bin/metals-emacs -f
+#+end_quote
 ** Pretty Mode
 #+begin_src emacs-lisp
   (use-package pretty-mode
