@@ -619,35 +619,25 @@ Enable Hs-minor-mode globally
   (use-package eglot
     :ensure t
     :config
-    (defun eglot-format-buffer-on-save()
-      (if (and (project-current) (eglot-managed-p))
-          (add-hook 'before-save-hook  #'eglot-format-buffer nil 'local)
-        (remove-hook 'before-save-hook #'eglot-format-buffer 'local)))
+    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
     )
 
-  (require 'eglot)
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;; (use-package lsp-mode
+  ;;   :init
+  ;;   ;; set prefix for lsp-command-keymap
+  ;;   (setq lsp-keymap-prefix "C-c l")
+  ;;   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+  ;;          (lua-mode . lsp)
+  ;;          ;; install lua-lanuage-server first
+  ;;          (lsp-mode . lsp-enable-which-key-integration))
+  ;;   :commands lsp)
 
-  (use-package lsp-mode
-    :init
-    ;; set prefix for lsp-command-keymap
-    (setq lsp-keymap-prefix "C-c l")
-    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (scala-mode . lsp)
-           (lua-mode . lsp)
-           ;; install lua-lanuage-server first
-           (lsp-mode . lsp-enable-which-key-integration))
-    :commands lsp)
-
-  ;; Add metals backend for lsp-mode
-  (use-package lsp-metals)
-
-  ;; optionally
-  (use-package lsp-ui :commands lsp-ui-mode)
-  ;; if you are ivy user
-  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-  ;; optional if you want which-key integration
-  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  ;; ;; optionally
+  ;; (use-package lsp-ui :commands lsp-ui-mode)
+  ;; ;; if you are ivy user
+  ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+  ;; ;; optional if you want which-key integration
+  ;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
   (use-package which-key
     :config
@@ -764,9 +754,14 @@ Enable Hs-minor-mode globally
    #+RESULTS:
 ** Scala Setting
 #+begin_src emacs-lisp
+  ;; Add metals backend for lsp-mode
+  (use-package lsp-metals)
+
   (use-package scala-mode
     :interpreter
     ("scala" . scala-mode))
+  (add-hook 'scala-mode-hook 'eglot-ensure)
+
   ;; Enable sbt mode for executing sbt commands
   (use-package sbt-mode
     :commands sbt-start sbt-command
