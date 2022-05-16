@@ -343,8 +343,11 @@ The emacs org mode, S key is shift key!!!
     (show-paren-mode 1))
 
   (use-package smartparens
-    :ensure t)
-  (require 'smartparens-config)
+    :ensure t
+    :init
+    (smartparens-global-mode)
+    (require 'smartparens-config)
+    (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-mode))
 #+end_src
 ** Ivy and Counsel
 
