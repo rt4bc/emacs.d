@@ -190,14 +190,8 @@ New line indent
     :config
     (set-face-background 'highlight-indentation-face "#e3e3d3")
     (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-    ;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
-    (add-hook 'program-mode-hook 'highlight-indentation-mode)
+    (add-hook 'python-mode-hook 'highlight-indentation-mode)
     )
-
-  (use-package aggressive-indent
-    :config
-    (global-aggressive-indent-mode 1))
-
 #+end_src
 
 * ESL Spell check
@@ -671,21 +665,23 @@ Enable Hs-minor-mode globally
   #+end_src
 
    #+begin_src emacs-lisp
-     (use-package elpy
-       :init
-       (elpy-enable)
-       :config
-       (setq elpy-rpc-virtualenv-path 'current)
-       (setq elpy-formatter 'black)
-       (setq elpy-syntax-check-command  "black")
-       (setq elpy-rpc-backend "pyls")
-       (add-hook 'elpy-mode-hook (lambda ()
-                                   (add-hook 'before-save-hook
-                                             'elpy-format-code nil t)))
-       )
 
-     ;; Pyls-mypy Mypy type checking for Python 3
-     ;; pyls-isort Isort import sort code formatting
+     ;; (use-package elpy
+     ;;   :init
+     ;;   (elpy-enable)
+     ;;   :config
+     ;;   (setq elpy-rpc-virtualenv-path 'current)
+     ;;   (setq elpy-formatter 'black)
+     ;;   (setq elpy-syntax-check-command  "black")
+     ;;   (setq elpy-rpc-backend "pyls")
+     ;;   (add-hook 'elpy-mode-hook (lambda ()
+     ;;                               (add-hook 'before-save-hook
+     ;;                                         'elpy-format-code nil t)))
+     ;;   )
+
+     ;; ;; Pyls-mypy Mypy type checking for Python 3
+     ;; ;; pyls-i
+     ;; sort Isort import sort code formatting
      ;; pyls-black for code formatting using Black
      ;; ;; M-x elpy-config can get the elpy environment config.
      ;; ;; an install the needed package.
@@ -697,7 +693,7 @@ Enable Hs-minor-mode globally
      ;; :hook (python-mode . (lambda ()
      ;; (require 'lsp-python-ms)
      ;; (lsp))))  ; or lsp-deferred
-
+     (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
      (setq python-shell-interpreter "python"
            ;; python-shell-interpreter-args "-i --simple-prompt")
