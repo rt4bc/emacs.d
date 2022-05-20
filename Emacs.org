@@ -601,27 +601,6 @@ Enable Hs-minor-mode globally
     :config
     (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
     )
-
-  ;; (use-package lsp-mode
-  ;;   :init
-  ;;   ;; set prefix for lsp-command-keymap
-  ;;   (setq lsp-keymap-prefix "C-c l")
-  ;;   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-  ;;          (lua-mode . lsp)
-  ;;          ;; install lua-lanuage-server first
-  ;;          (lsp-mode . lsp-enable-which-key-integration))
-  ;;   :commands lsp)
-
-  ;; ;; optionally
-  ;; (use-package lsp-ui :commands lsp-ui-mode)
-  ;; ;; if you are ivy user
-  ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-  ;; ;; optional if you want which-key integration
-  ;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-  (use-package which-key
-    :config
-    (which-key-mode))
 #+end_src
 ** Common Lisp Setting
 1. Install SBCL
