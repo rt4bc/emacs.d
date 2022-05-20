@@ -1,4 +1,4 @@
-#+title: Emacs From Scratch Configuration
+OB#+title: Emacs From Scratch Configuration
 #+STARTUP: overview
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 * Every Beginning
@@ -190,30 +190,15 @@ New line indent
     :config
     (set-face-background 'highlight-indentation-face "#e3e3d3")
     (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-    (add-hook 'python-mode-hook 'highlight-indentation-mode)
+    ;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
+    (add-hook 'program-mode-hook 'highlight-indentation-mode)
     )
 
-  ;; (use-package aggressive-indent
-  ;; :config
-  ;; (global-aggressive-indent-mode 1))
-
-#+end_src
-
-Define words jump mode when brows docs
-#+begin_src emacs-lisp
-  (use-package ace-jump-mode
-    :bind ("C-." . ace-jump-mode))
-#+end_src
-
-ace-window
-#+begin_src emacs-lisp
-  (use-package ace-window
+  (use-package aggressive-indent
     :config
-    (global-set-key (kbd "M-o") 'ace-window)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+    (global-aggressive-indent-mode 1))
+
 #+end_src
-* Evil Mode
-** TODO 
 
 * ESL Spell check
 Need to install spell checker and dictionary
@@ -224,7 +209,6 @@ aspell & aspell-dict-en
 #+end_src
 
 * Basic UI Configuration
-
 ** Bar Mode and Transparency
 #+begin_src emacs-lisp
   (if (display-graphic-p)
@@ -312,10 +296,10 @@ Use Fira code and Cantarell
 
 #+begin_src emacs-lisp
   ;; doom-modeline depend the all-the-icons package 
-  ;; (use-package all-the-icons)
-  ;; (use-package doom-modeline
-  ;; :init (doom-modeline-mode 1)
-  ;; :custom ((doom-modeline-height 15)))
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 15)))
 #+end_src
 
 ** Key Remapping
@@ -341,13 +325,6 @@ The emacs org mode, S key is shift key!!!
     :config
     (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
     (show-paren-mode 1))
-
-  (use-package smartparens
-    :ensure t
-    :init
-    (smartparens-global-mode)
-    (require 'smartparens-config)
-    (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-mode))
 #+end_src
 ** Ivy and Counsel
 
