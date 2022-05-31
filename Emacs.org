@@ -708,6 +708,21 @@ Enable Hs-minor-mode globally
 
    #+RESULTS:
 ** Scala Setting
+Install scala lsp server first
+#+begin_quote
+# Make sure to use coursier v1.1.0-M9 or newer.
+curl -L -o coursier https://git.io/coursier-cli
+chmod +x coursier
+./coursier bootstrap \
+  --java-opt -Xss4m \
+  --java-opt -Xms100m \
+  --java-opt -Dmetals.client=emacs \
+  org.scalameta:metals_2.12:0.11.2 \
+  -r bintray:scalacenter/releases \
+  -r sonatype:snapshots \
+  -o /home/bochao/.local/bin/metals-emacs -f
+#+end_quote
+
 #+begin_src emacs-lisp
   ;; Add metals backend for lsp-mode
   (use-package lsp-metals)
@@ -715,7 +730,31 @@ Enable Hs-minor-mode globally
   (use-package scala-mode
     :interpreter
     ("scala" . scala-mode))
-  (add-hook 'scala-mode-hook 'eglot-ensure)
+
+  (use-package lsp-mode
+    ;; Optional - enable lsp-mode automatically in scala files
+    :hook  (scala-mode . lsp)
+    (lsp-mode . lsp-lens-mode)
+    :config
+    ;; Uncomment following section if you would like to tune lsp-mode performance according to
+    ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+    ;;       (setq gc-cons-threshold 100000000) ;; 100mb
+    ;;       (setq read-process-output-max (* 1024 1024)) ;; 1mb
+    ;;       (setq lsp-idle-delay 0.500)
+    ;;       (setq lsp-log-io nil)
+    ;;       (setq lsp-completion-provider :capf)
+    (setq lsp-prefer-flymake nil))
+  (use-package lsp-ui)
+
+  ;; Use company-capf as a completion provider.
+  ;;
+  ;; To Company-lsp users:
+  ;;   Company-lsp is no longer maintained and has been removed from MELPA.
+  ;;   Please migrate to company-capf.
+  (use-package company
+    :hook (scala-mode . company-mode)
+    :config
+    (setq lsp-completion-provider :capf))
 
   ;; Enable sbt mode for executing sbt commands
   (use-package sbt-mode
@@ -731,20 +770,7 @@ Enable Hs-minor-mode globally
     (setq sbt:program-options '("-Dsbt.supershell=false"))
     )
 #+end_src
-Install lsp server manually
-#+begin_quote
-# Make sure to use coursier v1.1.0-M9 or newer.
-curl -L -o coursier https://git.io/coursier-cli
-chmod +x coursier
-./coursier bootstrap \
-  --java-opt -Xss4m \
-  --java-opt -Xms100m \
-  --java-opt -Dmetals.client=emacs \
-  org.scalameta:metals_2.12:0.11.2 \
-  -r bintray:scalacenter/releases \
-  -r sonatype:snapshots \
-  -o /home/bochao/.local/bin/metals-emacs -f
-#+end_quote
+
 ** Pretty Mode
 #+begin_src emacs-lisp
   (use-package pretty-mode
