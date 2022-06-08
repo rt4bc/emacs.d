@@ -1,4 +1,4 @@
-OB#+title: Emacs From Scratch Configuration
+#+title: Emacs From Scratch Configuration
 #+STARTUP: overview
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 * Every Beginning
@@ -555,16 +555,6 @@ useful for figuring out how things work in Emacs.
     :ensure t)
 #+end_src
 
-** Code template
-#+begin_src emacs-lisp
-  (use-package yasnippet                  
-    :config
-    (add-hook 'prog-mode-hook #'yas-minor-mode))
-
-  (use-package yasnippet-snippets
-    :ensure t)
-#+end_src
-
 ** Code Folding
 Enable Hs-minor-mode globally
 #+begin_src emacs-lisp
@@ -589,12 +579,40 @@ Enable Hs-minor-mode globally
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
 ** LSP Mode Setting
+Install dependencies
+#+begin_src shell
+  Install Python dependencies: python-epc (pip install epc)
+  Install Elisp dependencies:
+  posframe
+  markdown-mode
+  yasnippet
+#+end_src
+*** Posframe
 #+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
+  (use-package posframe
+    :ensure t)
+#+end_src
+*** Markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t)
+#+end_src
+*** Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet                  
     :config
-    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-    )
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+
+  (use-package yasnippet-snippets
+    :ensure t)
+#+end_src
+
+*** LSP-Bridge Client
+#+begin_src emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/lsp-bridge")
+  ;; require yasnipppet)
+  (require 'lsp-bridge)
+  (global-lsp-bridge-mode)
 #+end_src
 ** Common Lisp Setting
 1. Install SBCL
@@ -615,136 +633,6 @@ Enable Hs-minor-mode globally
     (setq inferior-lisp-program "/usr/bin/sbcl"
           sly-complete-symbol-function 'sly-simple-completions))
 #+end_src
-** C/C++ Setting
-#+begin_src emacs-lisp
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure)
-  ;; Clang stuff
-
-  ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
-  (use-package clang-format
-  :ensure t)
-  (setq clang-format-style "file")
-
-#+end_src
-
-** Python Setting
-*** How to setting Env
-+ install virtualenv by pip
-  #+begin_src shell
-    pip3 install virtualenv
-    pip3 install virtualenvwrapper
-  #+end_src
-  after install python package, add virtualenvwrapper.sh path  to $PATH
-  or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
-  #+begin_src shell
-    ❯ mkvirtualenv py39
-  #+end_src
-
-+ virtualevn set, put setting in .zshrc file
-  #+begin_src shell
-    #Virtualenvwrapper settings:
-    export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
-    export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
-    source $HOME/.virtualenvs/py39/bin/activate 
-  #+end_src
-
-  #+begin_src shell
-    #Run:
-    $workon
-    #A list of environments, empty, is printed.
-  #+end_src
-  
-*** How to set LSP
-+ install Python language server, python-language-server is outdated...
-  #+begin_src shell
-    pip3 install 'python-lsp-server[all]'
-    pip3 install pyls-mypy pyls-isort pyls-black
-  #+end_src
-
-   #+begin_src emacs-lisp
-
-     ;; (use-package elpy
-     ;;   :init
-     ;;   (elpy-enable)
-     ;;   :config
-     ;;   (setq elpy-rpc-virtualenv-path 'current)
-     ;;   (setq elpy-formatter 'black)
-     ;;   (setq elpy-syntax-check-command  "black")
-     ;;   (setq elpy-rpc-backend "pyls")
-     ;;   (add-hook 'elpy-mode-hook (lambda ()
-     ;;                               (add-hook 'before-save-hook
-     ;;                                         'elpy-format-code nil t)))
-     ;;   )
-
-     ;; ;; Pyls-mypy Mypy type checking for Python 3
-     ;; ;; pyls-i
-     ;; sort Isort import sort code formatting
-     ;; pyls-black for code formatting using Black
-     ;; ;; M-x elpy-config can get the elpy environment config.
-     ;; ;; an install the needed package.
-
-
-     ;; (use-package lsp-python-ms
-     ;; :ensure t
-     ;; :init (setq lsp-python-ms-auto-install-server t)
-     ;; :hook (python-mode . (lambda ()
-     ;; (require 'lsp-python-ms)
-     ;; (lsp))))  ; or lsp-deferred
-     (add-hook 'python-mode-hook 'eglot-ensure)
-     (setq python-indent-guess-indent-offset-verbose nil)
-     (setq python-shell-interpreter "python"
-           ;; python-shell-interpreter-args "-i --simple-prompt")
-           python-shell-interpreter-args "-i")
-
-     ;; format code on save
-     (use-package python-black
-       :after python
-       :config
-       (add-hook 'python-mode-hook 'python-black-on-save-mode))
-   #+end_src
-
-   #+RESULTS:
-** Scala Setting
-#+begin_src emacs-lisp
-  ;; Add metals backend for lsp-mode
-  (use-package lsp-metals)
-
-  (use-package scala-mode
-    :interpreter
-    ("scala" . scala-mode))
-  (add-hook 'scala-mode-hook 'eglot-ensure)
-
-  ;; Enable sbt mode for executing sbt commands
-  (use-package sbt-mode
-    :commands sbt-start sbt-command
-    :config
-    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-    ;; allows using SPACE when in the minibuffer
-    (substitute-key-definition
-     'minibuffer-complete-word
-     'self-insert-command
-     minibuffer-local-completion-map)
-    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-    (setq sbt:program-options '("-Dsbt.supershell=false"))
-    )
-#+end_src
-Install lsp server manually
-#+begin_quote
-# Make sure to use coursier v1.1.0-M9 or newer.
-curl -L -o coursier https://git.io/coursier-cli
-chmod +x coursier
-./coursier bootstrap \
-  --java-opt -Xss4m \
-  --java-opt -Xms100m \
-  --java-opt -Dmetals.client=emacs \
-  org.scalameta:metals_2.12:0.11.2 \
-  -r bintray:scalacenter/releases \
-  -r sonatype:snapshots \
-  -o /home/bochao/.local/bin/metals-emacs -f
-#+end_quote
 ** Pretty Mode
 #+begin_src emacs-lisp
   (use-package pretty-mode
@@ -791,27 +679,6 @@ chmod +x coursier
   ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
 
 #+end_src   
-** HDL Setting
-#+begin_src emacs-lisp
-  (use-package verilog-mode
-    :config
-    ;; User customization for Verilog mode
-    (setq verilog-indent-level             3
-          verilog-indent-level-module      3
-          verilog-indent-level-declaration 3
-          verilog-indent-level-behavioral  3
-          verilog-indent-level-directive   1
-          verilog-case-indent              2
-          verilog-auto-newline             t
-          verilog-auto-indent-on-newline   t
-          verilog-tab-always-indent        t
-          verilog-auto-endcomments         t
-          verilog-minimum-comment-distance 40
-          verilog-indent-begin-after-if    t
-          verilog-auto-lineup              'declarations
-          verilog-linter                   "iverilog -t null -Wall"
-          ))
-#+end_src
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
