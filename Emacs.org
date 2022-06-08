@@ -555,16 +555,6 @@ useful for figuring out how things work in Emacs.
     :ensure t)
 #+end_src
 
-** Code template
-#+begin_src emacs-lisp
-  (use-package yasnippet                  
-    :config
-    (add-hook 'prog-mode-hook #'yas-minor-mode))
-
-  (use-package yasnippet-snippets
-    :ensure t)
-#+end_src
-
 ** Code Folding
 Enable Hs-minor-mode globally
 #+begin_src emacs-lisp
@@ -576,6 +566,14 @@ Enable Hs-minor-mode globally
   (add-hook 'prog-mode-hook 'my-hs-mode-hook)
 #+end_src
 
+** LSP Mode Setting
+#+begin_src emacs-lisp
+  (use-package eglot
+    :ensure t
+    :config
+    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+    )
+#+end_src
 ** Company Mode
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 #+begin_src emacs-lisp
@@ -588,14 +586,16 @@ Enable Hs-minor-mode globally
   (global-company-mode)
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
-** LSP Mode Setting
+** Code template
 #+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
+  (use-package yasnippet                  
     :config
-    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-    )
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+
+  (use-package yasnippet-snippets
+    :ensure t)
 #+end_src
+
 ** Common Lisp Setting
 1. Install SBCL
    For Arch:
