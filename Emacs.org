@@ -240,11 +240,14 @@ Use Fira code and Cantarell
   (defvar efs/default-variable-font-size 120)
   (if (display-graphic-p)
       (progn
-        (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
         ;; Set the fixed pitch face
+        ;; (set-face-attribute 'default nil :font "DejaVuSansMono" :height efs/default-font-size)
+        ;; (set-face-attribute 'fixed-pitch nil :font "DejaVuSansMono" :height efs/default-font-size)
         (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
+        (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
+
         ;; Set the variable pitch face
-        ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
+        ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)
         ))
 #+end_src
 
@@ -296,6 +299,33 @@ Use Fira code and Cantarell
     :custom ((doom-modeline-height 15)))
 #+end_src
 
+** Emacs Tree Sitter
+#+begin_src emacs-lisp
+
+  ;; (use-package tree-sitter
+  ;; :ensure t
+  ;; :config
+  ;; (global-tree-sitter-mode)
+  ;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  ;; Don't highlight strings, in any language.    
+  ;; )
+  ;; (add-function :before-while tree-sitter-hl-face-mapping-function
+  ;; (lambda (capture-name)
+  ;; (not (string= capture-name "string"))))
+  ;; (add-hook 'python-mode-hook
+  ;; (lambda ()
+  ;; (add-function :before-until (local 'tree-sitter-hl-face-mapping-function)
+  ;; (lambda (capture-name)
+  ;; (pcase capture-name
+  ;; ("doc" 'font-lock-comment-face))))))
+
+  ;; (use-package tree-sitter-langs
+  ;; :ensure t
+  ;; )
+  ;; (use-package tree-sitter-indent
+  ;; :ensure t
+  ;; )
+#+end_src
 ** Key Remapping
 The advantage of creating the Super and Hyper in emacs is that you can have more hotkeys, and no major or minor modes will stamp on your keys.
 super key should be ok now, for wsl2 environment.
@@ -448,23 +478,7 @@ useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Config
-** Emacs Tree Sitter
-#+begin_src emacs-lisp
-
-  (use-package tree-sitter
-    :ensure t
-    :config
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-    )
-  (use-package tree-sitter-langs
-    :ensure t
-    )
-  (use-package tree-sitter-indent
-    :ensure t
-    )
-#+end_src
-** File Explorer sidebar
+** File Explorer side bar
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure t
@@ -478,7 +492,7 @@ useful for figuring out how things work in Emacs.
             treemacs-deferred-git-apply-delay      0.5
             treemacs-directory-name-transformer    #'identity
             treemacs-display-in-side-window        t
-            treemacs-eldoc-display                 t
+            treemacs-eldoc-display                 nil
             treemacs-file-event-delay              5000
             treemacs-file-extension-regex          treemacs-last-period-regex-value
             treemacs-file-follow-delay             0.2
@@ -553,6 +567,8 @@ useful for figuring out how things work in Emacs.
   (use-package treemacs-magit
     :after (treemacs magit)
     :ensure t)
+
+  (setq max-mini-window-height 3)
 #+end_src
 
 ** Code Folding
@@ -663,9 +679,8 @@ Enable Hs-minor-mode globally
     pip3 install 'python-lsp-server[all]'
     pip3 install pyls-mypy pyls-isort pyls-black
   #+end_src
-
+  
    #+begin_src emacs-lisp
-
      ;; (use-package elpy
      ;;   :init
      ;;   (elpy-enable)
@@ -679,20 +694,6 @@ Enable Hs-minor-mode globally
      ;;                                         'elpy-format-code nil t)))
      ;;   )
 
-     ;; ;; Pyls-mypy Mypy type checking for Python 3
-     ;; ;; pyls-i
-     ;; sort Isort import sort code formatting
-     ;; pyls-black for code formatting using Black
-     ;; ;; M-x elpy-config can get the elpy environment config.
-     ;; ;; an install the needed package.
-
-
-     ;; (use-package lsp-python-ms
-     ;; :ensure t
-     ;; :init (setq lsp-python-ms-auto-install-server t)
-     ;; :hook (python-mode . (lambda ()
-     ;; (require 'lsp-python-ms)
-     ;; (lsp))))  ; or lsp-deferred
      (add-hook 'python-mode-hook 'eglot-ensure)
      (setq python-indent-guess-indent-offset-verbose nil)
      (setq python-shell-interpreter "python"
@@ -702,8 +703,8 @@ Enable Hs-minor-mode globally
      ;; format code on save
      (use-package python-black
        :after python
-       :config
-       (add-hook 'python-mode-hook 'python-black-on-save-mode))
+       :hook
+       (python-mode . python-black-on-save-mode-enable-dwim))
    #+end_src
 
    #+RESULTS:
@@ -841,7 +842,9 @@ chmod +x coursier
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
-       :init (global-flycheck-mode))
+       :init (global-flycheck-mode)
+       )
+     (setq flycheck-python-flake8-executable "flake8")
    #+end_src
 
 ** CMake
@@ -1090,6 +1093,23 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 ** Latex Mode
 #+begin_src emacs-lisp
 
+#+end_src
+* Reading
+** RSS
+#+begin_src emacs-lisp
+  (setq elfeed-feeds
+        '(
+          ;; programming
+          ("https://www.reddit.com/r/programming.rss" programming)
+          ("https://www.reddit.com/r/emacs.rss" emacs)
+
+          ;; programming languages
+          ("https://www.reddit.com/r/python.rss" python)
+          ))
+
+  (setq-default elfeed-search-filter "@2-days-ago +unread")
+  (setq-default elfeed-search-title-max-width 100)
+  (setq-default elfeed-search-title-min-width 100)
 #+end_src
 * Ends
 ** Windows Startup Size
