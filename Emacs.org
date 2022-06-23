@@ -582,14 +582,6 @@ Enable Hs-minor-mode globally
   (add-hook 'prog-mode-hook 'my-hs-mode-hook)
 #+end_src
 
-** LSP Mode Setting
-#+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
-    :config
-    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-    )
-#+end_src
 ** Company Mode
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 #+begin_src emacs-lisp
@@ -630,6 +622,14 @@ Enable Hs-minor-mode globally
     :config
     (setq inferior-lisp-program "/usr/bin/sbcl"
           sly-complete-symbol-function 'sly-simple-completions))
+#+end_src
+** Eglot LSP Client Setting
+#+begin_src emacs-lisp
+  (use-package eglot
+    :ensure t
+    :config
+    (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+    )
 #+end_src
 ** C/C++ Setting
 #+begin_src emacs-lisp
@@ -845,6 +845,42 @@ chmod +x coursier
        :init (global-flycheck-mode)
        )
      (setq flycheck-python-flake8-executable "flake8")
+
+     (defun flycheck-eglot--start (checker callback)
+       "Clean up errors when done.
+     CHECKER is the checker (eglot).
+     CALLBACK is the function that we need to call when we are done, on all the errors."
+       (cl-labels
+           ((flymake-diag->flycheck-err
+             (diag)
+             (with-current-buffer (flymake--diag-buffer diag)
+               (flycheck-error-new-at-pos
+                (flymake--diag-beg diag)
+                (pcase (flymake--diag-type diag)
+                  ('eglot-note 'info)
+                  ('eglot-warning 'warning)
+                  ('eglot-error 'error)
+                  (_ (error "Unknown diagnostic type, %S" diag)))
+                (flymake--diag-text diag)
+                :end-pos (flymake--diag-end diag)
+                :checker checker
+                :buffer (current-buffer)
+                :filename (buffer-file-name)))))
+         ;; NOTE: Setting up eglot to automatically create flycheck errors for the buffer.
+         (eglot-flymake-backend (lambda (flymake-diags &rest _)
+                                  (funcall callback 'finished (mapcar #'flymake-diag->flycheck-err flymake-diags))))
+         ;; NOTE: Forcefully trigger a check in the buffer (function name is confusing)
+         (flycheck-buffer)))
+
+     (defun flycheck-eglot--available-p ()
+       (bound-and-true-p eglot--managed-mode))
+
+     (flycheck-define-generic-checker 'eglot
+       "Report `eglot' diagnostics using `flycheck'."
+       :start #'flycheck-eglot--start
+       :predicate #'flycheck-eglot--available-p
+       :modes '(prog-mode text-mode))
+
    #+end_src
 
 ** CMake
