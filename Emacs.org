@@ -25,7 +25,7 @@ to forget the optimised cached. See help hash. (Of course, I assume you reread t
 ** Measure Loading Time Performance
 #+begin_src emacs-lisp
   ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 50 1000 1000))
+  (setq gc-cons-threshold (* 128 1000 1000))
 
   (defun efs/display-startup-time ()
     (message "Emacs loaded in %s with %d garbage collections."
@@ -277,7 +277,8 @@ Use Fira code and Cantarell
 
   ;; Finally, apply moe-theme now.
   ;; Choose what you like, (moe-light) or (moe-dark)
-  (load-theme 'moe-dark t)
+  ;; (load-theme 'moe-dark t)
+  (load-theme 'solarized-gruvbox-dark t)
 
   ;;  (if (display-graphic-p)
   ;;      (load-theme 'solarized-zenburn t)
@@ -340,7 +341,7 @@ The emacs org mode, S key is shift key!!!
     :diminish which-key-mode
     :config
     (which-key-mode)
-    (setq which-key-idle-delay 0.5))
+    (setq which-key-idle-delay 0.8))
 #+end_src
 
 ** Config & Show parens
@@ -568,6 +569,7 @@ useful for figuring out how things work in Emacs.
     :after (treemacs magit)
     :ensure t)
 
+  ;; set minibufer height , like eldoc display height
   (setq max-mini-window-height 3)
 #+end_src
 
@@ -587,9 +589,6 @@ Enable Hs-minor-mode globally
 #+begin_src emacs-lisp
   (use-package company
     :ensure t
-    :hook (scala-mode . company-mode)
-    :config
-    (setq lsp-completion-provider :capf)
     )
   (global-company-mode)
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
@@ -747,16 +746,6 @@ chmod +x coursier
   (add-hook 'scala-mode-hook 'eglot-ensure)
 #+end_src
 
-** Pretty Mode
-#+begin_src emacs-lisp
-  (use-package pretty-mode
-               :ensure t)
-  (require 'pretty-mode)
-                                          ; if you want to set it globally
-  (global-pretty-mode t)
-                                          ; if you want to set it only for a specific mode
-  ;; (add-hook 'my-pretty-language-hook 'turn-on-pretty-mode)
-#+end_src
 ** TAGS
 #+begin_src emacs-lisp
   (use-package counsel-etags
@@ -1085,26 +1074,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   ;; (run-at-time 1 10 'indent-org-block-automatically)
 #+end_src
 
-*** Org Roam Mode
-#+begin_src emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :init
-    (setq org-roam-v2-ack t)
-    :custom
-    (org-roam-directory "~/org-brain/")
-    :bind
-    (("C-c n l" . org-roam-buffer-toggle)
-     ("C-c n f" . org-roam-node-find)
-     ("C-c n i" . org-roam-node-insert))
-    :config
-    (org-roam-setup))
-
-#+end_src
-** Latex Mode
-#+begin_src emacs-lisp
-
-#+end_src
 * Reading
 ** RSS
 #+begin_src emacs-lisp
