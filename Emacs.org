@@ -810,7 +810,17 @@ chmod +x coursier
        :modes '(prog-mode text-mode))
 
    #+end_src
+#+begin_quote
+I am not familiar with a cpp-mode; I assume you mean c++-mode.
+The contents of a dir-locals-file should form an alist, i.e. ((mode . vars)) instead of (mode . vars).
+The cdr of each such mode-vars pair, i.e. the mode-specific settings, should also form an alist: ((mode . ((var . val)))) instead of ((mode . (var . val))).
+Each variable-value pair results in the cdr (value) being assigned to the car (variable); the form is not evaluated as is. The cdr is only evaluated when the car comprises the special symbol eval.
+So, your dir-locals-file should probably read:
 
+((c++-mode . ((flycheck-gcc-include-path . ("/home/<user>/<project>/include")))))
+
+As far as I can tell from the variable's documentation (C-h v flycheck-gcc-include-path RET) it is supposed to be a list of directory paths. If this does not work you should consider reporting it as a bug.
+#+end_quote
 ** CMake
 #+begin_src emacs-lisp
   (use-package cmake-mode
