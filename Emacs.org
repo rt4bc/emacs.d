@@ -302,14 +302,12 @@ Use Fira code and Cantarell
 
 ** Emacs Tree Sitter
 #+begin_src emacs-lisp
-
-  ;; (use-package tree-sitter
-  ;; :ensure t
-  ;; :config
-  ;; (global-tree-sitter-mode)
-  ;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  ;; Don't highlight strings, in any language.    
-  ;; )
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  ;; Don't highlight strings, in any language.
   ;; (add-function :before-while tree-sitter-hl-face-mapping-function
   ;; (lambda (capture-name)
   ;; (not (string= capture-name "string"))))
