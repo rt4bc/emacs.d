@@ -765,6 +765,16 @@ chmod +x coursier
           verilog-linter                   "iverilog -t null -Wall"
           ))
 #+end_src
+** Lua Setting
+#+begin_src emacs-lisp
+  (use-package lua-mode
+    :ensure t
+    :config
+    autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+  )
+#+end_src
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
@@ -987,6 +997,7 @@ Eval code blocks.
      'org-babel-load-languages
      '((emacs-lisp . t)
        (C . t)
+       (lua . t)
        (python . t)))
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 #+end_src
