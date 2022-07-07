@@ -477,6 +477,37 @@ useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Config
+** Projectile
+
+#+begin_src emacs-lisp
+
+  (use-package projectile
+    :ensure t)
+  (projectile-mode t)
+  (defun my-projectile-project-find-function (dir)
+    (let ((root (projectile-project-root dir)))
+      (and root (cons 'transient root))))
+  (with-eval-after-load 'project
+    (add-to-list 'project-find-functions 'my-projectile-project-find-function))
+
+#+end_src
+When set local directory to be a project root, just need a .projectile file under local root directory. like below
+don't need git .init anymore
+#+begin_quote
+❯ ls -al
+total 32
+drwxr-xr-x  7 bochao bochao 4096 Jul  7 10:49 .
+drwxr-xr-x 10 bochao bochao 4096 Jul  7 09:20 ..
+drwxr-xr-x  3 bochao bochao 4096 Jul  7 09:21 .bloop
+-rw-r--r--  1 bochao bochao 3462 Jul  7 09:21 build.sbt
+drwxr-xr-x  2 bochao bochao 4096 Jul  7 10:51 .metals
+drwxr-xr-x  3 bochao bochao 4096 Jul  7 09:21 project
+-rw-r--r--  1 bochao bochao    0 Jul  7 10:44 .projectile
+drwxr-xr-x  3 bochao bochao 4096 Jul  7 09:21 src
+drwxr-xr-x  7 bochao bochao 4096 Jul  7 09:22 target
+  ~/scala-project/scala-programming-4th/test
+#+end_quote
+
 ** File Explorer side bar
 #+begin_src emacs-lisp
   (use-package treemacs
