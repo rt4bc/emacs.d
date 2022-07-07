@@ -483,6 +483,8 @@ useful for figuring out how things work in Emacs.
 
   (use-package projectile
     :ensure t)
+  ;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t)
   (defun my-projectile-project-find-function (dir)
     (let ((root (projectile-project-root dir)))
