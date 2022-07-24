@@ -629,12 +629,14 @@ Enable Hs-minor-mode globally
 #+end_src
 ** Code template
 #+begin_src emacs-lisp
-  (use-package yasnippet                  
-    :config
-    (add-hook 'prog-mode-hook #'yas-minor-mode))
+  ;; (use-package yasnippet
+  ;; :ensure t
+  ;; :config
+  ;; (add-hook 'prog-mode-hook #'yas-minor-mode))
 
   (use-package yasnippet-snippets
-    :ensure t)
+    :ensure t
+    )
 #+end_src
 
 ** Common Lisp Setting
