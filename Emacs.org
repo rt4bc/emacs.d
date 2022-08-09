@@ -805,6 +805,13 @@ chmod +x coursier
        :init (global-flycheck-mode)
        )
      (setq flycheck-python-flake8-executable "flake8")
+     
+     (use-package flycheck-clang-tidy
+       :after flycheck
+       :hook
+       (flycheck-mode . flycheck-clang-tidy-setup)
+       )
+
 
    #+end_src
    Set .dir-locals.el to include path
