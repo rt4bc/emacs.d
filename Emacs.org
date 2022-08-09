@@ -804,17 +804,22 @@ chmod +x coursier
      (use-package flycheck
        :init (global-flycheck-mode)
        )
-     (setq flycheck-python-flake8-executable "flake8")
-     
-     (use-package flycheck-clang-tidy
-       :after flycheck
-       :hook
-       (flycheck-mode . flycheck-clang-tidy-setup)
-       )
+     ;; (setq flycheck-python-flake8-executable "flake8")
+
+     ;; (use-package flycheck-clang-tidy
+     ;; :after flycheck
+     ;; :hook
+     ;; (flycheck-mode . flycheck-clang-tidy-setup)
+     ;; )
+
+     ;; (when (derived-mode-p 'c-mode 'c++-mode)
+     ;; (flycheck-select-checker "c/c++-cppcheck"))
+     ;; (when (derived-mode-p major-mode 'c++-mode)
+     ;; (flycheck-select-checker "c/c++-cppcheck"))
 
 
    #+end_src
-   Set .dir-locals.el to include path
+   Set .dir-locals.el include path manually or
 #+begin_quote
 ((nil . (
          (flycheck-clang-include-path . ("/home/bochao/br2-projects/br2-override-src/u-boot-2022.01/include"
@@ -822,6 +827,16 @@ chmod +x coursier
                                          ))
          )
       ))
+#+end_quote
+#+begin_quote
+M-x add-dir-local-variable RET c+±mode RET flycheck-clang-definitions RET ("-DPSV" “-DSH”) RET 产生：
+
+;;; Directory Local Variables
+;;; For more information see (info "(emacs) Directory Variables")
+
+((c++-mode
+  (flycheck-clang-definitions "-DPSV" "-DSH")))
+  
 #+end_quote
 ** CMake
 #+begin_src emacs-lisp
