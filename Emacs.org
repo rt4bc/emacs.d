@@ -635,7 +635,7 @@ Enable Hs-minor-mode globally
   ;; (add-hook 'prog-mode-hook #'yas-minor-mode))
 
   (use-package yasnippet-snippets
-    :ensure t
+    :defer t
     )
 #+end_src
 
