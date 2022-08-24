@@ -1093,6 +1093,12 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
   (setq-default elfeed-search-title-max-width 100)
   (setq-default elfeed-search-title-min-width 100)
 #+end_src
+* Profiling
+#+begin_src emacs-lisp
+  (use-package esup
+    :ensure t)
+  (setq esup-depth 0)
+#+end_src
 * Ends
 ** Windows Startup Size
 Put this part at the end of init file, for font size config has impact on this.
