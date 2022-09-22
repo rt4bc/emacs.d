@@ -803,6 +803,8 @@ chmod +x coursier
    #+begin_src emacs-lisp
      (use-package flycheck
        :init (global-flycheck-mode)
+       :config
+       (setq flycheck-checker-error-threshold 2000)
        )
      ;; (setq flycheck-python-flake8-executable "flake8")
 
