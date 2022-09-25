@@ -417,7 +417,7 @@ The emacs org mode, S key is shift key!!!
 
   (use-package ivy-hydra
     :after ivy
-    :esnure t)
+    :ensure t)
 
   (use-package counsel
     :bind (("M-x" . counsel-M-x)
