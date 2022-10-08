@@ -1081,23 +1081,6 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
    #+end_src
    means link, so the lua mode comment block will not display without literal mode
 
-* Reading
-** RSS
-#+begin_src emacs-lisp
-  (setq elfeed-feeds
-        '(
-          ;; programming
-          ("https://www.reddit.com/r/programming.rss" programming)
-          ("https://www.reddit.com/r/emacs.rss" emacs)
-
-          ;; programming languages
-          ("https://www.reddit.com/r/python.rss" python)
-          ))
-
-  (setq-default elfeed-search-filter "@2-days-ago +unread")
-  (setq-default elfeed-search-title-max-width 100)
-  (setq-default elfeed-search-title-min-width 100)
-#+end_src
 * Profiling
 #+begin_src emacs-lisp
   (use-package esup
