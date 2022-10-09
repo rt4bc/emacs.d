@@ -898,52 +898,11 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
-* Writing
+* GTD
 ** Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
 document editor, project planner, task and time tracker, blogging
 engine, and literate coding utility all wrapped up in one package.
-*** Beter Font
-The =efs/org-font-setup= function configures various text faces to
-tweak the sizes of headings and use variable width fonts in most cases
-so that it looks more like we're editing a document in =org-mode=.  We
-switch back to fixed width (monospace) fonts for code blocks and
-tables so that they display correctly.
-#+begin_src emacs-lisp
-
-  (defun efs/org-font-setup ()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-    ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.25)
-                    (org-level-2 . 1.2)
-                    (org-level-3 . 1.15)
-                    (org-level-4 . 1.1)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    ;; (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil :inheit '(fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
-
-#+end_src
-
 *** Org Basic Config
 This package provides visual alignment for Org Mode, Markdown and table.el tables on
 GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters
@@ -965,7 +924,25 @@ configuration for Org agendas and capture templates.
   (defun efs/org-mode-setup ()
     (org-indent-mode)
     (variable-pitch-mode 1)
-    (visual-line-mode 1))
+    (visual-line-mode 1)
+    ;; Setting org direcotry
+    (setq org-direcotry "~/orgnotes")
+    (setq org-agenda-files (list "inbox.org"))
+
+    ;; org capture templates
+    (setq org-capture-templates
+          `(("i" "Inbox" entry (file "inbox.org")
+             ,(concat "* TODO %?\n"
+                      "/Entered on/ %U"))))
+    (define-key global-map (kbd "C-c c") `org-capture)
+    ;; with shorter key inputs sequence
+    (defun org-capture-inbox ()
+      (interactive)
+      (call-interactively `org-store-link)
+      (org-capture nil "i"))
+    (define-key global-map (kbd "C-c i") `org-capture-inbox)
+
+    )
 
   (use-package org
     :ensure t
@@ -990,7 +967,6 @@ configuration for Org agendas and capture templates.
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
             (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
     )
 #+end_src
 
@@ -1001,8 +977,7 @@ configuration for Org agendas and capture templates.
     :ensure t
     :hook (org-mode . org-bullets-mode)
     :custom
-    (org-bullets-bullet-list '("◉" "☯" "○" "☯" "✸" "☯" "✿" "☯" "✜" "☯" "◆" "☯" "▶")))
-
+    (org-bullets-bullet-list '("◉" "○" "✸" "✿" "✜" "◆" "⁖" "▶")))
 #+end_src
 
 *** Config Babel Languages
@@ -1079,8 +1054,96 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
    #+begin_src lua
      [[ ]] 
    #+end_src
-   means link, so the lua mode comment block will not display without literal mode
+   means link, so the lua mode comment block will not display without literal mod
+   
+* Email
+** offlineimap
+create .offlineimaprc file
+#+begin_src 
+[general]
+accounts = Gmail
+maxsyncaccounts = 3
 
+[Account Gmail]
+localrepository = Local
+remoterepository = Remote
+
+[Repository Local]
+type = Maildir
+localfolders = ~/mail
+
+[Repository Remote]
+type = IMAP
+remotehost = imap.gmail.com
+remoteuser = xxe@gmail.com
+remotepass = xxx
+ssl = yes
+maxconnections = 1
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+#+end_src
+** mu
+*** Install
+under archlinux, use yay -S to install mu client
+*** Initialize
+#+begin_src shell
+  mu init --maildir=~/maildir
+#+end_src
+
+*** MU4E
+#+begin_src emacs-lisp
+  (require 'mu4e)
+  (setq mail-user-agent 'mu4e-user-agent)
+
+  (setq mu4e-drafts-folder "/[Gmail].Drafts")
+  (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+  (setq mu4e-trash-folder  "/[Gmail].Trash")
+
+  ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+  (setq mu4e-sent-messages-behavior 'delete)
+  ;; (See the documentation for `mu4e-sent-messages-behavior' if you have
+  ;; additional non-Gmail addresses and want assign them different
+  ;; behavior.)
+
+  ;; setup some handy shortcuts
+  ;; you can quickly switch to your Inbox -- press ``ji''
+  ;; then, when you want archive some messages, move them to
+  ;; the 'All Mail' folder by pressing ``ma''.
+
+  (setq mu4e-maildir-shortcuts
+        '( (:maildir "/INBOX"              :key ?i)
+           (:maildir "/[Gmail].Sent Mail"  :key ?s)
+           (:maildir "/[Gmail].Trash"      :key ?t)
+           (:maildir "/[Gmail].All Mail"   :key ?a)))
+
+  ;; allow for updating mail using 'U' in the main view:
+  (setq mu4e-get-mail-command "offlineimap")
+
+  ;; something about ourselves
+  (setq
+   user-mail-address "bochao.me@gmail.com"
+   user-full-name  "BoChao"
+   ;; mu4e-compose-signature
+   ;; (concat
+   ;; "Foo X. Bar\n"
+   ;; "http://www.example.com\n")
+   )
+  ;; sending mail -- replace USERNAME with your gmail username
+  ;; also, make sure the gnutls command line utils are installed
+  ;; package 'gnutls-bin' in Debian/Ubuntu
+
+  (require 'smtpmail)
+  (setq message-send-mail-function 'smtpmail-send-it
+        starttls-use-gnutls t
+        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        smtpmail-auth-credentials
+        '(("smtp.gmail.com" 587 "bochao.me@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587)
+
+  ;; don't keep message buffers around
+  (setq message-kill-buffer-on-exit t)
+#+end_src
 * Profiling
 #+begin_src emacs-lisp
   (use-package esup
