@@ -983,12 +983,15 @@ configuration for Org agendas and capture templates.
 *** Config Babel Languages
 Eval code blocks.
 #+begin_src emacs-lisp
+  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+
   (with-eval-after-load 'org
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
        (C . t)
        (lua . t)
+       (plantuml . t)
        (python . t)))
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 #+end_src
@@ -1056,94 +1059,6 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
    #+end_src
    means link, so the lua mode comment block will not display without literal mod
    
-* Email
-** offlineimap
-create .offlineimaprc file
-#+begin_src 
-[general]
-accounts = Gmail
-maxsyncaccounts = 3
-
-[Account Gmail]
-localrepository = Local
-remoterepository = Remote
-
-[Repository Local]
-type = Maildir
-localfolders = ~/mail
-
-[Repository Remote]
-type = IMAP
-remotehost = imap.gmail.com
-remoteuser = xxe@gmail.com
-remotepass = xxx
-ssl = yes
-maxconnections = 1
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
-#+end_src
-** mu
-*** Install
-under archlinux, use yay -S to install mu client
-*** Initialize
-#+begin_src shell
-  mu init --maildir=~/maildir
-#+end_src
-
-*** MU4E
-#+begin_src emacs-lisp
-  (require 'mu4e)
-  (setq mail-user-agent 'mu4e-user-agent)
-
-  (setq mu4e-drafts-folder "/[Gmail].Drafts")
-  (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
-  (setq mu4e-trash-folder  "/[Gmail].Trash")
-
-  ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
-  (setq mu4e-sent-messages-behavior 'delete)
-  ;; (See the documentation for `mu4e-sent-messages-behavior' if you have
-  ;; additional non-Gmail addresses and want assign them different
-  ;; behavior.)
-
-  ;; setup some handy shortcuts
-  ;; you can quickly switch to your Inbox -- press ``ji''
-  ;; then, when you want archive some messages, move them to
-  ;; the 'All Mail' folder by pressing ``ma''.
-
-  (setq mu4e-maildir-shortcuts
-        '( (:maildir "/INBOX"              :key ?i)
-           (:maildir "/[Gmail].Sent Mail"  :key ?s)
-           (:maildir "/[Gmail].Trash"      :key ?t)
-           (:maildir "/[Gmail].All Mail"   :key ?a)))
-
-  ;; allow for updating mail using 'U' in the main view:
-  (setq mu4e-get-mail-command "offlineimap")
-
-  ;; something about ourselves
-  (setq
-   user-mail-address "bochao.me@gmail.com"
-   user-full-name  "BoChao"
-   ;; mu4e-compose-signature
-   ;; (concat
-   ;; "Foo X. Bar\n"
-   ;; "http://www.example.com\n")
-   )
-  ;; sending mail -- replace USERNAME with your gmail username
-  ;; also, make sure the gnutls command line utils are installed
-  ;; package 'gnutls-bin' in Debian/Ubuntu
-
-  (require 'smtpmail)
-  (setq message-send-mail-function 'smtpmail-send-it
-        starttls-use-gnutls t
-        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-        smtpmail-auth-credentials
-        '(("smtp.gmail.com" 587 "bochao.me@gmail.com" nil))
-        smtpmail-default-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 587)
-
-  ;; don't keep message buffers around
-  (setq message-kill-buffer-on-exit t)
-#+end_src
 * Profiling
 #+begin_src emacs-lisp
   (use-package esup
