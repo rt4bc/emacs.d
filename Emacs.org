@@ -247,7 +247,9 @@ aspell & aspell-dict-en
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
 
 #+begin_src emacs-lisp
-
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t)
+  
   (require 'color-theme-sanityinc-tomorrow)
 
   (setq custom-safe-themes t)
