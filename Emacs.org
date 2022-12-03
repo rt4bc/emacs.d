@@ -249,7 +249,11 @@ aspell & aspell-dict-en
 #+begin_src emacs-lisp
   (use-package nord-theme
     :ensure t)
-  (load-theme 'nord t)
+  (use-package ef-themes
+    :ensure t)
+
+  ;; (load-theme 'nord t)
+  (load-theme 'ef-autumn t)
 
 #+end_src
 
@@ -269,28 +273,19 @@ aspell & aspell-dict-en
 
 ** Emacs Tree Sitter
 #+begin_src emacs-lisp
-  ;;(use-package tree-sitter
-  ;;  :ensure t
-  ;;  :config
-  ;;  (global-tree-sitter-mode)
-  ;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-  ;; Don't highlight strings, in any language.
-  ;; (add-function :before-while tree-sitter-hl-face-mapping-function
-  ;; (lambda (capture-name)
-  ;; (not (string= capture-name "string"))))
-  ;; (add-hook 'python-mode-hook
-  ;; (lambda ()
-  ;; (add-function :before-until (local 'tree-sitter-hl-face-mapping-function)
-  ;; (lambda (capture-name)
-  ;; (pcase capture-name
-  ;; ("doc" 'font-lock-comment-face))))))
+  ;; will be build-in in emacs29
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-  ;; (use-package tree-sitter-langs
-  ;; :ensure t
-  ;; )
-  ;; (use-package tree-sitter-indent
-  ;; :ensure t
-  ;; )
+  (use-package tree-sitter-langs
+    :ensure t
+    )
+  (use-package tree-sitter-indent
+    :ensure t
+    )
 #+end_src
 ** Key Remapping
 The advantage of creating the Super and Hyper in emacs is that you can have more hotkeys, and no major or minor modes will stamp on your keys.
