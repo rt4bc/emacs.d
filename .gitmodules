@@ -1,3 +1,0 @@
-[submodule "stand-alone/org-roam-ui"]
-	path = stand-alone/org-roam-ui
-	url = git@github.com:org-roam/org-roam-ui.git
