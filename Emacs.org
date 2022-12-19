@@ -900,7 +900,6 @@ Eval code blocks.
      '((emacs-lisp . t)
        (C . t)
        (lua . t)
-       (makefile . t)
        (plantuml . t)
        (python . t)))
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
@@ -968,7 +967,15 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
      [[ ]] 
    #+end_src
    means link, so the lua mode comment block will not display without literal mod
-   
+*** Facilitates moving images from point A to point B
+#+begin_src emacs-lisp
+  (use-package org-download
+    :ensure t)
+  (require 'org-download)
+
+  ;; Drag-and-drop to `dired`
+  (add-hook 'dired-mode-hook 'org-download-enable)
+#+end_src
 * Profiling
 #+begin_src emacs-lisp
   (use-package esup
