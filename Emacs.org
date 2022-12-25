@@ -968,11 +968,11 @@ A bracket is either of two tall fore- or back-facing punctuation marks commonly 
    #+end_src
    means link, so the lua mode comment block will not display without literal mod
 *** Facilitates moving images from point A to point B
+A screenshot taken using gnome-screenshot, scrot, gm, xclip (on Linux), screencapture (on OS X) or , imagemagick/convert (on Windows). Use the org-download-screenshot command for this. Customize the backend with org-download-screenshot-method.
 #+begin_src emacs-lisp
   (use-package org-download
     :ensure t)
   (require 'org-download)
-
   ;; Drag-and-drop to `dired`
   (add-hook 'dired-mode-hook 'org-download-enable)
 #+end_src
