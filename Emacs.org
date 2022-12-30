@@ -578,7 +578,7 @@ Enable Hs-minor-mode globally
   (setq eldoc-echo-area-use-multiline-p nil)
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 #+end_src
-** C/C++ Setting
+** Eglot Mode Hook
 #+begin_src emacs-lisp
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
