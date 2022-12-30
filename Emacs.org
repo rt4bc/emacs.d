@@ -976,6 +976,10 @@ A screenshot taken using gnome-screenshot, scrot, gm, xclip (on Linux), screenca
   (require 'org-download)
   ;; Drag-and-drop to `dired`
   (add-hook 'dired-mode-hook 'org-download-enable)
+
+  (use-package xclip
+    :ensure t)
+  (require 'xclip)
 #+end_src
 * Profiling
 #+begin_src emacs-lisp
