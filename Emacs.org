@@ -276,17 +276,18 @@ aspell & aspell-dict-en
   ;; will be build-in in emacs29
   (use-package tree-sitter
     :ensure t
-    :config
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
     )
-
   (use-package tree-sitter-langs
     :ensure t
     )
   (use-package tree-sitter-indent
     :ensure t
     )
+  (require 'tree-sitter)
+  (require 'tree-sitter-hl)
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+
 #+end_src
 ** Key Remapping
 The advantage of creating the Super and Hyper in emacs is that you can have more hotkeys, and no major or minor modes will stamp on your keys.
@@ -624,8 +625,8 @@ Enable Hs-minor-mode globally
 *** How to set LSP
 + install Python language server, python-language-server is outdated...
   #+begin_src shell
-    pip3 install 'python-lsp-server[all]'
-    pip3 install pyls-mypy pyls-isort pyls-black
+    # pip3 install 'python-lsp-server[all]'
+    pip install pyright
   #+end_src
   
    #+begin_src emacs-lisp
@@ -643,6 +644,7 @@ Enable Hs-minor-mode globally
      ;;   )
 
      (add-hook 'python-mode-hook 'eglot-ensure)
+     (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
      (setq python-indent-guess-indent-offset-verbose nil)
      (setq python-shell-interpreter "python"
            ;; python-shell-interpreter-args "-i --simple-prompt")
