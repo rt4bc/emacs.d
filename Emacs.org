@@ -287,7 +287,8 @@ aspell & aspell-dict-en
   (require 'tree-sitter-hl)
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
-
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 #+end_src
 ** Key Remapping
 The advantage of creating the Super and Hyper in emacs is that you can have more hotkeys, and no major or minor modes will stamp on your keys.
