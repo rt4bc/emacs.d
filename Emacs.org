@@ -958,7 +958,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   (setq org-src-tab-acts-natively t)
   (add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
   ;; (run-at-time 1 10 'indent-org-block-automatically)
-  (add-hook 'org-mode-hook '(lambda () (setq fill-column 80)))
+  (add-hook 'org-mode-hook (lambda () (setq fill-column 80)))
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+end_src
 
