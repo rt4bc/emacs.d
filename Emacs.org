@@ -615,6 +615,7 @@ Enable Hs-minor-mode globally
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
   (add-hook 'lua-mode-hook 'eglot-ensure)
+  (add-hook 'js2-mode-hook 'eglot-ensure)
   ;; Clang stuff
 
   ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
