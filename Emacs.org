@@ -831,7 +831,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
     :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 #+end_src
 
-** Rainbow Delimiters
+** Rainbow
 [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
 
 #+begin_src emacs-lisp
@@ -839,6 +839,12 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 
+#+end_src
+
+[[https://elpa.gnu.org/packages/rainbow-mode.html][Rainbow Mode]] Colorize color names in buffers
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :hook (prog-mode . rainbow-mode))
 #+end_src
 
 * GTD
