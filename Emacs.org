@@ -553,6 +553,14 @@ Enable Hs-minor-mode globally
     )
 #+end_src
 
+** Eglot LSP Client Setting
+#+begin_src emacs-lisp
+  (use-package eglot
+    :ensure t
+    )
+  (setq eldoc-echo-area-use-multiline-p nil)
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+#+end_src
 ** Common Lisp Setting
 1. Install SBCL
    For Arch:
@@ -573,35 +581,6 @@ Enable Hs-minor-mode globally
           sly-complete-symbol-function 'sly-simple-completions))
 #+end_src
 ** JS Mode Setting
-#+begin_src emacs-lisp
-  (use-package js2-mode
-    :ensure t)
-  (require 'js2-mode)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  ;; Better imenu
-  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-
-  (use-package js2-refactor
-    :ensure t)
-  (use-package xref-js2
-    :ensure t)
-  (require 'js2-refactor)
-  (require 'xref-js2)
-
-  (add-hook 'js2-mode-hook #'js2-refactor-mode)
-  (js2r-add-keybindings-with-prefix "C-c C-r")
-  (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
-
-  ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
-  ;; unbind it.
-  (define-key js-mode-map (kbd "M-.") nil)
-
-  (add-hook 'js2-mode-hook (lambda ()
-                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
-  (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
-
-#+end_src
-** TypeScript
 1. Install npm first
 2. Install typescript and language server
    npm package location:
@@ -614,40 +593,18 @@ Enable Hs-minor-mode globally
    #+begin_quote
    npm install -g typescript-language-server typescript
    #+end_quote
+   
+#+begin_src emacs-lisp
+  (use-package js2-mode
+    :mode "\\.js\\")
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+#+end_src
+
 #+begin_src emacs-lisp
   (use-package typescript-mode
-    :mode "\\.ts\\'"
-    :config
-    (setq typescript-indent-level 2))
+    :mode "\\.ts\\'")
 #+end_src
-** Eglot LSP Client Setting
-#+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
-    )
-  (setq eldoc-echo-area-use-multiline-p nil)
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-#+end_src
-** Eglot Mode Hook
-#+begin_src emacs-lisp
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure)
-  (add-hook 'lua-mode-hook 'eglot-ensure)
-  (add-hook 'js2-mode-hook 'eglot-ensure)
-  (add-hook 'typescript-mode-hook 'eglot-ensure)
-  (add-hook 'js-ts-mode  'eglot-ensure)
-  (add-hook 'tsx-ts-mode 'eglot-ensure)
-  (add-hook 'typescript-ts-mode  'eglot-ensure)
-  ;; Clang stuff
-
-  ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
-  (use-package clang-format
-    :ensure t)
-  (setq clang-format-style "file")
-
-#+end_src
-
 ** Python Setting
 *** How to setting Env
 + install virtualenv by pip
@@ -696,19 +653,21 @@ Enable Hs-minor-mode globally
      ;;                               (add-hook 'before-save-hook
      ;;                                         'elpy-format-code nil t)))
      ;;   )
-
-     (add-hook 'python-mode-hook 'eglot-ensure)
-     (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
-     (setq python-indent-guess-indent-offset-verbose nil)
+     ;; (setq python-indent-guess-indent-offset-verbose nil)
+     (use-package py-yapf
+       :ensure t)
+     (require 'py-yapf)
+     (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
+     
      (setq python-shell-interpreter "python"
            ;; python-shell-interpreter-args "-i --simple-prompt")
            python-shell-interpreter-args "-i")
 
      ;; format code on save
-     (use-package python-black
-       :after python
-       :hook
-       (python-mode . python-black-on-save-mode-enable-dwim))
+     ;; (use-package python-black
+     ;; :after python
+     ;; :hook
+     ;; (python-mode . python-black-on-save-mode-enable-dwim))
    #+end_src
 
    #+RESULTS:
@@ -768,6 +727,27 @@ chmod +x coursier
   (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 #+end_src
+** Eglot Mode Hook
+#+begin_src emacs-lisp
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (add-hook 'c++-mode-hook 'eglot-ensure)
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  ;; (add-hook 'lua-mode-hook 'eglot-ensure)
+  ;; (add-hook 'js2-mode-hook 'eglot-ensure)
+  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
+  ;; (add-hook 'js-ts-mode  'eglot-ensure)
+  ;; (add-hook 'tsx-ts-mode 'eglot-ensure)
+  ;; (add-hook 'typescript-ts-mode  'eglot-ensure)
+  ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+
+  ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
+  (use-package clang-format
+    :ensure t)
+  (setq clang-format-style "file")
+
+#+end_src
+
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
