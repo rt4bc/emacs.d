@@ -673,6 +673,9 @@ Enable Hs-minor-mode globally
                 (push '("function" . ?ƒ) prettify-symbols-alist)))
 
     (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+  (use-package js2-refactor
+    :ensure t)
+  (require 'js2-refactor)
 #+end_src
 *** Common Lisp Setting
 1. Install SBCL
