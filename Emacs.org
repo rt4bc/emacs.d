@@ -521,6 +521,66 @@ drwxr-xr-x  7 bochao bochao 4096 Jul  7 09:22 target
   (setq max-mini-window-height 3)
 #+end_src
 
+** Commenting
+Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
+
+#+begin_src emacs-lisp
+
+  (use-package evil-nerd-commenter
+    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+#+end_src
+
+** Rainbow
+[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
+
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+#+end_src
+
+[[https://elpa.gnu.org/packages/rainbow-mode.html][Rainbow Mode]] Colorize color names in buffers
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :hook (prog-mode . rainbow-mode))
+#+end_src
+** CMake
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :config
+    (setq auto-mode-alist  
+          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
+                    ("\\.cmake\\'" . cmake-mode))  
+                  auto-mode-alist)))
+#+end_src
+
+** Magit
+[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
+
+#+begin_src emacs-lisp
+
+   (use-package magit
+     :commands magit-status
+     :custom
+     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+   ;; NOTE: Make sure to configure a GitHub token before using this package!
+   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+   (use-package forge
+     :after magit)
+  ;; Note: How to add private to ~/.ssh/config files
+  ;; Host github.com-rt4bc
+  ;; HostName github.com
+  ;; User rt4bc
+  ;; IdentityFile ~/.ssh/id_rsa_github_rt
+
+  ;; Note update ssh keybindings
+  ;; ssh-add -D ; remove all cache
+  ;; ssh-add xxxx_private_key  ;;update host private key.
+#+end_src
+
 ** Code Folding
 Enable Hs-minor-mode globally
 #+begin_src emacs-lisp
@@ -553,7 +613,8 @@ Enable Hs-minor-mode globally
     )
 #+end_src
 
-** Eglot LSP Client Setting
+** Eglot Setting
+
 #+begin_src emacs-lisp
   (use-package eglot
     :ensure t
@@ -561,7 +622,59 @@ Enable Hs-minor-mode globally
   (setq eldoc-echo-area-use-multiline-p nil)
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 #+end_src
-** Common Lisp Setting
+
+** Language Setting
+*** Python Setting
+#+begin_src emacs-lisp
+  (use-package py-yapf
+    :ensure t)
+  (require 'py-yapf)
+  (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
+
+  (setq python-shell-interpreter "python"
+        ;; python-shell-interpreter-args "-i --simple-prompt")
+        python-shell-interpreter-args "-i")
+
+#+end_src
+**** How to setting Env
+1. install virtualenv by pip
+  #+begin_src shell
+    > pip3 install virtualenv
+    > pip3 install virtualenvwrapper
+    > mkvirtualenv py39
+    #after install python package, add virtualenvwrapper.sh path  to $PATH
+    #or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
+  #+end_src
+
+2. virtualevn set, put setting in .zshrc file
+  #+begin_src shell
+    #Virtualenvwrapper settings:
+    export WORKON_HOME=$HOME/.virtualenvs
+    export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
+    export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
+    source $HOME/.virtualenvs/py39/bin/activate 
+  #+end_src  
+**** How to set LSP
+#+begin_src shell
+  > pip3 install pyright
+  #+end_src
+
+*** JS&TS Setting
+#+begin_src emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :init
+    (setq-default js-indent-level 8
+                  js2-cleanup-whitespace t                                  
+                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+
+    (add-hook 'js2-mode-hook
+              (lambda ()
+                (push '("function" . ?ƒ) prettify-symbols-alist)))
+
+    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+#+end_src
+*** Common Lisp Setting
 1. Install SBCL
    For Arch:
    #+begin_src shell
@@ -580,99 +693,7 @@ Enable Hs-minor-mode globally
     (setq inferior-lisp-program "/usr/bin/sbcl"
           sly-complete-symbol-function 'sly-simple-completions))
 #+end_src
-** JS&TS Mode Setting
-1. Install npm first
-2. Install typescript and language server
-   npm package location:
-   #+begin_quote
-   cat ~/.npmrc
-
-   prefix=~/.local/
-   #+end_quote
-   
-   #+begin_quote
-   npm install -g typescript-language-server typescript
-   #+end_quote
-   
-#+begin_src emacs-lisp
-  (use-package js2-mode
-    :mode "\\.js\\")
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 8)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package typescript-mode
-    :mode "\\.ts\\'")
-  
-#+end_src
-** Python Setting
-*** How to setting Env
-+ install virtualenv by pip
-  #+begin_src shell
-    pip3 install virtualenv
-    pip3 install virtualenvwrapper
-  #+end_src
-  after install python package, add virtualenvwrapper.sh path  to $PATH
-  or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
-  #+begin_src shell
-    ❯ mkvirtualenv py39
-  #+end_src
-
-+ virtualevn set, put setting in .zshrc file
-  #+begin_src shell
-    #Virtualenvwrapper settings:
-    export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=$HOME/.virtualenvs/py39/bin/python3
-    export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs/py39/bin/virtualenv
-    source $HOME/.virtualenvs/py39/bin/activate 
-  #+end_src
-
-  #+begin_src shell
-    #Run:
-    $workon
-    #A list of environments, empty, is printed.
-  #+end_src
-  
-*** How to set LSP
-+ install Python language server, python-language-server is outdated...
-  #+begin_src shell
-    # pip3 install 'python-lsp-server[all]'
-    pip install pyright
-  #+end_src
-  
-   #+begin_src emacs-lisp
-     ;; (use-package elpy
-     ;;   :init
-     ;;   (elpy-enable)
-     ;;   :config
-     ;;   (setq elpy-rpc-virtualenv-path 'current)
-     ;;   (setq elpy-formatter 'black)
-     ;;   (setq elpy-syntax-check-command  "black")
-     ;;   (setq elpy-rpc-backend "pyls")
-     ;;   (add-hook 'elpy-mode-hook (lambda ()
-     ;;                               (add-hook 'before-save-hook
-     ;;                                         'elpy-format-code nil t)))
-     ;;   )
-     ;; (setq python-indent-guess-indent-offset-verbose nil)
-     (use-package py-yapf
-       :ensure t)
-     (require 'py-yapf)
-     (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
-     
-     (setq python-shell-interpreter "python"
-           ;; python-shell-interpreter-args "-i --simple-prompt")
-           python-shell-interpreter-args "-i")
-
-     ;; format code on save
-     ;; (use-package python-black
-     ;; :after python
-     ;; :hook
-     ;; (python-mode . python-black-on-save-mode-enable-dwim))
-   #+end_src
-
-   #+RESULTS:
-** Scala Setting
+*** Scala Setting
 Install scala lsp server first
 #+begin_quote
 # Make sure to use coursier v1.1.0-M9 or newer.
@@ -706,12 +727,8 @@ chmod +x coursier
     ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
     (setq sbt:program-options '("-Dsbt.supershell=false"))
     )
-
-  ;; hook scala mode to eglot
-  (add-hook 'scala-mode-hook 'eglot-ensure)
 #+end_src
-
-** HDL Setting
+*** HDL Setting
 #+begin_src emacs-lisp
   (use-package verilog-mode
     :ensure t 
@@ -720,35 +737,23 @@ chmod +x coursier
     (setq verilog-linter                   "verilator --lint-only -Wall"
           ))
 #+end_src
-** Lua Setting
-#+begin_src emacs-lisp
-  (use-package lua-mode
-    :ensure t)
-  (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-#+end_src
-** Eglot Mode Hook
+*** Eglot Mode Hook
 #+begin_src emacs-lisp
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
   (add-hook 'python-mode-hook 'eglot-ensure)
-  ;; (add-hook 'lua-mode-hook 'eglot-ensure)
-  ;; (add-hook 'js2-mode-hook 'eglot-ensure)
+  (add-hook 'js2-mode-hook 'eglot-ensure)
+  (add-hook 'scala-mode-hook 'eglot-ensure)
   ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
-  ;; (add-hook 'js-ts-mode  'eglot-ensure)
-  ;; (add-hook 'tsx-ts-mode 'eglot-ensure)
-  ;; (add-hook 'typescript-ts-mode  'eglot-ensure)
-  ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
-
-  ;; You need to generate a .clang-format file in your project's root, with the command clang-format -style=llvm -dump-config > .clang-format.
-  (use-package clang-format
-    :ensure t)
-  (setq clang-format-style "file")
-
 #+end_src
-
+*** Color Identifiers Mode
+#+begin_src emacs-lisp
+  (use-package color-identifiers-mode
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook 'color-identifiers-mode))
+#+end_src
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
@@ -790,67 +795,6 @@ M-x add-dir-local-variable RET c+±mode RET flycheck-clang-definitions RET ("-DP
   (flycheck-clang-definitions "-DPSV" "-DSH")))
   
 #+end_quote
-** CMake
-#+begin_src emacs-lisp
-  (use-package cmake-mode
-    :config
-    (setq auto-mode-alist  
-          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                    ("\\.cmake\\'" . cmake-mode))  
-                  auto-mode-alist)))
-#+end_src
-
-** Magit
-[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-
-   (use-package magit
-     :commands magit-status
-     :custom
-     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-   ;; NOTE: Make sure to configure a GitHub token before using this package!
-   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-   (use-package forge
-     :after magit)
-  ;; Note: How to add private to ~/.ssh/config files
-  ;; Host github.com-rt4bc
-  ;; HostName github.com
-  ;; User rt4bc
-  ;; IdentityFile ~/.ssh/id_rsa_github_rt
-
-  ;; Note update ssh keybindings
-  ;; ssh-add -D ; remove all cache
-  ;; ssh-add xxxx_private_key  ;;update host private key.
-#+end_src
-
-** Commenting
-Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
-
-#+begin_src emacs-lisp
-
-  (use-package evil-nerd-commenter
-    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-#+end_src
-
-** Rainbow
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-
-#+begin_src emacs-lisp
-
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-
-#+end_src
-
-[[https://elpa.gnu.org/packages/rainbow-mode.html][Rainbow Mode]] Colorize color names in buffers
-#+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :hook (prog-mode . rainbow-mode))
-#+end_src
-
 * GTD
 ** Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
