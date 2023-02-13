@@ -580,7 +580,7 @@ Enable Hs-minor-mode globally
     (setq inferior-lisp-program "/usr/bin/sbcl"
           sly-complete-symbol-function 'sly-simple-completions))
 #+end_src
-** JS Mode Setting
+** JS&TS Mode Setting
 1. Install npm first
 2. Install typescript and language server
    npm package location:
@@ -598,12 +598,13 @@ Enable Hs-minor-mode globally
   (use-package js2-mode
     :mode "\\.js\\")
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
+  (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 8)))
 #+end_src
 
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :mode "\\.ts\\'")
+  
 #+end_src
 ** Python Setting
 *** How to setting Env
