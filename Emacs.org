@@ -545,16 +545,6 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   (use-package rainbow-mode
     :hook (prog-mode . rainbow-mode))
 #+end_src
-** CMake
-#+begin_src emacs-lisp
-  (use-package cmake-mode
-    :config
-    (setq auto-mode-alist  
-          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                    ("\\.cmake\\'" . cmake-mode))  
-                  auto-mode-alist)))
-#+end_src
-
 ** Magit
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
 
@@ -740,15 +730,29 @@ chmod +x coursier
     (setq verilog-linter                   "verilator --lint-only -Wall"
           ))
 #+end_src
-*** Eglot Mode Hook
+*** CMake
+Install cmake-language-server
+"$ pip install cmake-language-server"
 #+begin_src emacs-lisp
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (use-package cmake-mode
+    :config
+    (setq auto-mode-alist  
+          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
+                    ("\\.cmake\\'" . cmake-mode))  
+                  auto-mode-alist)))
+#+end_src
+
+*** Eglot Mode Hook
+1. HTML need vscode-html-languageserver
+2. cmake need cmake-language-server by pip
+3. python has multi lsp, pyright needs js dependeies   
+#+begin_src emacs-lisp
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
+  (add-hook 'cmake-mode-hook 'eglot-ensure)
   (add-hook 'python-mode-hook 'eglot-ensure)
   (add-hook 'js2-mode-hook 'eglot-ensure)
-  (add-hook 'scala-mode-hook 'eglot-ensure)
-  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
+  (add-hook 'html-mode-hook 'eglot-ensure)
 #+end_src
 *** Color Identifiers Mode
 #+begin_src emacs-lisp
