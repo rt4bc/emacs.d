@@ -752,6 +752,7 @@ Install cmake-language-server
   (add-hook 'cmake-mode-hook 'eglot-ensure)
   (add-hook 'python-mode-hook 'eglot-ensure)
   (add-hook 'js2-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-mode-hook 'eglot-ensure)
   (add-hook 'html-mode-hook 'eglot-ensure)
 #+end_src
 *** Color Identifiers Mode
@@ -894,6 +895,7 @@ Eval code blocks.
      'org-babel-load-languages
      '((emacs-lisp . t)
        (C . t)
+       (js . t)
        (lua . t)
        (plantuml . t)
        (python . t)))
