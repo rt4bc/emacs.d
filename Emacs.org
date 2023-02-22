@@ -762,6 +762,13 @@ Install cmake-language-server
     :init
     (add-hook 'prog-mode-hook 'color-identifiers-mode))
 #+end_src
+*** TAGS
+#+begin_src emacs-lisp
+  (use-package xcscope
+    :ensure t)
+  (add-hook 'c-mode-hook '(lambda ()
+                            (cscope-minor-mode t)))
+#+end_src
 ** Flycheck
    #+begin_src emacs-lisp
      (use-package flycheck
