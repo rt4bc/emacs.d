@@ -1,5 +1,5 @@
 #+title: Emacs From Scratch Configuration
-#+STARTUP: overview
+#+STARTUP: content
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 * Every Beginning
 Learn emacs configuration and itself(emacs-lisp) from System
