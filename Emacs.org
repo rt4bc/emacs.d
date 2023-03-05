@@ -997,23 +997,42 @@ A screenshot taken using gnome-screenshot, scrot, gm, xclip (on Linux), screenca
 #+end_src
 ** Org Roam
 #+begin_src emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :custom
-    (org-roam-directory (file-truename "~/OrgNotes/"))
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n g" . org-roam-graph)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-roam-capture)
-           ;; Dailies
-           ("C-c n j" . org-roam-dailies-capture-today))
-    :config
-    ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    (org-roam-db-autosync-mode)
-    ;; If using org-roam-protocol
-    (require 'org-roam-protocol))
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/OrgNotes/"))
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default & gtd" plain
+      "%?"
+      :if-new (file+head "gtd/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("p" "programming languages" plain
+      "%?"
+      :if-new (file+head "languages/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("f" "embedded firmware things" plain
+      "%?"
+      :if-new (file+head "firmware/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("e" "electronics knowledge" plain
+      "%?"
+      :if-new (file+head "electronics/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 #+end_src
 * Profiling
 #+begin_src emacs-lisp
