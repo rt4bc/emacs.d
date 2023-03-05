@@ -231,16 +231,20 @@ aspell & aspell-dict-en
 
 ** Font Configuration
 #+begin_src emacs-lisp
-  (defvar efs/default-font-size 160)
-  (defvar efs/default-variable-font-size 160)
-  (if (display-graphic-p)
-      (progn
-        ;; Set the fixed pitch face
-        (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
-        (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
-        ;; set the variable pitch face
-        ;; (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height efs/default-variable-font-size :weight 'regular)
-        ))
+(defvar efs/default-font-size 160)
+(defvar efs/default-variable-font-size 160)
+(if (display-graphic-p)
+    (progn
+      ;; Set the fixed pitch face
+      (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
+      (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
+      ;; set the variable pitch face
+      ;; (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height efs/default-variable-font-size :weight 'regular)
+      ))
+(use-package unicode-fonts
+  :ensure t)
+(require 'unicode-fonts)
+(unicode-fonts-setup)
 #+end_src
 
 ** Color theme
