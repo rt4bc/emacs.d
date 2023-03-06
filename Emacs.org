@@ -639,6 +639,10 @@ Enable Hs-minor-mode globally
     #after install python package, add virtualenvwrapper.sh path  to $PATH
     #or source virtualenvwrapper.sh first, make makevirtualenv workon ... command available
   #+end_src
+  or just use a simple command
+   #+begin_src shell
+python3 -m venv tutorial-env
+   #+end_src
 
 2. virtualevn set, put setting in .zshrc file
   #+begin_src shell
