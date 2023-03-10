@@ -597,14 +597,15 @@ Enable Hs-minor-mode globally
 #+end_src
 ** Code template
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :ensure t
-    :config
-    (add-hook 'prog-mode-hook #'yas-minor-mode))
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
-  (use-package yasnippet-snippets
-    :ensure t
-    )
+(use-package yasnippet-snippets
+  :ensure t
+  )
 #+end_src
 
 ** Eglot Setting
