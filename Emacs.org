@@ -553,7 +553,6 @@ them yourself.
     :init
     (add-hook 'prog-mode-hook 'color-identifiers-mode))
 #+end_src
-
 ** Company Mode
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than
 =completion-at-point= which is more reminiscent of what you would expect from an
@@ -799,30 +798,21 @@ by Org mode (or Markdown mode) is left untouched.
 
 #+begin_src emacs-lisp
 
-(use-package org
+;; use this variable to disable acutal size
+;; otherwise the #+ATTR_ORG or #+ATTR_HTML :width 300px will not work
+(setq org-image-actual-width nil)
+
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+
+(use-package valign
   :ensure t
-  :pin org
-  :commands (org-capture org-agenda)
-  :hook (org-mode . efs/org-mode-setup)
   :config
-  (setq org-ellipsis " ▾")
-
-  ;; use this variable to disable acutal size
-  ;; otherwise the #+ATTR_ORG or #+ATTR_HTML :width 300px will not work
-  (setq org-image-actual-width nil)
-
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-
-  (use-package valign
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook #'valign-mode)
-    (add-hook 'org-mode-hook
-              (lambda()
-                (setq truncate-lines nil))))
-
+  (add-hook 'org-mode-hook #'valign-mode)
+  (add-hook 'org-mode-hook
+            (lambda()
+              (setq truncate-lines nil))))
 #+end_src
 
 ** Nice Heading Bullets
