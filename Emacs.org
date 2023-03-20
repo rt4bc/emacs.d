@@ -546,13 +546,6 @@ them yourself.
   :hook (prog-mode . rainbow-mode))
 #+end_src
 
-** Color Identifiers Mode
-#+begin_src emacs-lisp
-  (use-package color-identifiers-mode
-    :ensure t
-    :init
-    (add-hook 'prog-mode-hook 'color-identifiers-mode))
-#+end_src
 ** Company Mode
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than
 =completion-at-point= which is more reminiscent of what you would expect from an
