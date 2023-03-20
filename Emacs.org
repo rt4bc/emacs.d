@@ -806,19 +806,22 @@ by Org mode (or Markdown mode) is left untouched.
 ** Config Babel Languages
 Eval code blocks.
 #+begin_src emacs-lisp
-  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-  (setq org-src-preserve-indentation t)
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (C . t)
-       (js . t)
-       (makefile . t)
-       (lua . t)
-       (plantuml . t)
-       (python . t)))
-    (push '("conf-unix" . conf-unix) org-src-lang-modes))
+(setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+(setq org-src-preserve-indentation t)
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (C . t)
+     (js . t)
+     (makefile . t)
+     (lua . t)
+     (plantuml . t)
+     (python . t)))
+  (push '("conf-unix" . conf-unix) org-src-lang-modes))
+
+(require 'org-tempo)
+
 #+end_src
 
 Code blocks syntax hightlight
