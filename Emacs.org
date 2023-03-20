@@ -568,19 +568,6 @@ location if needed).
 (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 #+end_src
 
-** Code Template
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
-
-(use-package yasnippet-snippets
-  :ensure t
-  )
-#+end_src
-
 ** Eglot Setting
 
 #+begin_src emacs-lisp
