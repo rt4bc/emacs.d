@@ -620,21 +620,19 @@ python3 -m venv tutorial-env
 
 *** JS&TS Setting
 #+begin_src emacs-lisp
-  (use-package js2-mode
-    :ensure t
-    :init
-    (setq-default js-indent-level 8
-                  js2-cleanup-whitespace t                                  
-                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+(use-package js2-mode
+  :ensure t
+  :init
+  (setq-default js-indent-level 8
+                js2-cleanup-whitespace t                                  
+                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-    (add-hook 'js2-mode-hook
-              (lambda ()
-                (push '("function" . ?ƒ) prettify-symbols-alist)))
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (push '("function" . ?ƒ) prettify-symbols-alist)))
 
-    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
-  (use-package js2-refactor
-    :ensure t)
-  (require 'js2-refactor)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
 #+end_src
 *** Common Lisp Setting
 1. Install SBCL
