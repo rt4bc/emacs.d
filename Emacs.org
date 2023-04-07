@@ -2,15 +2,8 @@
 #+STARTUP: overview
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 * Every Beginning
-Learn emacs configuration and itself(emacs-lisp) from System
-Crafters [[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], copy and remember, happy hacking.
-
-#+begin_quote
-In order to optimise command lookup, bash keeps a cache, per bash process, of where it found files. So if you typed python and it found it in /usr/bin/, then changing the PATH to provide another python earlier in the PATH will have no effect. You need to also give the bash command:
-
-hash -r
-to forget the optimised cached. See help hash. (Of course, I assume you reread the .bashrc or set the PATH explicitly in your shell as well).
-#+end_quote
+Learn emacs configuration and itself(emacs-lisp) from System Crafters
+[[https://github.com/daviwil/emacs-from-scratch][Emacs-From-Scratch]], copy and remember, happy hacking.
 
 * Startup Performance
 ** Yes-or-No -> Y-or-N
@@ -24,25 +17,22 @@ to forget the optimised cached. See help hash. (Of course, I assume you reread t
 #+end_src
 ** Measure Loading Time Performance
 #+begin_src emacs-lisp
-  ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 50 1000 1000))
+;; The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
 
-  (defun efs/display-startup-time ()
-    (message "Emacs loaded in %s with %d garbage collections."
-             (format "%.2f seconds"
-                     (float-time
-                      (time-subtract after-init-time before-init-time)))
-             gcs-done))
+(defun custom/display-startup-time ()
+  (message "Emacs loaded in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
 
-  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+(add-hook 'emacs-startup-hook #'custom/display-startup-time)
 #+end_Src
-* Package System Setup
-Emacs has a built in package manager but it doesn’t make it easy to
-automatically install packages on a new system the first time you pull
-down your configuration. use-package is a really helpful package used
-in this configuration to make it a lot easier to automate the
-installation and configuration of everything else we use.
 
+* Package System Setup
+use-package is a really helpful package used in this configuration to make it a
+lot easier to automate the installation and configuration of everything.
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -89,7 +79,8 @@ Read PATH from shell
 #+end_src
 
 ** Enable SSH connections over HTTPS
-To set this in your ssh config, edit the file at ~/.ssh/config, add configuration as below, for company's firewall issue
+To set this in your ssh config, edit the file at ~/.ssh/config, add
+configuration as below, for company's firewall issue 
 #+begin_src shell
 Host github.com
 Hostname ssh.github.com
@@ -98,20 +89,20 @@ User git
 #+end_src
 
 ** Better User Experience
-In Windows, Like Cadence will use HOME directory, so this not friendly to emacs, so need to customerize the HOEM direcotry
-when emacs startup.
+In Windows, Like Cadence will use HOME directory, so this not friendly to emacs,
+so need to customerize the HOEM direcotry when emacs startup.
 1. Try to find load-path by emacs command. C-h v load-path
    check the load-path variable
 2. Then add a site-start.el file with this content.
    #+begin_quote
-;;(setq user-init-file "C:/path/to/.emacs")
-;;(setq user-emacs-directory "C:/path/to/.emacs.d/")
-;;(setq default-directory "C:/whatever/you/want/to/start/in")
-;;(setenv "HOME" "D:/my/home/directory")
-;;(load user-init-file)
-
-(setenv "HOME" "E:/Dotfiles")
-(setq default-directory "E:/ESP32-Projects")
+   ;;(setq user-init-file "C:/path/to/.emacs")
+   ;;(setq user-emacs-directory "C:/path/to/.emacs.d/")
+   ;;(setq default-directory "C:/whatever/you/want/to/start/in")
+   ;;(setenv "HOME" "D:/my/home/directory")
+   ;;(load user-init-file)
+   
+   (setenv "HOME" "E:/Dotfiles")
+   (setq default-directory "E:/ESP32-Projects")
    #+end_quote
    
 * Working with Coding Systems and Unicode
@@ -131,11 +122,10 @@ when emacs startup.
 #+end_src
 
 * Keep Folders Clean
-We use the no-littering package to keep folders where we edit files
-and the Emacs configuration folder clean! It knows about a wide
-variety of variables for built in Emacs features as well as those from
-community packages so it can be much easier than finding and setting
-these variables yourself.
+We use the no-littering package to keep folders where we edit files and the
+Emacs configuration folder clean! It knows about a wide variety of variables for
+built in Emacs features as well as those from community packages so it can be
+much easier than finding and setting these variables yourself.
 
 #+begin_src emacs-lisp
   (use-package no-littering
@@ -158,19 +148,14 @@ these variables yourself.
 #+end_src
 
 * General Configuration
-Auto Wrap lines
-#+begin_src emacs-lisp
-  (global-visual-line-mode 1)  
-#+end_src
-
-Key binding
-This settin works for GUI Emacs
+** MacOS Key binding
+This settin works for GUI Emacs， For Emacs in terminal, like iterm2, need to
+change profile->keys bindings.
 #+begin_src emacs-lisp
   (setq mac-option-modifier 'meta)
 #+end_src
-For Emacs in terminal, like iterm2, need to change profile->keys bindings
 
-Kill ring lines
+** Kill ring lines
 #+begin_src emacs-lisp
   (setq  global-mark-ring-max 5000 ;;increase mark ring to contains 5000 entries
          mark-ring-max 5000 ;;increase kill ring to contains 5000 entries
@@ -180,18 +165,18 @@ Kill ring lines
   (setq kill-ring-max 5000 )
 #+end_src
 
-New line indent
+** New line indent
 #+begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil)
-  (global-set-key (kbd "RET") 'newline-and-indent)
+(setq-default indent-tabs-mode nil)
+(global-set-key (kbd "RET") 'newline-and-indent)
 
-  ;; Hight lighting Indentation
-  (use-package highlight-indentation
-    :config
-    (set-face-background 'highlight-indentation-face "#e3e3d3")
-    (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-    (add-hook 'python-mode-hook 'highlight-indentation-mode)
-    )
+;; Hight lighting Indentation
+(use-package highlight-indentation
+  :config
+  (set-face-background 'highlight-indentation-face "#e3e3d3")
+  (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+  (add-hook 'python-mode-hook 'highlight-indentation-mode)
+  )
 #+end_src
 
 * ESL Spell check
@@ -203,62 +188,53 @@ aspell & aspell-dict-en
 #+end_src
 
 * Basic UI Configuration
-** Bar Mode and Transparency
+** Bar Mode
 #+begin_src emacs-lisp
-  (if (display-graphic-p)
-      (progn
-        (scroll-bar-mode -1)        ; Disable visible scrollbar
-        (tool-bar-mode -1)          ; Disable the toolbar
-        (tooltip-mode -1)           ; Disable tooltips
-        (set-fringe-mode 10)        ; Give some breathing room
-        (menu-bar-mode -1)            ; Disable the menu bar
-        ))
+(if (display-graphic-p)
+    (progn
+      (scroll-bar-mode -1)        ; Disable visible scrollbar
+      (tool-bar-mode -1)          ; Disable the toolbar
+      (tooltip-mode -1)           ; Disable tooltips
+      (set-fringe-mode 10)        ; Give some breathing room
+      (menu-bar-mode -1)            ; Disable the menu bar
+      ))
 
-  ;; Set up the visible bell
-  (setq visible-bell t)
-  (display-time-mode 1)
-  (column-number-mode)
-  (global-display-line-numbers-mode t)
-
-  ;; Set frame transparenc
-  (defvar efs/frame-transparency '(90 . 90))
-  (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
-  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
-  ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Set up the visible bell
+(setq visible-bell t)
+(display-time-mode 1)
+(column-number-mode)
+(global-display-line-numbers-mode t)
 #+end_src
 
 ** Font Configuration
 Use Fira code and Cantarell
 #+begin_src emacs-lisp
-  ;; For mainly ascii characters inputs&writing, no need.
-  ;; (use-package unicode-fonts              
-  ;; :config
-  ;; (unicode-fonts-setup))
+;; For mainly ascii characters inputs&writing, no need.
+;; (use-package unicode-fonts              
+;; :config
+;; (unicode-fonts-setup))
 
-  (defvar efs/default-font-size 150)
-  (defvar efs/default-variable-font-size 120)
-  (if (display-graphic-p)
-      (progn
-        (set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
-        ;; Set the fixed pitch face
-        (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height efs/default-font-size)
-        ;; Set the variable pitch face
-        ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
-        ))
+(defvar custom/default-font-size 150)
+(defvar custom/default-variable-font-size 120)
+(if (display-graphic-p)
+    (progn
+      (set-face-attribute 'default nil :font "JetBrains Mono" :height custom/default-font-size)
+      ;; Set the fixed pitch face
+      (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height custom/default-font-size)
+      ;; Set the variable pitch face
+      ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-variable-font-size :weight 'regular)))
+      ))
 #+end_src
 
 ** Color theme
-[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
+[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many
+different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide
+which one you like best.  You can also run =M-x counsel-load-theme= to choose
+between them easily. 
 
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t)
-  (use-package solarized-theme
-    :ensure t)
   (use-package moe-theme
     :ensure t)
-
   (require 'moe-theme)
 
   ;; Show highlighted buffer-id as decoration. (Default: nil)
@@ -271,22 +247,17 @@ Use Fira code and Cantarell
 
   ;; Choose a color for mode-line.(Default: blue)
   ;; (moe-theme-set-color 'cyan)
-
-  ;; Finally, apply moe-theme now.
-  ;; Choose what you like, (moe-light) or (moe-dark)
   (load-theme 'moe-dark t)
-
-  ;;  (if (display-graphic-p)
-  ;;      (load-theme 'solarized-zenburn t)
-  ;;  ())
-
 #+end_src
 
 ** Better Modeline
+[[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line
+configuration for Emacs.  The default configuration is quite good but you can
+check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
 
-[[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
-
-*NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
+The first time you load your configuration on a new machine, you'll need
+to run `M-x all-the-icons-install-fonts` so that mode line icons display
+correctly.
 
 #+begin_src emacs-lisp
   ;; doom-modeline depend the all-the-icons package 
@@ -297,13 +268,17 @@ Use Fira code and Cantarell
 #+end_src
 
 ** Key Remapping
-The advantage of creating the Super and Hyper in emacs is that you can have more hotkeys, and no major or minor modes will stamp on your keys.
-super key should be ok now, for wsl2 environment.
-The emacs org mode, S key is shift key!!!
+The advantage of creating the Super and Hyper in emacs is that you can have more
+hotkeys, and no major or minor modes will stamp on your keys. Super key should
+be ok now, for wsl2 environment. The emacs org mode, S key is shift key!!!
 
 ** Which Key
-
-[[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press =C-c= (hold control and press the letter =c=), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
+[[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing any key
+binding in Emacs to offer you all possible completions for the prefix.  For
+example, if you press =C-c= (hold control and press the letter =c=), a panel
+will appear at the bottom of the frame displaying all of the bindings under that
+prefix and which command they run.  This is very useful for learning the
+possible key bindings in the mode of your current buffer. 
 
 #+begin_src emacs-lisp
   (use-package which-key
@@ -313,103 +288,107 @@ The emacs org mode, S key is shift key!!!
     (setq which-key-idle-delay 0.5))
 #+end_src
 
-** Config & Show parens
+** Show parens
 #+begin_src emacs-lisp
   (use-package paren
     :config
     (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
     (show-paren-mode 1))
 #+end_src
+
 ** Ivy and Counsel
+[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet
+powerful selection menu that appears when you open files, switch buffers, and
+for many other tasks in Emacs.  Counsel is a customized set of commands to
+replace `find-file` with `counsel-find-file`, etc which provide useful commands
+for each of the default completion commands. 
 
-[[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.
-
-[[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
+[[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more
+information about each item. 
 
 #+begin_src emacs-lisp
-  (use-package ivy
-    :bind (
-           ("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-wrap t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq enable-recursive-minibuffers t)
+(use-package ivy
+  :bind (
+         ("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-wrap t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq enable-recursive-minibuffers t)
 
-    (setq ivy-initial-inputs-alist nil)
+  (setq ivy-initial-inputs-alist nil)
 
-    ;; Use different regex strategies per completion command
-    (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist)
-    (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
-    (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
+  ;; Use different regex strategies per completion command
+  (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist)
+  (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
+  (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
 
-    ;; Set minibuffer height for different commands
-    (setf (alist-get 'counsel-projectile-ag ivy-height-alist) 15)
-    (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
-    (setf (alist-get 'swiper ivy-height-alist) 15)
-    (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7)
+  ;; Set minibuffer height for different commands
+  (setf (alist-get 'counsel-projectile-ag ivy-height-alist) 15)
+  (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
+  (setf (alist-get 'swiper ivy-height-alist) 15)
+  (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7)
 
-    (ivy-mode 1))
+  (ivy-mode 1))
 
-  (use-package ivy-rich
-    :after ivy
-    :init
-    (ivy-rich-mode 1)
-    :config
-    (setq ivy-format-function #'ivy-format-function-line)
-    (setq ivy-rich-display-transformers-list
-          (plist-put ivy-rich-display-transformers-list
-                     'ivy-switch-buffer
-                     '(:columns
-                       ((ivy-rich-candidate (:width 40))
-                        (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
-                        (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
-                        (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
-                        (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
-                       :predicate
-                       (lambda (cand)
-                         (if-let ((buffer (get-buffer cand)))
-                             ;; Don't mess with EXWM buffers
-                             (with-current-buffer buffer
-                               (not (derived-mode-p 'exwm-mode)))))))))
+(use-package ivy-rich
+  :after ivy
+  :init
+  (ivy-rich-mode 1)
+  :config
+  (setq ivy-format-function #'ivy-format-function-line)
+  (setq ivy-rich-display-transformers-list
+        (plist-put ivy-rich-display-transformers-list
+                   'ivy-switch-buffer
+                   '(:columns
+                     ((ivy-rich-candidate (:width 40))
+                      (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
+                      (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
+                      (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
+                      (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
+                     :predicate
+                     (lambda (cand)
+                       (if-let ((buffer (get-buffer cand)))
+                           ;; Don't mess with EXWM buffers
+                           (with-current-buffer buffer
+                             (not (derived-mode-p 'exwm-mode)))))))))
 
-  (use-package ivy-hydra
-    :after ivy)
+(use-package ivy-hydra
+  :after ivy)
 
-  (use-package counsel
-    :bind (("M-x" . counsel-M-x)
-           ("C-x b" . counsel-switch-buffer)
-           ("C-M-j" . 'counsel-switch-buffer)
-           ("C-x C-b" . counsel-ibuffer)
-           ("M-y" . counsel-yank-pop)
-           ("C-x C-r" . counsel-recentf)
-           ("C-x C-f" . counsel-find-file)
-           :map minibuffer-local-map
-           ("C-r" . 'counsel-minibuffer-history))
-    :custom
-    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-    :config
-    (counsel-mode 1))
-
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-switch-buffer)
+         ("C-M-j" . 'counsel-switch-buffer)
+         ("C-x C-b" . counsel-ibuffer)
+         ("M-y" . counsel-yank-pop)
+         ("C-x C-r" . counsel-recentf)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history))
+  :custom
+  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  :config
+  (counsel-mode 1))
 #+end_src
 
 ** Improved Candidate Sorting
 prescient.el provides some helpful behavior for sorting Ivy completion
 candidates based on how recently or frequently you select them.  This
 can be especially helpful when using =M-x= to run commands that you
-don't have bound to a key but still need to access occasionally.
+don't have bound to a key but still need to access occasionally. 
 
 #+begin_src emacs-lisp
   (use-package ivy-prescient
@@ -448,514 +427,36 @@ useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Config
-** Emacs Tree Sitter
+** LSP Config
+Try to use lsp-bridge as the lsp client. Using Python multithreading techniques,
+lsp-bridge builds a high-speed cache between Emacs and the LSP server, ensuring
+that Emacs never gets stuck while providing a smooth and seamless code
+completion experience.
 #+begin_src emacs-lisp
-
-  (use-package tree-sitter
+  (use-package yasnippet
     :ensure t
     :config
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-    )
-  (use-package tree-sitter-langs
-    :ensure t
-    )
-  (use-package tree-sitter-indent
-    :ensure t
-    )
-#+end_src
-** File Explorer sidebar
-#+begin_src emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'ace-window)
-    ;; (define-key ace-window-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (progn
-      (setq treemacs-collapse-dirs                 1
-            treemacs-deferred-git-apply-delay      0.5
-            treemacs-directory-name-transformer    #'identity
-            treemacs-display-in-side-window        t
-            treemacs-eldoc-display                 t
-            treemacs-file-event-delay              5000
-            treemacs-file-extension-regex          treemacs-last-period-regex-value
-            treemacs-file-follow-delay             0.2
-            treemacs-file-name-transformer         #'identity
-            treemacs-follow-after-init             t
-            treemacs-expand-after-init             t
-            treemacs-git-command-pipe              ""
-            treemacs-goto-tag-strategy             'refetch-index
-            treemacs-indentation                   2
-            treemacs-indentation-string            " "
-            treemacs-is-never-other-window         nil
-            treemacs-max-git-entries               5000
-            treemacs-missing-project-action        'ask
-            treemacs-move-forward-on-expand        nil
-            treemacs-no-png-images                 nil
-            treemacs-no-delete-other-windows       t
-            treemacs-project-follow-cleanup        nil
-            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-            treemacs-position                      'left
-            treemacs-read-string-input             'from-child-frame
-            treemacs-recenter-distance             0.1
-            treemacs-recenter-after-file-follow    nil
-            treemacs-recenter-after-tag-follow     nil
-            treemacs-recenter-after-project-jump   'always
-            treemacs-recenter-after-project-expand 'on-distance
-            ;; treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
-            treemacs-show-cursor                   nil
-            treemacs-show-hidden-files             nil
-            treemacs-silent-filewatch              nil
-            treemacs-silent-refresh                nil
-            treemacs-sorting                       'alphabetic-asc
-            treemacs-space-between-root-nodes      t
-            treemacs-tag-follow-cleanup            t
-            treemacs-tag-follow-delay              1.5
-            treemacs-user-mode-line-format         nil
-            treemacs-user-header-line-format       nil
-            ;; treemacs-width                         12
-            treemacs-width-is-initially-locked     t
-            treemacs-workspace-switch-cleanup      nil)
+    (yas-global-mode 1))
 
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
-
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode 'always)
-      (pcase (cons (not (null (executable-find "git")))
-                   (not (null treemacs-python-executable)))
-        (`(t . t)
-         (treemacs-git-mode 'deferred))
-        (`(t . _)
-         (treemacs-git-mode 'simple))))
-    :bind
-    (:map global-map
-          ("M-0"       . treemacs-select-window)
-          ("C-x t 1"   . treemacs-delete-other-windows)
-          ("C-x t t"   . treemacs)
-          ("C-x t B"   . treemacs-bookmark)
-          ("C-x t C-t" . treemacs-find-file)
-          ("C-x t M-t" . treemacs-find-tag)))
-
-  (use-package treemacs-projectile
-    :after (treemacs projectile)
-    :ensure t)
-
-  (use-package treemacs-icons-dired
-    :after (treemacs dired)
-    :ensure t
-    :config (treemacs-icons-dired-mode))
-
-  (use-package treemacs-magit
-    :after (treemacs magit)
-    :ensure t)
-#+end_src
-
-** Code Folding
-Enable Hs-minor-mode globally
-#+begin_src emacs-lisp
-  (defun my-hs-mode-hook ()
-    (hs-minor-mode)
-    ;; (local-set-key (kbd "C-=") 'hs-show-block) 
-    ;; (local-set-key (kbd "C-+") 'hs-hide-block)
-    )
-  (add-hook 'prog-mode-hook 'my-hs-mode-hook)
-#+end_src
-
-** Company Mode
-[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
-#+begin_src emacs-lisp
-  (use-package company
-    :ensure t
-    :hook (scala-mode . company-mode)
-    :config
-    (setq lsp-completion-provider :capf)
-    )
-  (global-company-mode)
-  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-#+end_src
-** LSP Mode Setting
-Install dependencies
-#+begin_src shell
-  Install Python dependencies: python-epc (pip install epc)
-  Install Elisp dependencies:
-  posframe
-  markdown-mode
-  yasnippet
-#+end_src
-*** Posframe
-#+begin_src emacs-lisp
+  ;; install depending package
   (use-package posframe
     :ensure t)
-#+end_src
-*** Markdown
-#+begin_src emacs-lisp
   (use-package markdown-mode
     :ensure t)
-#+end_src
-*** Yasnippet
-#+begin_src emacs-lisp
-  (use-package yasnippet                  
-    :config
-    (add-hook 'prog-mode-hook #'yas-minor-mode))
+  ;; popup completion
+  (unless (display-graphic-p)
+    (add-to-list 'load-path "~/.emacs.d/custom-package/emacs-popon")
+    (add-to-list 'load-path "~/.emacs.d/custom-package/acm-terminal")
+    (with-eval-after-load 'acm
+      (require 'acm-terminal)))
 
-  (use-package yasnippet-snippets
-    :ensure t)
-#+end_src
 
-*** LSP-Bridge Client
-#+begin_src emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/lsp-bridge")
-  ;; require yasnipppet)
+  (add-to-list 'load-path "~/.emacs.d/custom-package/lsp-bridge")
   (require 'lsp-bridge)
   (global-lsp-bridge-mode)
 #+end_src
-** Common Lisp Setting
-1. Install SBCL
-   For Arch:
-   #+begin_src shell
-     $pacman -S sbcl
-     $curl -O http://beta.quicklisp.org/quicklisp.lisp
-     $sbcl --load quicklisp.lisp
-   #+end_src
-   
-2. Config
-#+begin_src emacs-lisp
-  ;; (load (expand-file-name "~/quicklisp/slime-helper.el"))
-  ;; Replace "sbcl" with the path to your implementation
-  ;; (setq inferior-lisp-program "/usr/sbin/sbcl")
-  (use-package sly
-    :config
-    (setq inferior-lisp-program "/usr/bin/sbcl"
-          sly-complete-symbol-function 'sly-simple-completions))
-#+end_src
-** Pretty Mode
-#+begin_src emacs-lisp
-  (use-package pretty-mode
-               :ensure t)
-  (require 'pretty-mode)
-                                          ; if you want to set it globally
-  (global-pretty-mode t)
-                                          ; if you want to set it only for a specific mode
-  ;; (add-hook 'my-pretty-language-hook 'turn-on-pretty-mode)
-#+end_src
-** TAGS
-#+begin_src emacs-lisp
-  (use-package counsel-etags
-    :bind (("C-]" . counsel-etags-find-tag-at-point))
-    :init
-    (add-hook 'prog-mode-hook
-              (lambda ()
-                (add-hook 'after-save-hook
-                          'counsel-etags-virtual-update-tags 'append 'local)))
-    :config
-    (setq counsel-etags-update-interval 60)
-    (push "build" counsel-etags-ignore-directories))
-  (use-package xcscope
-    :ensure t)
-  (require 'xcscope)
 
-  (use-package ggtags
-    :ensure t)
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode)
-                (ggtags-mode 1))))
-
-  ;;  (use-package counsel-gtags-mode-map
-  ;;              :ensure t)
-  ;;  for kernel cross reference
-  ;;  (add-hook 'c-mode-hook 'counsel-gtags-mode)
-  ;;  (add-hook 'c++-mode-hook 'counsel-gtags-mode)
-
-  ;;  (with-eval-after-load 'counsel-gtags
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-t") 'counsel-gtags-find-definition)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-r") 'counsel-gtags-find-reference)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-s") 'counsel-gtags-find-symbol)
-  ;;  (define-key counsel-gtags-mode-map (kbd "M-,") 'counsel-gtags-go-backward))
-
-#+end_src   
-** Flycheck
-   #+begin_src emacs-lisp
-     (use-package flycheck
-       :init (global-flycheck-mode))
-   #+end_src
-
-** CMake
-#+begin_src emacs-lisp
-  (use-package cmake-mode
-    :config
-    (setq auto-mode-alist  
-          (append '(("CMakeLists\\.txt\\'" . cmake-mode)  
-                    ("\\.cmake\\'" . cmake-mode))  
-                  auto-mode-alist)))
-#+end_src
-
-** Magit
-[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-
-   (use-package magit
-     :commands magit-status
-     :custom
-     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-   ;; NOTE: Make sure to configure a GitHub token before using this package!
-   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-   (use-package forge
-     :after magit)
-  ;; Note: How to add private to ~/.ssh/config files
-  ;; Host github.com-rt4bc
-  ;; HostName github.com
-  ;; User rt4bc
-  ;; IdentityFile ~/.ssh/id_rsa_github_rt
-
-  ;; Note update ssh keybindings
-  ;; ssh-add -D ; remove all cache
-  ;; ssh-add xxxx_private_key  ;;update host private key.
-#+end_src
-
-** Commenting
-Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=) doesn't always comment things in the way you might expect so we use [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] to provide a more familiar behavior.  I've bound it to =M-/= since other editors sometimes use this binding but you could also replace Emacs' =M-;= binding with this command.
-
-#+begin_src emacs-lisp
-
-  (use-package evil-nerd-commenter
-    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-#+end_src
-
-** Rainbow Delimiters
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-
-#+begin_src emacs-lisp
-
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-
-#+end_src
-
-* Writing
-** Org Mode
-[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich
-document editor, project planner, task and time tracker, blogging
-engine, and literate coding utility all wrapped up in one package.
-*** Beter Font
-The =efs/org-font-setup= function configures various text faces to
-tweak the sizes of headings and use variable width fonts in most cases
-so that it looks more like we're editing a document in =org-mode=.  We
-switch back to fixed width (monospace) fonts for code blocks and
-tables so that they display correctly.
-#+begin_src emacs-lisp
-
-  (defun efs/org-font-setup ()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-    ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    ;; (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil :inheit '(fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-    (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
-
-#+end_src
-
-*** Org Basic Config
-This package provides visual alignment for Org Mode, Markdown and table.el tables on
-GUI Emacs. It can properly align tables containing variable-pitch font, CJK characters
-and images. Meanwhile, the text-based alignment generated by Org mode (or Markdown
-mode) is left untouched.
-#+begin_src emacs-lisp
-  (use-package valign
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook #'valign-mode)
-    (add-hook 'org-mode-hook
-              (lambda()
-                (setq truncate-lines nil))))
-#+end_src
-
-This section contains the basic configuration for =org-mode= plus the
-configuration for Org agendas and capture templates.
-#+begin_src emacs-lisp
-  (defun efs/org-mode-setup ()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (visual-line-mode 1))
-
-  (use-package org
-    :ensure t
-    :pin org
-    :commands (org-capture org-agenda)
-    :hook (org-mode . efs/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
-
-    ;; use this variable to disable acutal size
-    ;; otherwise the #+ATTR_ORG or #+ATTR_HTML :width 300px will not work
-    (setq org-image-actual-width nil)
-
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
-
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-    )
-#+end_src
-
-*** Nice Heading Bullets
-#+begin_src emacs-lisp
-
-  (use-package org-bullets
-    :ensure t
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "☯" "○" "☯" "✸" "☯" "✿" "☯" "✜" "☯" "◆" "☯" "▶")))
-
-#+end_src
-
-*** Config Babel Languages
-Eval code blocks.
-#+begin_src emacs-lisp
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (C . t)
-       (lua . t)
-       (python . t)))
-    (push '("conf-unix" . conf-unix) org-src-lang-modes))
-#+end_src
-
-Code blocks syntax hightlight
-#+begin_src  emacs-lisp
-  (use-package htmlize)
-#+end_src
-
-*** Structurngle Templates
-Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with =org-tempo= by typing =<= followed by the template name like =el= or =py= and then press =TAB=.  For example, to insert an empty =emacs-lisp= block below, you can type =<el= and press =TAB= to expand into such a block.
-
-You can add more =src= block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language [[https://orgmode.org/worg/org-contrib/babel/languages.html][as it is known by Org Babel]].
-
-#+begin_src emacs-lisp
-  (with-eval-after-load 'org
-    (cond
-     ((string> org-version "9.")
-      (progn
-        (with-eval-after-load 'org
-          ;; This is needed as of Org 9.x
-          (require 'org-tempo)
-
-          (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-          (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-          (add-to-list 'org-structure-template-alist '("py" . "src python"))
-          )))))
-#+end_src
-
-*** Auto-tangle Configuration Files
-This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
-
-#+begin_src emacs-lisp
-  ;; Automatically tangle our Emacs.org config file when we save it
-  (defun efs/org-babel-tangle-config ()
-    (when (string-equal (file-name-directory (buffer-file-name))
-                        (expand-file-name user-emacs-directory))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-#+end_src
-
-*** Format Code Block
-#+begin_src emacs-lisp
-  (defun indent-org-block-automatically ()
-    (when (org-in-src-block-p)
-      (org-edit-special)
-      (indent-region (point-min) (point-max))
-      (org-edit-src-exit)))
-  (setq org-src-tab-acts-natively t)
-  (add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
-  ;; (run-at-time 1 10 'indent-org-block-automatically)
-#+end_src
-
-*** Org Roam Mode
-#+begin_src emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :init
-    (setq org-roam-v2-ack t)
-    :custom
-    (org-roam-directory "~/org-brain/")
-    :bind
-    (("C-c n l" . org-roam-buffer-toggle)
-     ("C-c n f" . org-roam-node-find)
-     ("C-c n i" . org-roam-node-insert))
-    :config
-    (org-roam-setup))
-
-#+end_src
-** Latex Mode
-#+begin_src emacs-lisp
-
-#+end_src
 * Ends
-** Windows Startup Size
-Put this part at the end of init file, for font size config has impact on this.
-#+begin_src emacs-lisp
-  (defun set-frame-size-according-to-resolution ()
-    (interactive)
-    (if window-system
-        (progn
-          ;; use 120 char wide window for largish displays
-          ;; and smaller 80 column windows for smaller displays
-          ;; pick whatever numbers make sense for you
-          (if (> (x-display-pixel-width) 1500)
-              (setq default-frame-alist
-                    '((top . 10)(left . 10)
-                      (width . 85)(height . 36)
-                      ))
-            (setq default-frame-alist
-                  '((top . 10)(left . 10)
-                    (width . 85)(height . 32)
-                    )))
-          ))
-    )
-  (set-frame-size-according-to-resolution)
-#+end_src
 ** Disable line number hook for special major mode
 #+begin_src emacs-lisp
   ;; Disable line numbers for some modes
