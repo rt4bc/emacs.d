@@ -560,11 +560,12 @@ location if needed).
 ** Eglot Setting
 
 #+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t
-    )
-  (setq eldoc-echo-area-use-multiline-p nil)
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+(use-package eglot
+  :ensure t
+  )
+(setq eldoc-echo-area-use-multiline-p nil)
+(add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
 #+end_src
 
 ** Language Setting
@@ -604,9 +605,8 @@ python3 -m venv tutorial-env
   #+end_src  
 **** How to set LSP
 #+begin_src shell
-  > pip3 install pyright
-  #+end_src
-
+> pip3 install pyright
+#+end_src
 *** JS&TS Setting
 #+begin_src emacs-lisp
 (use-package js2-mode
