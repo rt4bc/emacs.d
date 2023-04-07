@@ -1,3 +1,12 @@
-[submodule "stand-alone/org-roam-ui"]
-	path = stand-alone/org-roam-ui
-	url = git@github.com:org-roam/org-roam-ui.git
+
+[submodule "custom-package/lsp-bridge"]
+	path = custom-package/lsp-bridge
+	url = https://github.com/manateelazycat/lsp-bridge.git
+        
+[submodule "custom-package/acm-terminal"]
+	path = custom-package/acm-terminal
+	url = https://github.com/twlz0ne/acm-terminal.git
+        
+[submodule "custom-package/emacs-popon"]
+	path = custom-package/emacs-popon
+	url = https://codeberg.org/akib/emacs-popon.git
