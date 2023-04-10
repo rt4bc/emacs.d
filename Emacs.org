@@ -596,19 +596,18 @@ org-download-screenshot command for this. Customize the backend with
 org-download-screenshot-method.
 #+begin_src emacs-lisp
 (use-package org-download
-  :after org
-  :defer nil
   :custom
   (org-download-method 'directory)
   (org-download-image-dir "./images")
-  (org-download-heading-lvl nil)
   (org-download-timestamp "%Y%m%d-%H%M%S_")
-  (org-image-actual-width 300)
   (org-download-screenshot-method "magick clipboard: %s")
+  (org-download-image-html-width 100)
   :bind
   ("C-M-y" . org-download-screenshot)
-  :config
-  (require 'org-download))
+  )
+;; Drag-and-drop to `dired`
+(require 'org-download)
+(add-hook 'dired-mode-hook 'org-download-enable)
 #+end_src
 
 ** Org Roam
