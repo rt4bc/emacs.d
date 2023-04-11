@@ -105,14 +105,19 @@ so need to customerize the HOEM direcotry when emacs startup.
    check the load-path variable
 2. Then add a site-start.el file with this content.
    #+begin_quote
-;;(setq user-init-file "C:/path/to/.emacs")
-;;(setq user-emacs-directory "C:/path/to/.emacs.d/")
-;;(setq default-directory "C:/whatever/you/want/to/start/in")
-;;(setenv "HOME" "D:/my/home/directory")
-;;(load user-init-file)
+    ;;(setq user-init-file "C:/path/to/.emacs")
+    
+    ;;(setq user-emacs-directory "C:/path/to/.emacs.d/")
+    
+    ;;(setq default-directory "C:/whatever/you/want/to/start/in")
+    
+    ;;(setenv "HOME" "D:/my/home/directory")
+    
+    ;;(load user-init-file)
 
-(setenv "HOME" "E:/Dotfiles")
-(setq default-directory "E:/ESP32-Projects")
+    (setenv "HOME" "E:/Dotfiles")
+    
+    (setq default-directory "E:/ESP32-Projects")
    #+end_quote
    
 * Working with Coding Systems and Unicode
