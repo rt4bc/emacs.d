@@ -437,6 +437,22 @@ dummy event remap, followed by the command name you want to remap; for the
 binding, specify the new definition (usually a command name, but possibly any
 other valid definition for a key binding). 
 
+** Citre
+Citre is an advanced Ctags (or actually, readtags) frontend for Emacs. It
+offers: 
+1. completion-at-point, xref and imenu integration.
+2. citre-jump: A completing-read UI for jumping to definition.
+3. citre-peek: A powerful code reading tool that lets you go down the rabbit
+   hole without leaving current
+#+begin_src emacs-lisp
+(use-package citre
+  :ensure t)
+(require 'citre)
+(require 'citre-config)
+(setq citre-ctags-program "uctags")
+(setq citre-readtags-program "ureadtags")
+#+end_src
+   
 ** Languages Setting
 *** Python
 #+begin_src emacs-lisp
@@ -513,12 +529,15 @@ org.scalameta:metals_2.12:0.11.2 \
 
 *** Verilog HDL
 #+begin_src emacs-lisp
-(use-package verilog-mode
-  :ensure t 
-  :config
-  ;; User customization for Verilog mode
-  (setq verilog-linter "verilator --lint-only -Wall"
-        ))
+(add-hook 'verilog-mode-hook
+          '(lambda ()
+             (company-mode)
+             (define-key verilog-mode-map "\M-["
+               'citre-peek)
+             (define-key verilog-mode-map "\M-."
+               'citre-jump)
+             (define-key verilog-mode-map "\M-,"
+               'citre-jump-back)))
 #+end_src
 
 *** CMake
