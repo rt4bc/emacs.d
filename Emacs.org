@@ -51,22 +51,6 @@ lot easier to automate the installation and configuration of everything.
 (setq use-package-always-ensure t)
 #+end_src
 
-The auto-package-update package helps us keep our Emacs packages up to date! It
-will prompt you after a certain number of days either at startup or at a
-specific time of day to remind you to update your packages. You can also use M-x
-auto-package-update-now to update right now! 
-
-#+begin_src emacs-lisp
-(use-package auto-package-update
-  :custom
-  (auto-package-update-interval 180) ;; interval days 
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe) ;; update installed package if at least xx days have pased since last update
-  (auto-package-update-at-time "09:00"))
-#+end_src
-
 Read PATH from shell, X Windows startup usually need this.
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
@@ -100,8 +84,8 @@ so need to customerize the HOEM direcotry when emacs startup.
 ;;(setenv "HOME" "D:/my/home/directory")
 ;;(load user-init-file)
 
-(setenv "HOME" "E:/Dotfiles")
-(setq default-directory "E:/ESP32-Projects")
+(setenv "HOME" "x:/Dotfiles")
+(setq default-directory "x:/xx")
 #+end_quote
    
 * Working with Coding Systems and UNICODE
@@ -221,7 +205,7 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 (color-theme-sanityinc-tomorrow-eighties)
 #+end_src
 
-** Better Modeline
+** Better Mode Line
 #+begin_src emacs-lisp
 ;; doom-modeline depend the all-the-icons package 
 (use-package all-the-icons)
@@ -265,7 +249,7 @@ possible key bindings in the mode of your current buffer.
   (setq which-key-idle-delay 0.5))
 #+end_src
 
-** Show parens
+** Show Brackets
 #+begin_src emacs-lisp
 (use-package paren
   :config
@@ -394,7 +378,7 @@ It is very useful for figuring out how things work in Emacs.
   )
 #+end_src
 
-* Programming Config
+* Programming Configuration
 ** Commenting
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
@@ -402,7 +386,7 @@ It is very useful for figuring out how things work in Emacs.
     :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 #+end_src
 
-** LSP Config
+** LSP Configuration
 Try to use lsp-bridge as the lsp client. Using Python multithreading techniques,
 lsp-bridge builds a high-speed cache between Emacs and the LSP server, ensuring
 that Emacs never gets stuck while providing a smooth and seamless code
@@ -612,6 +596,38 @@ by Org mode (or Markdown mode) is left untouched.
   :ensure t)
 #+end_src
 
+** Format Org Babel Code Block
+#+begin_src emacs-lisp
+(defun indent-org-block-automatically ()
+  (when (org-in-src-block-p)
+    (org-edit-special)
+    (indent-region (point-min) (point-max))
+    (org-edit-src-exit)))
+(setq org-src-tab-acts-natively t)
+(add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
+;; (run-at-time 1 10 'indent-org-block-automatically)
+(add-hook 'org-mode-hook (lambda () (setq fill-column 80)))
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+end_Src
+** HTML Export
+The Org mode export to HTML setting.
+1. By adding extra tag to each org file
+#+begin_quote
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+#+end_quote
+
+2. make the html more readable.
+#+begin_src emacs-lisp
+(setq org-html-htmlize-output-type 'css)
+#+end_src
+and more important thing is M-x run commands
+#+begin_quote
+M-x org-html-htmlize-generate-css
+#+end_quote
+#+begin_quote
+Note: remember to (setq org-html-head-include-default-style nil) to avoid any
+unexpected styles from the default styles, see Issue #14. 
+#+end_quote
 ** Org Download
 A screenshot taken using gnome-screenshot, scrot, gm, xclip (on Linux),
 screencapture (on OS X) or, imagemagick/convert (on Windows). Use the
@@ -687,40 +703,6 @@ org-download-screenshot-method.
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 #+end_src
-
-** Format Org Babel Code Block
-#+begin_src emacs-lisp
-(defun indent-org-block-automatically ()
-  (when (org-in-src-block-p)
-    (org-edit-special)
-    (indent-region (point-min) (point-max))
-    (org-edit-src-exit)))
-(setq org-src-tab-acts-natively t)
-(add-hook 'org-babel-pre-tangle-hook 'indent-org-block-automatically)
-;; (run-at-time 1 10 'indent-org-block-automatically)
-(add-hook 'org-mode-hook (lambda () (setq fill-column 80)))
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
-#+end_Src
-
-** HTML Export
-The Org mode export to HTML setting.
-1. By adding extra tag to each org file
-#+begin_quote
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
-#+end_quote
-
-2. make the html more readable.
-#+begin_src emacs-lisp
-(setq org-html-htmlize-output-type 'css)
-#+end_src
-and more important thing is M-x run commands
-#+begin_quote
-M-x org-html-htmlize-generate-css
-#+end_quote
-#+begin_quote
-Note: remember to (setq org-html-head-include-default-style nil) to avoid any
-unexpected styles from the default styles, see Issue #14. 
-#+end_quote
 
 * Ends
 ** Profiling
