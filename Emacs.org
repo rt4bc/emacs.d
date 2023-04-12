@@ -450,8 +450,11 @@ offers:
   :ensure t)
 (require 'citre)
 (require 'citre-config)
-(setq citre-ctags-program "uctags")
-(setq citre-readtags-program "ureadtags")
+(if (eq system-type 'darwin)
+    (progn
+      (setq citre-ctags-program "uctags")
+      (setq citre-readtags-program "ureadtags")))
+
 #+end_src
    
 ** Languages Setting
