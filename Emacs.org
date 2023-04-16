@@ -393,9 +393,9 @@ that Emacs never gets stuck while providing a smooth and seamless code
 completion experience.
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
+  :ensure t)
+;; :config
+;; (yas-global-mode 1))
 
 ;; install depending package
 (use-package posframe
