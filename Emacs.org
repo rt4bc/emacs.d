@@ -700,9 +700,11 @@ org-download-screenshot-method.
 #+begin_src emacs-lisp
 (defun custom/get-font-size ()
   "Get font size depending on X Windows pixel height"
-  (cond ((> (x-display-pixel-height) 1440) 180)
-        ((> (x-display-pixel-height) 1080) 120)
-        (t 100)))
+  (cond
+   ((and (> (x-display-pixel-height) 1440) (eq window-system 'win32)) 150)
+   ((> (x-display-pixel-height) 1440) 180)
+   ((> (x-display-pixel-height) 1080) 120)
+   (t 100)))
 
 (if (display-graphic-p)
     (progn
