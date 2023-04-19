@@ -177,31 +177,6 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 (global-display-line-numbers-mode t)
 #+end_src
 
-** Font Configuration
-#+begin_src emacs-lisp
-
-(defun custom/get-font-size ()
-  "Get font size depending on X Windows pixel height"
-  (cond ((> (x-display-pixel-height) 1440) 200)
-        ((> (x-display-pixel-height) 1080) 150)
-        (t 120))
-  )
-
-(if (display-graphic-p)
-    (progn
-      (defvar custom/default-font-size (custom/get-font-size))
-      (defvar custom/default-variable-font-size (custom/get-font-size))
-      (set-face-attribute 'default nil :font "JetBrains Mono" :height custom/default-font-size)
-      ;; Set the fixed pitch face
-      (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height custom/default-font-size)
-        
-      ;; Set the variable pitch face
-      ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height custom/default-variable-font-size :weight 'regular)))
-      ;; set the variable pitch face
-      (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height custom/default-variable-font-size :weight 'regular)
-      ))
-#+end_src
-
 ** Color theme
 #+begin_src emacs-lisp
 (use-package color-theme-sanityinc-tomorrow
@@ -721,27 +696,39 @@ org-download-screenshot-method.
     (setq esup-depth 0))
 #+end_src
 
-** GUI Window Size
+** GUI Font&Window Size Configuration
 #+begin_src emacs-lisp
-(defun set-frame-size-according-to-resolution ()
-  "Set windows size depending on X Windows pixel height&width"
-  (if window-system
-      (progn
-        ;; use 120 char wide window for largish displays
-        ;; and smaller 80 column windows for smaller displays
-        ;; pick whatever numbers make sense for you
-        (if (> (x-display-pixel-width) 1500)
-            (setq default-frame-alist
-                  '((top . 10)(left . 10)
-                    (width . 120)(height . 60)
-                    ))
-          (setq default-frame-alist
-                '((top . 10)(left . 10)
-                  (width . 90)(height . 40)
-                  )))
-        ))
-  )
-(set-frame-size-according-to-resolution)
+(defun custom/get-font-size ()
+  "Get font size depending on X Windows pixel height"
+  (cond ((> (x-display-pixel-height) 1440) 180)
+        ((> (x-display-pixel-height) 1080) 120)
+        (t 100)))
+
+(if (display-graphic-p)
+    (progn
+      (defvar custom/default-font-size (custom/get-font-size))
+      (defvar custom/default-variable-font-size (custom/get-font-size))
+      (set-face-attribute 'default nil :font "JetBrains Mono" :height custom/default-font-size)
+      ;; Set the fixed pitch face
+      (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height custom/default-font-size)
+      
+      ;; Set the variable pitch face
+      ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height custom/default-variable-font-size :weight 'regular)))
+      ;; set the variable pitch face
+      (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height custom/default-variable-font-size :weight 'regular)
+      ))
+
+(if (display-graphic-p)
+    (cond ((> (x-display-pixel-height) 1440)
+           (setq default-frame-alist
+                 '((top . 10)(left . 10)(width . 100)(height . 40))))
+          ((> (x-display-pixel-height) 1080)
+           (setq default-frame-alist
+                 '((top . 10)(left . 10)(width . 90)(height . 35))))
+          (t
+           (setq default-frame-alist
+                 '((top . 10)(left . 10)(width . 80)(height . 30))))
+          ))
 #+end_src
 
 ** Misc
