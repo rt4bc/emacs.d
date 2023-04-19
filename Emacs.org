@@ -179,10 +179,18 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 
 ** Font Configuration
 #+begin_src emacs-lisp
-(defvar custom/default-font-size 120)
-(defvar custom/default-variable-font-size 120)
+
+(defun custom/get-font-size ()
+  "Get font size depending on X Windows pixel height"
+  (cond ((> (x-display-pixel-height) 1440) 200)
+        ((> (x-display-pixel-height) 1080) 150)
+        (t 120))
+  )
+
 (if (display-graphic-p)
     (progn
+      (defvar custom/default-font-size (custom/get-font-size))
+      (defvar custom/default-variable-font-size (custom/get-font-size))
       (set-face-attribute 'default nil :font "JetBrains Mono" :height custom/default-font-size)
       ;; Set the fixed pitch face
       (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height custom/default-font-size)
@@ -716,7 +724,7 @@ org-download-screenshot-method.
 ** GUI Window Size
 #+begin_src emacs-lisp
 (defun set-frame-size-according-to-resolution ()
-  (interactive)
+  "Set windows size depending on X Windows pixel height&width"
   (if window-system
       (progn
         ;; use 120 char wide window for largish displays
