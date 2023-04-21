@@ -721,10 +721,7 @@ org-download-screenshot-method.
       ))
 
 (if (display-graphic-p)
-    (cond ((> (x-display-pixel-height) 1440)
-           (setq default-frame-alist
-                 '((top . 10)(left . 10)(width . 120)(height . 80))))
-          ((> (x-display-pixel-height) 1080)
+    (cond ((> (x-display-pixel-height) 1080)
            (setq default-frame-alist
                  '((top . 10)(left . 10)(width . 100)(height . 60))))
           (t
