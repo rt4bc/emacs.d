@@ -702,7 +702,7 @@ org-download-screenshot-method.
   "Get font size depending on X Windows pixel height"
   (cond
    ((and (> (x-display-pixel-height) 1440) (eq window-system 'w32)) 125)
-   ((> (x-display-pixel-height) 1440) 180)
+   ((> (x-display-pixel-height) 1440) 175)
    ((> (x-display-pixel-height) 1080) 120)
    (t 100)))
 
