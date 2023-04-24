@@ -179,6 +179,22 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 
 ** Color theme
 #+begin_src emacs-lisp
+;; Colorize color names in buffers
+(use-package rainbow-mode
+  :config
+  (progn
+    (defun @-enable-rainbow ()
+      (rainbow-mode t))
+    (add-hook 'prog-mode-hook '@-enable-rainbow)
+    ))
+
+(use-package rainbow-delimiters
+  :config
+  (progn
+    (defun @-enable-rainbow-delimiters ()
+      (rainbow-delimiters-mode t))
+    (add-hook 'prog-mode-hook '@-enable-rainbow-delimiters)))
+
 (use-package color-theme-sanityinc-tomorrow
   :ensure t)
 
@@ -395,6 +411,7 @@ completion experience.
 (add-to-list 'load-path "~/.emacs.d/custom-package/lsp-bridge")
 (require 'lsp-bridge)
 (global-lsp-bridge-mode)
+(setq lsp-bridge-enable-org-babel t)
 (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
 (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
 #+end_src
