@@ -626,6 +626,12 @@ org-download-screenshot-method.
   ("C-M-y" . org-download-screenshot)
   )
 
+(defun make-images-path (path-name)
+  "create a direcotry if it is not existed"
+  (unless (file-directory-p path-name)
+    (make-directory path-name))
+  path-name)
+
 (defun org-download-wsl-clipboard()
   "use powershell to catch the clipboard, 
   to simplify the logic, use c:/Users/Public as temporary directoy, and move it into current directoy"
@@ -633,7 +639,8 @@ org-download-screenshot-method.
   (let* ((powershell "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
          (file-name (format-time-string "%Y%m%d-%H%M%S_screenshot.png"))
          ;; (file-path-powershell (concat "c:/Users/\$env:USERNAME/" file-name))
-         (file-path-wsl (concat "./images/" file-name))
+         ;; (file-path-wsl (concat "./images/" file-name))
+         (file-path-wsl (concat (make-images-path "./images/") file-name))
          )
     ;; (shell-command (concat powershell " -command \"(Get-Clipboard -Format Image).Save(\\\"C:/Users/\\$env:USERNAME/" file-name "\\\")\""))
     (shell-command (concat powershell " -command \"(Get-Clipboard -Format Image).Save(\\\"C:/Users/Public/" file-name "\\\")\""))
