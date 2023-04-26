@@ -345,7 +345,17 @@ a key but still need to access occasionally.
 (use-package smex ;; Adds M-x recent command sorting for counsel-M-x
   :after counsel)
 #+end_src
+** Ace Windows
+GNU Emacs package for selecting a window to switch to.
 
+Just assign ace-window to a short key binding, as switching windows is a common
+task. I suggest M-o, as it's short and not bound to anything important in the
+default Emacs.
+#+begin_src emacs-lisp
+(use-package ace-window
+  :ensure t
+  :bind ("M-o" . ace-window))
+#+end_src
 ** Helpful Help Commands
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-=
 command buffers.  For example, if you use =describe-function=, you will not only
