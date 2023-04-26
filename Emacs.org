@@ -732,10 +732,18 @@ org-download-screenshot-method.
 
 ** GUI Font&Window Size Configuration
 #+begin_src emacs-lisp
+;; This terminal-local variable tells Lisp programs what window system
+;; Emacs is using for displaying the frame. The possible values are
+;; x displaying the frame using X
+;; w32 MS-Windows GUI
+;; ns Nextstep interface(GNUStep and macOS)
+;; pc MS-DOS direct scrren
+;; nil Displaying the frame on a charachter based terminal
 (defun custom/get-font-size ()
   "Get font size depending on X Windows pixel height"
   (cond
    ((and (> (x-display-pixel-height) 1440) (eq window-system 'w32)) 125)
+   ((and (>= (x-display-pixel-height) 1080) (eq window-system 'ns)) 125)
    ((> (x-display-pixel-height) 1440) 175)
    ((> (x-display-pixel-height) 1080) 120)
    (t 100)))
@@ -755,7 +763,7 @@ org-download-screenshot-method.
       ))
 
 (if (display-graphic-p)
-    (cond ((> (x-display-pixel-height) 1080)
+    (cond ((or (> (x-display-pixel-height) 1080) (eq window-system 'ns))
            (setq default-frame-alist
                  '((top . 10)(left . 10)(width . 100)(height . 60))))
           (t
