@@ -151,14 +151,13 @@ much easier than finding and setting these variables yourself.
 (global-set-key (kbd "RET") 'newline-and-indent)
 #+end_src
 
-* ESL Spell check
+** ESL Spell check
 Need to install spell checker and dictionary aspell & aspell-dict-en
 #+begin_src emacs-lisp
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 #+end_src
 
-* Basic UI Configuration
 ** Bar Mode
 #+begin_src emacs-lisp
 (if (display-graphic-p)
@@ -325,6 +324,7 @@ information about each item.
   (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
   :config
   (counsel-mode 1))
+
 #+end_src
 
 ** Improved Candidate Sorting
