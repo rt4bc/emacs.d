@@ -55,8 +55,8 @@ Read PATH from shell, X Windows startup usually need this.
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
   :config
-  (if (eq window-system 'darwin)
-      (progn (exec-path-from-shell-initialize))))
+  (unless (eq window-system 'w32)
+    (progn (exec-path-from-shell-initialize))))
 #+end_src
 
 ** Enable SSH connections over HTTPS
