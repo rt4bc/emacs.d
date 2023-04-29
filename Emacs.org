@@ -423,7 +423,6 @@ completion experience.
 (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
 (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
 (setq lsp-bridge-enable-org-babel t)
-(setq lsp-bridge-enable-auto-format-code t)
 (global-lsp-bridge-mode)
 #+end_src
 A special kind of key binding can be used to remap one command to another,
