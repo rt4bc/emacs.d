@@ -402,9 +402,9 @@ that Emacs never gets stuck while providing a smooth and seamless code
 completion experience.
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :ensure t)
-;; :config
-;; (yas-global-mode 1))
+  :ensure t
+  :config
+  (yas-global-mode 1))
 
 ;; install depending package
 (use-package posframe
@@ -420,9 +420,10 @@ completion experience.
 
 (add-to-list 'load-path "~/.emacs.d/custom-package/lsp-bridge")
 (require 'lsp-bridge)
-(setq lsp-bridge-enable-org-babel t)
 (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
 (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
+(setq lsp-bridge-enable-org-babel t)
+(setq lsp-bridge-enable-auto-format-code t)
 (global-lsp-bridge-mode)
 #+end_src
 A special kind of key binding can be used to remap one command to another,
