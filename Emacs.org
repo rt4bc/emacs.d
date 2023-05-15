@@ -401,6 +401,21 @@ lsp-bridge builds a high-speed cache between Emacs and the LSP server, ensuring
 that Emacs never gets stuck while providing a smooth and seamless code
 completion experience.
 #+begin_src emacs-lisp
+
+(use-package clang-format
+  :ensure t)
+(defun clang-format-save-hook ()
+  "format buffer before save it"
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when (locate-dominating-file "." ".clang-format")
+                (clang-format-buffer))
+              nil)
+            nil
+            t))
+(add-hook 'c-mode-hook (lambda() (clang-format-save-hook)))
+(add-hook 'c++-mode-hook (lambda() (clang-format-save-hook)))
+
 (use-package yasnippet
   :ensure t
   :config
@@ -452,6 +467,17 @@ offers:
 #+end_src
    
 ** Languages Setting
+*** DTS
+For Device tree mode 
+#+begin_src emacs-lisp
+(use-package dts-mode
+  :ensure t)
+#+end_src
+For YAML mode
+#+begin_src emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+end_src
 *** Python
 #+begin_src emacs-lisp
 (use-package py-yapf
