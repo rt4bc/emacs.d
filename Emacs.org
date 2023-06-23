@@ -579,7 +579,11 @@ pip install cmake-language-server
                 auto-mode-alist))
   )
 #+end_src
-
+*** Rust
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :ensure t)
+#+end_src
 *** TAGS
 #+begin_src emacs-lisp
 ;; (use-package xcscope
