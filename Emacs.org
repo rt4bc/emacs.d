@@ -388,6 +388,13 @@ It is very useful for figuring out how things work in Emacs.
 #+end_src
 
 * Programming Configuration
+** Projectile
+#+begin_src emacs-lisp
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode))
+#+end_src
 ** Commenting
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
