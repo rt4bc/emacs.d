@@ -356,6 +356,20 @@ default Emacs.
   :ensure t
   :bind ("M-o" . ace-window))
 #+end_src
+** Dimmer Other Windows
+#+begin_src emacs-lisp
+(use-package dimmer
+  :ensure t)
+(require 'dimmer)
+(dimmer-configure-which-key)
+(dimmer-mode t)
+#+end_src
+** Diff & Hl Mode
+#+begin_src emacs-lisp
+(use-package diff-hl
+  :ensure t)
+(global-diff-hl-mode)
+#+end_src
 ** Helpful Help Commands
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-=
 command buffers.  For example, if you use =describe-function=, you will not only
@@ -640,7 +654,7 @@ by Org mode (or Markdown mode) is left untouched.
      (python . t)))
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
-(require 'org-tempo)
+;; (require 'org-tempo)
 
 ;; code blocks syntax hightlight
 (use-package htmlize
