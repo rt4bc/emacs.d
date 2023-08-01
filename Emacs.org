@@ -56,9 +56,9 @@ configuration of everything else we use.
 ;; (unless (package-installed-p 'use-package)
 ;; (package-install 'use-package))
 
-;; (require 'use-package)
-;; (require 'use-package-ensure)
-;; (setq use-package-always-ensure t)
+(require 'use-package)
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 #+end_src
 
 The auto-package-update package helps us keep our Emacs packages up to
@@ -284,22 +284,21 @@ correctly.
   ;; doom-modeline depend the all-the-icons package 
   (use-package all-the-icons)
   (use-package doom-modeline
-    :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 15)))
 #+end_src
 
 ** Emacs Tree Sitter
 #+begin_src emacs-lisp
 ;; will be build-in in emacs29
-;; (use-package tree-sitter
-;; :ensure t
-;; )
-;; (use-package tree-sitter-langs
-;; :ensure t
-;; )
-;; (use-package tree-sitter-indent
-;; :ensure t
-;; )
+(use-package tree-sitter
+:ensure t
+ )
+ (use-package tree-sitter-langs
+ :ensure t
+ )
+ (use-package tree-sitter-indent
+ :ensure t
+ )
 (require 'tree-sitter)
 (require 'tree-sitter-hl)
 (require 'tree-sitter-langs)
