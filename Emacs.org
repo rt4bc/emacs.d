@@ -45,20 +45,20 @@ configuration to make it a lot easier to automate the installation and
 configuration of everything else we use.
 
 #+begin_src emacs-lisp
-  (require 'package)
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
-  (package-initialize)
-  (unless package-archive-contents
-    (package-refresh-contents))
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;; (package-install 'use-package))
 
-  (require 'use-package)
-  (require 'use-package-ensure)
-  (setq use-package-always-ensure t)
+;; (require 'use-package)
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
 #+end_src
 
 The auto-package-update package helps us keep our Emacs packages up to
@@ -260,13 +260,13 @@ which one you like best.  You can also run =M-x counsel-load-theme= to choose
 between them easily. 
 
 #+begin_src emacs-lisp
-  (use-package color-theme-sanityinc-tomorrow
-    :ensure t)
-  
-  (require 'color-theme-sanityinc-tomorrow)
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t)
 
-  (setq custom-safe-themes t)
-  (color-theme-sanityinc-tomorrow-eighties)
+(require 'color-theme-sanityinc-tomorrow)
+
+(setq custom-safe-themes t)
+(color-theme-sanityinc-tomorrow-night)
 
 #+end_src
 
@@ -291,19 +291,18 @@ correctly.
 ** Emacs Tree Sitter
 #+begin_src emacs-lisp
 ;; will be build-in in emacs29
-(use-package tree-sitter
-  :ensure t
-  )
-(use-package tree-sitter-langs
-  :ensure t
-  )
-(use-package tree-sitter-indent
-  :ensure t
-  )
+;; (use-package tree-sitter
+;; :ensure t
+;; )
+;; (use-package tree-sitter-langs
+;; :ensure t
+;; )
+;; (use-package tree-sitter-indent
+;; :ensure t
+;; )
 (require 'tree-sitter)
 (require 'tree-sitter-hl)
 (require 'tree-sitter-langs)
-(global-tree-sitter-mode)
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 #+end_src
@@ -445,18 +444,18 @@ don't have bound to a key but still need to access occasionally.
 * Programming Config
 ** Projectile
 #+begin_src emacs-lisp
-  (use-package projectile
-    :ensure t)
-  ;; macOS
-  ;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  ;; Linux Windows
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode t)
-  (defun my-projectile-project-find-function (dir)
-    (let ((root (projectile-project-root dir)))
-      (and root (cons 'transient root))))
-  (with-eval-after-load 'project
-    (add-to-list 'project-find-functions 'my-projectile-project-find-function))
+(use-package projectile
+  :ensure t)
+;; macOS
+;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+;; Linux Windows
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(projectile-mode t)
+(defun my-projectile-project-find-function (dir)
+  (let ((root (projectile-project-root dir)))
+    (and root (cons 'transient root))))
+(with-eval-after-load 'project
+  (add-to-list 'project-find-functions 'my-projectile-project-find-function))
 #+end_src
 When set local directory to be a project root, just need a .projectile file under local root directory. like below
 don't need git .init anymore
@@ -482,39 +481,39 @@ drwxr-xr-x  7 bochao bochao 4096 Jul  7 09:22 target
 #+end_src
 ** File Explorer side bar
 #+begin_src emacs-lisp
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load 'ace-window)
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag))
-  :config
-  (progn
-    (setq treemacs-sorting                         'alphabetic-asc
-          treemacs-wide-toggle-width               70
-          treemacs-width                           35
-          treemacs-width-increment                 1
-          treemacs-width-is-initially-locked       t))
-  )
+;; (use-package treemacs
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   (with-eval-after-load 'ace-window)
+;;   :bind
+;;   (:map global-map
+;;         ("M-0"       . treemacs-select-window)
+;;         ("C-x t 1"   . treemacs-delete-other-windows)
+;;         ("C-x t t"   . treemacs)
+;;         ("C-x t B"   . treemacs-bookmark)
+;;         ("C-x t C-t" . treemacs-find-file)
+;;         ("C-x t M-t" . treemacs-find-tag))
+;;   :config
+;;   (progn
+;;     (setq treemacs-sorting                         'alphabetic-asc
+;;           treemacs-wide-toggle-width               70
+;;           treemacs-width                           35
+;;           treemacs-width-increment                 1
+;;           treemacs-width-is-initially-locked       t))
+;;   )
 
-(use-package treemacs-projectile
-  :after (treemacs projectile)
-  :ensure t)
+;; (use-package treemacs-projectile
+;; :after (treemacs projectile)
+;; :ensure t)
 
-(use-package treemacs-icons-dired
-  :after (treemacs dired)
-  :ensure t
-  :config (treemacs-icons-dired-mode))
+;; (use-package treemacs-icons-dired
+;; :after (treemacs dired)
+;; :ensure t
+;; :config (treemacs-icons-dired-mode))
 
 ;; set minibufer height , like eldoc display height
-(setq max-mini-window-height 3)
+;; (setq max-mini-window-height 3)
 #+end_src
 
 ** Commenting
@@ -563,12 +562,12 @@ location if needed).
 #+end_src
 
 ** Eglot Setting
-
 #+begin_src emacs-lisp
-(use-package eglot
-  :ensure t
-  )
-(setq eldoc-echo-area-use-multiline-p nil)
+;; (use-package eglot
+;; :ensure t
+;; )
+(require 'eglot)
+;; (setq eldoc-echo-area-use-multiline-p nil)
 (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
 (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
 #+end_src
@@ -807,17 +806,17 @@ by Org mode (or Markdown mode) is left untouched.
 ** Config Babel Languages
 Eval code blocks.
 #+begin_src emacs-lisp
-(setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+;; (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
 (setq org-src-preserve-indentation t)
 (with-eval-after-load 'org
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (C . t)
-     (js . t)
-     (makefile . t)
-     (lua . t)
-     (plantuml . t)
+     ;; (js . t)
+     ;; (makefile . t)
+     ;; (lua . t)
+     ;; (plantuml . t)
      (python . t)))
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
@@ -888,42 +887,42 @@ org-download-screenshot-method.
 #+end_src
 ** Org Roam
 #+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory (file-truename "~/OrgNotes/"))
-  (org-roam-completion-everywhere t)
-  (org-roam-capture-templates
-   '(("d" "default & gtd" plain
-      "%?"
-      :if-new (file+head "gtd/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("p" "programming languages" plain
-      "%?"
-      :if-new (file+head "languages/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("f" "embedded firmware things" plain
-      "%?"
-      :if-new (file+head "firmware/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("e" "electronics knowledge" plain
-      "%?"
-      :if-new (file+head "electronics/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
+;; (use-package org-roam
+;;   :ensure t
+;;   :custom
+;;   (org-roam-directory (file-truename "~/OrgNotes/"))
+;;   (org-roam-completion-everywhere t)
+;;   (org-roam-capture-templates
+;;    '(("d" "default & gtd" plain
+;;       "%?"
+;;       :if-new (file+head "gtd/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+;;       :unnarrowed t)
+;;      ("p" "programming languages" plain
+;;       "%?"
+;;       :if-new (file+head "languages/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+;;       :unnarrowed t)
+;;      ("f" "embedded firmware things" plain
+;;       "%?"
+;;       :if-new (file+head "firmware/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+;;       :unnarrowed t)
+;;      ("e" "electronics knowledge" plain
+;;       "%?"
+;;       :if-new (file+head "electronics/${slug}-%<%Y%m%d%H%M%S>.org" "#+title: ${title}\n")
+;;       :unnarrowed t)
+;;      ))
+;;   :bind (("C-c n l" . org-roam-buffer-toggle)
+;;          ("C-c n f" . org-roam-node-find)
+;;          ("C-c n g" . org-roam-graph)
+;;          ("C-c n i" . org-roam-node-insert)
+;;          ("C-c n c" . org-roam-capture)
+;;          ;; Dailies
+;;          ("C-c n j" . org-roam-dailies-capture-today))
+;;   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
+  ;; (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  ;; (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
+  ;; (require 'org-roam-protocol))
 #+end_src
 * Profiling
 #+begin_src emacs-lisp
