@@ -163,6 +163,11 @@ these variables yourself.
   )
 #+end_src
 
+No Backup files
+#+begin_src emacs-lisp
+(setq make-backup-files nil)
+#+end_src
+
 * General Configuration
 Auto Wrap lines
 #+begin_src emacs-lisp
@@ -199,18 +204,6 @@ New line indent
   ;; (add-hook 'python-mode-hook 'highlight-indentation-mode)
   ;; noisy
   )
-#+end_src
-
-No Backup files
-#+begin_src emacs-lisp
-(setq make-backup-files nil)
-#+end_src
-* ESL Spell check
-Need to install spell checker and dictionary
-aspell & aspell-dict-en
-#+begin_src emacs-lisp
-  (dolist (hook '(text-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1))))
 #+end_src
 
 * Basic UI Configuration
