@@ -358,11 +358,11 @@ default Emacs.
 #+end_src
 ** Dimmer Other Windows
 #+begin_src emacs-lisp
-(use-package dimmer
-  :ensure t)
-(require 'dimmer)
-(dimmer-configure-which-key)
-(dimmer-mode t)
+;; (use-package dimmer
+;; :ensure t)
+;; (require 'dimmer)
+;; (dimmer-configure-which-key)
+;; (dimmer-mode t)
 #+end_src
 ** Diff & Hl Mode
 #+begin_src emacs-lisp
@@ -496,7 +496,9 @@ offers:
 For Device tree mode 
 #+begin_src emacs-lisp
 (use-package dts-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.overlay\\'" . dts-mode)))
 #+end_src
 For YAML mode
 #+begin_src emacs-lisp
