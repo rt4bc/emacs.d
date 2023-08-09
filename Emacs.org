@@ -460,10 +460,11 @@ completion experience.
 
 (add-to-list 'load-path "~/.emacs.d/custom-package/lsp-bridge")
 (require 'lsp-bridge)
-(define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
-(define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
-(setq lsp-bridge-enable-org-babel t)
+;; (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
+;; (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
+;; (setq lsp-bridge-enable-org-babel t)
 (global-lsp-bridge-mode)
+
 #+end_src
 A special kind of key binding can be used to remap one command to another,
 without having to refer to the key sequence(s) bound to the original command. To
@@ -484,11 +485,8 @@ offers:
   :ensure t)
 (require 'citre)
 (require 'citre-config)
-(if (eq system-type 'darwin)
-    (progn
-      (setq citre-ctags-program "uctags")
-      (setq citre-readtags-program "ureadtags")))
-
+(global-set-key (kbd "M-.") 'citre-jump)
+(global-set-key (kbd "M-,") 'citre-jump-back)
 #+end_src
    
 ** Languages Setting
