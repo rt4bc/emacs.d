@@ -463,6 +463,8 @@ completion experience.
 ;; (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
 ;; (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
 ;; (setq lsp-bridge-enable-org-babel t)
+(global-set-key (kbd "M-.") 'lsp-bridge-find-def)
+(global-set-key (kbd "M-,") 'lsp-bridge-find-def-return)
 (global-lsp-bridge-mode)
 
 #+end_src
@@ -485,8 +487,10 @@ offers:
   :ensure t)
 (require 'citre)
 (require 'citre-config)
-(global-set-key (kbd "M-.") 'citre-jump)
-(global-set-key (kbd "M-,") 'citre-jump-back)
+(if (eq system-type 'darwin)
+    (progn
+      (setq citre-ctags-program "uctags")
+      (setq citre-readtags-program "ureadtags")))
 #+end_src
    
 ** Languages Setting
