@@ -154,8 +154,8 @@ much easier than finding and setting these variables yourself.
 ** ESL Spell check
 Need to install spell checker and dictionary aspell & aspell-dict-en
 #+begin_src emacs-lisp
-(dolist (hook '(text-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
+;; (dolist (hook '(text-mode-hook))
+;; (add-hook hook (lambda () (flyspell-mode 1))))
 #+end_src
 
 ** Bar Mode
@@ -196,11 +196,17 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t)
+(use-package ef-themes
+  :ensure t)
 
 (require 'color-theme-sanityinc-tomorrow)
+(require 'ef-themes)
 
 (setq custom-safe-themes t)
-(color-theme-sanityinc-tomorrow-eighties)
+;; (color-theme-sanityinc-tomorrow-eighties)
+(if (display-graphic-p)
+    (ef-themes-select 'ef-maris-light)
+  (ef-themes-select 'ef-maris-dark))
 #+end_src
 
 ** Better Mode Line
