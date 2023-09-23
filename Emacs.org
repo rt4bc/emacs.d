@@ -513,6 +513,7 @@ For YAML mode
 (use-package yaml-mode
   :ensure t)
 #+end_src
+
 *** Python
 #+begin_src emacs-lisp
 (use-package py-yapf
@@ -529,6 +530,15 @@ Now set the python virtual environment is quite simple
 1. python3 -m venv tutorial-env
 2. put the setting env in sh file
 #+end_quote
+
+*** JS
+#+begin_src emacs-lisp
+(use-package js2-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode))
+#+end_src
 
 *** Common Lisp
 1. Install SBCL
