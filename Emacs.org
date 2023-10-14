@@ -221,21 +221,21 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
 ** Tree Sitter
 #+begin_src emacs-lisp
 ;; will be build-in in emacs29
-(use-package tree-sitter
-  :ensure t
-  )
-(use-package tree-sitter-langs
-  :ensure t
-  )
-(use-package tree-sitter-indent
-  :ensure t
-  )
-(require 'tree-sitter)
-(require 'tree-sitter-hl)
-(require 'tree-sitter-langs)
-(global-tree-sitter-mode)
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+;; (use-package tree-sitter
+;;   :ensure t
+;;   )
+;; (use-package tree-sitter-langs
+;;   :ensure t
+;;   )
+;; (use-package tree-sitter-indent
+;;   :ensure t
+;;   )
+;; (require 'tree-sitter)
+;; (require 'tree-sitter-hl)
+;; (require 'tree-sitter-langs)
+;; (global-tree-sitter-mode)
+;; (global-tree-sitter-mode)
+;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 #+end_src
 
 ** Which Key
