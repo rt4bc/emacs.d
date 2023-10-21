@@ -194,8 +194,16 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
       (rainbow-delimiters-mode t))
     (add-hook 'prog-mode-hook '@-enable-rainbow-delimiters)))
 
-(use-package spacegreytheme
+(use-package spacegray-theme
   :ensure t)
+(use-package color-theme-sanityinc-solarized
+  :ensure t)
+(use-package material-theme
+  :ensure t)
+;; (load-theme 'spacegray t)
+;; (require 'color-theme-sanityinc-solarized)
+;; (color-theme-sanityinc-solarized-dark)
+(load-theme 'material t)
 (setq custom-safe-themes t)
 #+end_src
 
@@ -247,7 +255,7 @@ possible key bindings in the mode of your current buffer.
 #+begin_src emacs-lisp
 (use-package paren
   :config
-  (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
+  (set-face-attribute 'show-paren-match-expression nil :background "#364e5f")
   (show-paren-mode 1))
 #+end_src
 
@@ -363,8 +371,9 @@ default Emacs.
 ** Diff & Hl Mode
 #+begin_src emacs-lisp
 (use-package diff-hl
-  :ensure t)
+  :ensure t )
 (global-diff-hl-mode)
+
 #+end_src
 ** Helpful Help Commands
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-=
