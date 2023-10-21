@@ -194,19 +194,9 @@ Need to install spell checker and dictionary aspell & aspell-dict-en
       (rainbow-delimiters-mode t))
     (add-hook 'prog-mode-hook '@-enable-rainbow-delimiters)))
 
-(use-package color-theme-sanityinc-tomorrow
+(use-package spacegreytheme
   :ensure t)
-(use-package ef-themes
-  :ensure t)
-
-(require 'color-theme-sanityinc-tomorrow)
-(require 'ef-themes)
-
 (setq custom-safe-themes t)
-;; (color-theme-sanityinc-tomorrow-eighties)
-(if (display-graphic-p)
-    (ef-themes-select 'ef-maris-light)
-  (ef-themes-select 'ef-maris-dark))
 #+end_src
 
 ** Better Mode Line
