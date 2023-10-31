@@ -472,6 +472,13 @@ completion experience.
 (global-set-key (kbd "M-,") 'lsp-bridge-find-def-return)
 (global-lsp-bridge-mode)
 
+(setq lsp-bridge-enable-log t)
+;; (setq lsp-bridge-enable-debug t)
+(setq lsp-bridge-enable-org-babel t)
+(setq lsp-bridge-python-command "python")
+;; (setq lsp-bridge-python-multi-lsp-server "pyright_ruff")
+(setq org-babel-load-languages '((emacs-lisp . t) (python . t)))
+(setq org-src-lang-modes '(("python" . python)))
 #+end_src
 A special kind of key binding can be used to remap one command to another,
 without having to refer to the key sequence(s) bound to the original command. To
