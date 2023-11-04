@@ -2,11 +2,14 @@
 [submodule "custom-package/lsp-bridge"]
 	path = custom-package/lsp-bridge
 	url = https://github.com/manateelazycat/lsp-bridge.git
+        branch = master
         
 [submodule "custom-package/acm-terminal"]
 	path = custom-package/acm-terminal
 	url = https://github.com/twlz0ne/acm-terminal.git
+        branch = master
         
 [submodule "custom-package/emacs-popon"]
 	path = custom-package/emacs-popon
 	url = https://codeberg.org/akib/emacs-popon.git
+        branch = master
