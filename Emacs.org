@@ -709,7 +709,7 @@ by Org mode (or Markdown mode) is left untouched.
      (python . t)))
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
-;; (require 'org-tempo)
+(require 'org-tempo)
 
 #+end_src
 
