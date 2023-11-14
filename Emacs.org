@@ -833,6 +833,16 @@ org-download-screenshot-method.
 ;;   (require 'org-roam-protocol))
 #+end_src
 
+** Obsidian 2 Org
+#+begin_src emacs-lisp
+(use-package obsidian
+  :ensure t
+  :demand t
+  :config
+  (obsidian-specify-path "~/../OneDrive/Documents/Obsdian")
+  (global-obsidian-mode t)
+  )
+#+end_src
 * Ends
 ** Profiling
 #+begin_src emacs-lisp
@@ -882,6 +892,12 @@ org-download-screenshot-method.
            (setq default-frame-alist
                  '((top . 10)(left . 10)(width . 80)(height . 40))))
           ))
+
+(use-package cnfonts
+  :ensure t
+  :config
+  (cnfonts-mode 1))
+
 #+end_src
 
 ** Misc
