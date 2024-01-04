@@ -467,12 +467,10 @@ completion experience.
 (require 'lsp-bridge)
 ;; (define-key global-map [remap xref-find-definitions] 'lsp-bridge-find-def)
 ;; (define-key global-map [remap xref-pop-marker-stack] 'lsp-bridge-find-def-return)
-;; (setq lsp-bridge-enable-org-babel t)
 (global-set-key (kbd "M-.") 'lsp-bridge-find-def)
 (global-set-key (kbd "M-,") 'lsp-bridge-find-def-return)
 (global-lsp-bridge-mode)
-
-(setq lsp-bridge-enable-log t)
+;; (setq lsp-bridge-enable-log t)
 ;; (setq lsp-bridge-enable-debug t)
 (setq lsp-bridge-enable-org-babel t)
 (setq lsp-bridge-python-command "python")
