@@ -877,9 +877,7 @@ org-download-screenshot-method.
       (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height custom/default-font-size)
       
       ;; Set the variable pitch face
-      ;; (set-face-attribute 'variable-pitch nil :font "Cantarell" :height custom/default-variable-font-size :weight 'regular)))
-      ;; set the variable pitch face
-      (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height custom/default-variable-font-size :weight 'regular)
+      (set-face-attribute 'variable-pitch nil :font "Cantarell" :height custom/default-variable-font-size :weight 'regular)
       ))
 
 (if (display-graphic-p)
@@ -895,8 +893,6 @@ org-download-screenshot-method.
   :ensure t
   :config
   (cnfonts-mode 1))
-
-#+end_src
 
 ** Misc
 #+begin_src emacs-lisp
