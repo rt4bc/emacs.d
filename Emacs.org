@@ -87,12 +87,12 @@ to emacs, so need to customerize the HOEM direcotry when emacs starts.
 
 ** SSH Over Https
 If ssh protocol is not available, then can use SSH over https configuration like below:
-#+begin_verse
+#+begin_example
 Host github.com
 Hostname ssh.github.com
 Port 443
-User git 
-#+end_verse
+User git
+#+end_example
 
 * Working with Coding Systems and Unicode
 #+begin_src emacs-lisp
