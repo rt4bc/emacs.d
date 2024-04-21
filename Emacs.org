@@ -65,9 +65,11 @@ default set of environment variables.
 
 *But* here may have protential issue, will be very slow
 #+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :config
-    (exec-path-from-shell-initialize))
+  (if (eq system-type 'darwin)
+      (use-package exec-path-from-shell
+	:config
+	(exec-path-from-shell-initialize))
+  )
 #+end_src
 
 In Windows, Like Cadence will use HOME directory, so this not friendly
