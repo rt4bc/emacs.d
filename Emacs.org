@@ -179,7 +179,7 @@ No Backup files
   (global-display-line-numbers-mode t)
 
   ;; Set frame transparenc
-  (defvar my/frame-transparency '(90 . 90))
+  (defvar my/frame-transparency '(95 . 95))
   (set-frame-parameter (selected-frame) 'alpha my/frame-transparency)
   (add-to-list 'default-frame-alist `(alpha . ,my/frame-transparency))
   ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -215,13 +215,18 @@ between them easily.
     :ensure t)
   (use-package zenburn-theme
     :ensure t)
+  (use-package doom-themes
+    :ensure t)
   (setq custom-safe-themes t)
   (if (display-graphic-p)
-      (color-theme-sanityinc-tomorrow-night)
+      ;; (color-theme-sanityinc-tomorrow-night)
+      (load-theme #'doom-dracula)
     (load-theme #'zenburn))
 
   (require 'rainbow-mode)
   (add-hook 'prog-mode-hook 'rainbow-mode)
+
+  (global-hl-line-mode t)
 #+end_src
 
 ** Better Modeline
@@ -521,10 +526,25 @@ untouched.
 ** Eglot
 #+begin_src emacs-lisp
   (require 'eglot)
+  (setq eldoc-echo-area-use-multiline-p nil)
+  ;; Install directly from this repo via M-x package-vc-install (pasting in this URL), or using, e.g. straight. Then, in your init, simply
+  ;; The emacs-lsp-booster project provides a rust-based wrapper program which substantially speeds up emacs' interactions with lsp servers. This small package enables eglot to use it.
+  ;; Download the binary executable program form
+  ;; https://github.com/blahgeek/emacs-lsp-booster
+  ;; https://github.com/jdtsmith/eglot-booster
+  ;; 
+  (use-package eglot-booster
+	:after eglot
+	:config	(eglot-booster-mode))
 #+end_src
 *** Hook Python
 #+begin_src emacs-lisp
   ;; pip install pyright, and run pyright, then will have pyright-langserver
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
   (add-hook 'python-mode-hook 'eglot-ensure)
+  (add-hook 'c++-mode-hook 'eglot-ensure)
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (use-package rust-mode
+    :ensure t)
+  (add-hook 'rust-mode-hook 'eglot-ensure)
 #+end_src
