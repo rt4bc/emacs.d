@@ -265,6 +265,28 @@ correctly.
     )
 #+end_src
 
+** Ace Windows
+#+begin_src emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind ("M-o" . ace-window))
+#+end_src
+
+** Diff Highlight
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :ensure t)
+  (global-diff-hl-mode)
+#+end_src
+** Dimmer Mode
+Dimmer mode will make inactive buffer dimmer.
+#+begin_src emacs-lisp
+  (use-package dimmer
+    :ensure t)
+  (require 'dimmer)
+  (dimmer-configure-which-key)
+  (dimmer-mode t)
+#+end_src
 ** Which Key
 [[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing
 any key binding in Emacs to offer you all possible completions for the
@@ -531,12 +553,15 @@ by Org mode (or Markdown mode) is left untouched.
 #+begin_src emacs-lisp
   (require 'eglot)
   (setq eldoc-echo-area-use-multiline-p nil)
+<<<<<<< HEAD
   ;; Install directly from this repo via M-x package-vc-install (pasting in this URL), or using, e.g. straight. Then, in your init, simply
   ;; The emacs-lsp-booster project provides a rust-based wrapper program which substantially speeds up emacs' interactions with lsp servers. This small package enables eglot to use it.
   ;; Download the binary executable program form
   ;; https://github.com/blahgeek/emacs-lsp-booster
   ;; https://github.com/jdtsmith/eglot-booster
   ;; 
+=======
+>>>>>>> 67939f9 (make ui looks better)
   (use-package eglot-booster
 	:after eglot
 	:config	(eglot-booster-mode))
