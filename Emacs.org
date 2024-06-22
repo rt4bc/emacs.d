@@ -159,7 +159,12 @@ No Backup files
   ;;increase kill-ring capacity
   (setq kill-ring-max 5000 )
 #+end_src
-
+** Switch Another Window
+#+begin_src emacs-lisp
+  (use-package ace-window
+  :ensure t)
+  (global-set-key (kbd "M-o") 'ace-window)
+#+end_src
 * UI Configuration
 ** Bar Mode and Transparency
 #+begin_src emacs-lisp
