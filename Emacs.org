@@ -553,15 +553,13 @@ by Org mode (or Markdown mode) is left untouched.
 #+begin_src emacs-lisp
   (require 'eglot)
   (setq eldoc-echo-area-use-multiline-p nil)
-<<<<<<< HEAD
+
   ;; Install directly from this repo via M-x package-vc-install (pasting in this URL), or using, e.g. straight. Then, in your init, simply
   ;; The emacs-lsp-booster project provides a rust-based wrapper program which substantially speeds up emacs' interactions with lsp servers. This small package enables eglot to use it.
   ;; Download the binary executable program form
   ;; https://github.com/blahgeek/emacs-lsp-booster
   ;; https://github.com/jdtsmith/eglot-booster
   ;; 
-=======
->>>>>>> 67939f9 (make ui looks better)
   (use-package eglot-booster
 	:after eglot
 	:config	(eglot-booster-mode))
