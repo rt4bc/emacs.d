@@ -563,14 +563,15 @@ by Org mode (or Markdown mode) is left untouched.
   ;; https://github.com/jdtsmith/eglot-booster
   ;; Install directly from this repo via M-x package-vc-install
 
-  (use-package eglot-booster
-    :after eglot
-    :config	(eglot-booster-mode))
+  ;; (use-package eglot-booster
+    ;; :after eglot
+    ;; :config	(eglot-booster-mode))
 #+end_src
 *** Hook Python, C++, Rust
 #+begin_src emacs-lisp
   ;; pip install pyright, and run pyright, then will have pyright-langserver
   ;; (add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
   (add-hook 'python-mode-hook 'eglot-ensure)
   (if (eq system-type 'darwin)
       (setq eglot-server-programs '((c++-mode . ("clangd-mp-18"))
