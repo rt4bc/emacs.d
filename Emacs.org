@@ -193,20 +193,28 @@ No Backup files
 
 ** Font Configuration
 #+begin_src emacs-lisp
-  ;; Get font from https://www.fontsquirrel.com/fonts
-  (defvar my/default-font-size 160)
-  (defvar my/default-variable-font-size 160)
-  (if (display-graphic-p)
-      (progn
-	;; Set the fixed pitch face
-	(set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height my/default-font-size)
-	(set-face-attribute 'default nil :font "JetBrains Mono" :height my/default-font-size)
-	(set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height my/default-font-size :weight 'regular)
-	))
-  (use-package unicode-fonts
-    :ensure t)
-  (require 'unicode-fonts)
-  (unicode-fonts-setup)
+    ;; Get font from https://www.fontsquirrel.com/fonts
+    (defvar my/default-font-size 160)
+    (defvar my/default-variable-font-size 160)
+    (if (display-graphic-p)
+	(progn
+	  ;; Set the fixed pitch face
+	  (set-face-attribute 'fixed-pitch nil :font "JetBrains Mono" :height my/default-font-size)
+	  (set-face-attribute 'default nil :font "JetBrains Mono" :height my/default-font-size)
+	  (set-face-attribute 'variable-pitch nil :font "Source Sans Pro" :height my/default-font-size :weight 'regular)
+	  ))
+    (use-package unicode-fonts
+      :ensure t)
+    (require 'unicode-fonts)
+    (unicode-fonts-setup)
+    (cond
+     ((eq system-type 'darwin)
+      (setq initial-frame-alist '((top . 10)
+				  (left . 60)
+				  (width . 85)
+				  (height . 50))))
+     (t
+      (message "for other system")))
 #+end_src
 
 ** Color theme
