@@ -561,21 +561,37 @@ by Org mode (or Markdown mode) is left untouched.
 * LSP
 ** Eglot
 #+begin_src emacs-lisp
-  (require 'eglot)
-  (setq eldoc-echo-area-use-multiline-p nil)
+    (require 'eglot)
+    (setq eldoc-echo-area-use-multiline-p nil)
 
-  ;; Install directly from this repo via M-x package-vc-install (pasting in this URL), or using, e.g. straight. Then, in your init, simply
-  ;; The emacs-lsp-booster project provides a rust-based wrapper program which substantially speeds up emacs' interactions with lsp servers. This small package enables eglot to use it.
-  ;; Download the binary executable program form
-  ;; https://github.com/blahgeek/emacs-lsp-booster  //system executable program, put it in $PATH
-  ;; https://github.com/jdtsmith/eglot-booster
-  ;; Install directly from this repo via M-x package-vc-install
+    ;; Install directly from this repo via M-x package-vc-install (pasting in this URL), or using, e.g. straight. Then, in your init, simply
+    ;; The emacs-lsp-booster project provides a rust-based wrapper program which substantially speeds up emacs' interactions with lsp servers. This small package enables eglot to use it.
+    ;; Download the binary executable program form
+    ;; https://github.com/blahgeek/emacs-lsp-booster  //system executable program, put it in $PATH
+    ;; https://github.com/jdtsmith/eglot-booster
+    ;; Install directly from this repo via M-x package-vc-install
 
   (use-package eglot-booster
     :after eglot
     :config (eglot-booster-mode))
 
+  (use-package corfu
+    :custom
+    (corfu-auto t)
+    (corfu-cycle t)
+    :hook ((prog-mode . corfu-mode))
+    :init
+    (global-corfu-mode))
+
+  ;; Optionally use the `orderless' completion style.
+  (use-package orderless
+    :custom
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (orderless-style-dispatchers '(+orderless-dispatch))
+    ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+    (completion-styles '(orderless basic))
     (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 *** Hook Python, C++, Rust
 #+begin_src emacs-lisp
