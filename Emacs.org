@@ -575,6 +575,7 @@ by Org mode (or Markdown mode) is left untouched.
     :after eglot
     :config (eglot-booster-mode))
 
+    (completion-category-defaults nil)
 #+end_src
 *** Hook Python, C++, Rust
 #+begin_src emacs-lisp
