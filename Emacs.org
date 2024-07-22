@@ -400,19 +400,85 @@ can be especially helpful when using =M-x= to run commands that you
 don't have bound to a key but still need to access occasionally.
 
 #+begin_src emacs-lisp
-(use-package ivy-prescient
-  :after counsel
-  :custom
-  (ivy-prescient-enable-filtering nil)
-  :config
-  ;; Uncomment the following line to have sorting remembered across sessions!
-  (prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
+  (use-package ivy-prescient
+    :after counsel
+    :custom
+    (ivy-prescient-enable-filtering nil)
+    :config
+    ;; Uncomment the following line to have sorting remembered across sessions!
+    (prescient-persist-mode 1)
+    (ivy-prescient-mode 1))
 
-(use-package smex ;; Adds M-x recent command sorting for counsel-M-x
-  :after counsel)
+  (use-package smex ;; Adds M-x recent command sorting for counsel-M-x
+    :after counsel)
 #+end_src
+** Hydra Mode
+#+begin_src emacs-lisp
+  (use-package hydra
+    :ensure t)
 
+  ;; 窗口管理 Hydra
+  (defhydra hydra-window (:hint nil)
+    "
+  Window Management
+  Movement        Resizing        Splitting       Buffer
+  ------------------------------------------------------------------
+  [_h_] left      [_H_] enlarge ← [_v_] vertical   [_b_] switch buffer
+  [_j_] down      [_J_] enlarge ↓ [_s_] horizontal [_f_] find file
+  [_k_] up        [_K_] shrink ↑  [_d_] delete     [_o_] other window
+  [_l_] right     [_L_] shrink →  [_D_] del others
+  [_0_] balance   [_=_] balance
+  [_q_] quit
+  "
+    ("h" windmove-left)
+    ("j" windmove-down)
+    ("k" windmove-up)
+    ("l" windmove-right)
+    ("H" enlarge-window-horizontally)
+    ("J" enlarge-window)
+    ("K" shrink-window)
+    ("L" shrink-window-horizontally)
+    ("v" split-window-right)
+    ("s" split-window-below)
+    ("d" delete-window)
+    ("D" delete-other-windows)
+    ("b" switch-to-buffer)
+    ("f" find-file)
+    ("0" balance-windows)
+    ("=" balance-windows)
+    ("o" other-window)
+    ("q" nil :exit t))
+
+  ;; 搜索替换 Hydra (结合 Swiper)
+  (defhydra hydra-search-replace (:hint nil)
+    "
+  Search and Replace
+  Search          Replace         Swiper
+  ------------------------------------------------------------------
+  [_s_] search    [_r_] replace   [_w_] swiper
+  [_S_] re-search [_R_] query-rep [_W_] swiper-all
+  [_g_] grep      [_G_] rgrep     [_i_] imenu
+  [_a_] ag        [_A_] proj-ag
+  [_q_] quit
+  "
+    ("s" isearch-forward)
+    ("S" isearch-forward-regexp)
+    ("r" replace-string)
+    ("R" query-replace)
+    ("g" grep)
+    ("G" rgrep)
+    ("a" ag)
+    ("A" projectile-ag)
+    ("w" swiper)
+    ("W" swiper-all)
+    ("i" swiper-imenu)
+    ("q" nil :exit t))
+
+  ;; 绑定快捷键来激活这些 Hydra
+  (global-set-key (kbd "C-c w") 'hydra-window/body)
+  (global-set-key (kbd "C-c s") 'hydra-search-replace/body)
+  
+#+end_src
 ** Comment Line
 Commenting Emacs’ built in commenting functionality comment-dwim
 (usually bound to M-;) doesn’t always comment things in the way you
