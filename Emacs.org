@@ -237,9 +237,11 @@ between them easily.
     :ensure t)
   (setq custom-safe-themes t)
   (if (display-graphic-p)
-      ;; (color-theme-sanityinc-tomorrow-night)
-      (load-theme #'doom-dracula)
-    (load-theme #'zenburn))
+      (color-theme-sanityinc-tomorrow-night)
+      ;; (load-theme #'doom-dracula)
+    ;; (load-theme #'zenburn)
+    (color-theme-sanityinc-tomorrow-eighties)
+    )
 
   (use-package rainbow-mode
     :ensure t)
@@ -564,6 +566,10 @@ by Org mode (or Markdown mode) is left untouched.
 #+end_src
 
 * LSP
+** Check on the Fly
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook 'flymake-mode)
+#+end_src
 ** Eglot
 #+begin_src emacs-lisp
     (require 'eglot)
@@ -580,11 +586,21 @@ by Org mode (or Markdown mode) is left untouched.
     :after eglot
     :config (eglot-booster-mode))
 
+  ;; Emacs Corfu (Completion Overlay Region FU) 是一个用于 Emacs 的补全框架，
+  ;; 它提供了一种新的用户界面来显示补全候选项。Corfu 是 Emacs的一个外部包，
+  ;; 它致力于提供一种直观且高效的补全体验。以下是一些 Corfu 的主要特性和功能：
+
   (use-package corfu
     :custom
     (corfu-auto t)
     (corfu-cycle t)
     :hook ((prog-mode . corfu-mode))
+    :bind
+    (:map corfu-map
+	  ("TAB" . corfu-next)
+	  ([tab] . corfu-next)
+	  ("S-TAB" . corfu-previous)
+	  ([backtab] . corfu-previous))
     :init
     (global-corfu-mode))
 
@@ -597,6 +613,33 @@ by Org mode (or Markdown mode) is left untouched.
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
+
+  ;; use Cap (completion at point extensions)
+  ;; (use-package cape
+    ;; :ensure t
+    ;; :init
+    ;; (add-to-list 'completion-at-point-function #'cape-file)
+    ;; (add-to-list 'completion-at-point-function #'cape-dabbrev))
+
+  ;; 启用 corfu-doc 提供补全文档显示
+  ;; (use-package corfu-doc
+    ;; :ensure t
+    ;; :hook (corfu-mode . corfu-doc-mode)
+    ;; :bind
+    ;; (:map corfu-map
+	  ;; ("M-d" . corfu-doc-toggle)
+	  ;; ("M-n" . corfu-doc-scroll-up)
+	  ;; ("M-p" . corfu-doc-scroll-down)))
+
+  ;; 配置 Eglot 与 Corfu 一起使用
+  (add-hook 'eglot-managed-mode-hook
+	    (lambda ()
+	      (setq-local completion-at-point-functions
+			  (list (cape-super-capf
+				 #'eglot-completion-at-point
+				 #'cape-file
+				 #'cape-dabbrev)))));
+
 #+end_src
 *** Hook Python, C++, Rust
 #+begin_src emacs-lisp
