@@ -229,18 +229,12 @@ which one you like best.  You can also run =M-x counsel-load-theme= to choose
 between them easily. 
 
 #+begin_src emacs-lisp
-  (use-package color-theme-sanityinc-tomorrow
-    :ensure t)
-  (use-package zenburn-theme
-    :ensure t)
-  (use-package doom-themes
+  (use-package ef-themes
     :ensure t)
   (setq custom-safe-themes t)
   (if (display-graphic-p)
-      (color-theme-sanityinc-tomorrow-night)
-      ;; (load-theme #'doom-dracula)
-    ;; (load-theme #'zenburn)
-    (color-theme-sanityinc-tomorrow-eighties)
+      (ef-themes--load-theme 'ef-winter)
+       (ef-themes--load-theme 'ef-owl)
     )
 
   (use-package rainbow-mode
