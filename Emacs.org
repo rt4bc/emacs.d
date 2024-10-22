@@ -165,6 +165,14 @@ No Backup files
   :ensure t)
   (global-set-key (kbd "M-o") 'ace-window)
 #+end_src
+** Auto Parentheses
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :ensure t)
+  (require 'smartparens-config)
+  (smartparens-global-mode 1)
+  (electric-pair-mode 1)
+#+end_src
 * UI Configuration
 ** Bar Mode and Transparency
 #+begin_src emacs-lisp
@@ -673,32 +681,6 @@ by Org mode (or Markdown mode) is left untouched.
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
-
-  ;; use Cap (completion at point extensions)
-  ;; (use-package cape
-    ;; :ensure t
-    ;; :init
-    ;; (add-to-list 'completion-at-point-function #'cape-file)
-    ;; (add-to-list 'completion-at-point-function #'cape-dabbrev))
-
-  ;; 启用 corfu-doc 提供补全文档显示
-  ;; (use-package corfu-doc
-    ;; :ensure t
-    ;; :hook (corfu-mode . corfu-doc-mode)
-    ;; :bind
-    ;; (:map corfu-map
-	  ;; ("M-d" . corfu-doc-toggle)
-	  ;; ("M-n" . corfu-doc-scroll-up)
-	  ;; ("M-p" . corfu-doc-scroll-down)))
-
-  ;; 配置 Eglot 与 Corfu 一起使用
-  (add-hook 'eglot-managed-mode-hook
-	    (lambda ()
-	      (setq-local completion-at-point-functions
-			  (list (cape-super-capf
-				 #'eglot-completion-at-point
-				 #'cape-file
-				 #'cape-dabbrev)))));
 
 #+end_src
 *** Hook Python, C++, Rust
